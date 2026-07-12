@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/lib/auth";
+import { getDbUser } from "@/lib/auth";
 import { r2 } from "@/lib/r2";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
@@ -8,8 +7,8 @@ import crypto from "crypto";
 
 export async function POST(req: Request) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session || session.user.role !== "Creator") {
+    const user = await getDbUser();
+    if (!user || user.role !== "Creator") {
       return NextResponse.json({ error: "Unauthorized. Must be a creator." }, { status: 401 });
     }
 
@@ -20,7 +19,7 @@ export async function POST(req: Request) {
     }
 
     const fileExtension = filename.split(".").pop();
-    const uniqueKey = `${session.user.id}/${crypto.randomUUID()}.${fileExtension}`;
+    const uniqueKey = `${user.id}/${crypto.randomUUID()}.${fileExtension}`;
 
     const command = new PutObjectCommand({
       Bucket: process.env.R2_BUCKET_NAME || "elitehub-bucket",

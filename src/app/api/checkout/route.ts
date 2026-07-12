@@ -1,13 +1,13 @@
 import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/lib/auth";
+import { getDbUser } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { razorpay } from "@/lib/razorpay";
 
 export async function POST(req: Request) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session) {
+    const user = await getDbUser();
+    
+    if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -38,7 +38,7 @@ export async function POST(req: Request) {
       // Save pending purchase
       await prisma.purchase.create({
         data: {
-          fanId: session.user.id,
+          fanId: user.id,
           postId: post.id,
           amount: post.price,
           commission,

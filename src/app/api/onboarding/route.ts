@@ -1,13 +1,12 @@
 import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/lib/auth";
+import { getDbUser } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 
 export async function POST(req: Request) {
   try {
-    const session = await getServerSession(authOptions);
+    const user = await getDbUser();
     
-    if (!session || !session.user || !session.user.id) {
+    if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -23,14 +22,14 @@ export async function POST(req: Request) {
       const existing = await prisma.user.findUnique({
         where: { handle }
       });
-      if (existing && existing.id !== session.user.id) {
+      if (existing && existing.id !== user.id) {
         return NextResponse.json({ error: "Handle already taken" }, { status: 400 });
       }
     }
 
     // Update the user record
     const updatedUser = await prisma.user.update({
-      where: { id: session.user.id },
+      where: { id: user.id },
       data: {
         role,
         category: categories?.[0] || null, // taking first item since onboarding might send array

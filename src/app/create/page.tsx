@@ -2,14 +2,14 @@
 
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
+import { useUser } from "@clerk/nextjs";
 import { Button } from "@/components/Button";
 import { Card, CardContent } from "@/components/Card";
 import { BottomNav } from "@/components/BottomNav";
 
 export default function CreatePage() {
   const router = useRouter();
-  const { data: session } = useSession();
+  const { user, isLoaded, isSignedIn } = useUser();
   
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
@@ -19,7 +19,7 @@ export default function CreatePage() {
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  if (!session) return null; // Or redirect
+  if (isLoaded && !isSignedIn) return null; // Or redirect
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -69,7 +69,7 @@ export default function CreatePage() {
       });
 
       if (postRes.ok) {
-        router.push(`/${session.user.handle}`);
+        router.push(`/dashboard`);
       } else {
         alert("Failed to save post");
       }

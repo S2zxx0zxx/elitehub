@@ -1,18 +1,19 @@
 import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/lib/auth";
+
+import { getDbUser } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 
 export async function GET(req: Request) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session || session.user.role !== "Creator") {
+    const user = await getDbUser();
+    
+    if (!user || user.role !== "Creator") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const creatorId = session.user.id;
+    const creatorId = user.id;
 
     // 1. Calculate Total Earnings from Purchases
     const purchases = await prisma.purchase.findMany({

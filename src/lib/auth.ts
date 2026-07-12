@@ -1,47 +1,43 @@
-import { NextAuthOptions } from "next-auth"
-import GoogleProvider from "next-auth/providers/google"
-import { PrismaAdapter } from "@next-auth/prisma-adapter"
-import { prisma } from "@/lib/db"
+import { auth, currentUser } from "@clerk/nextjs/server";
+import { prisma } from "./db";
 
-export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(prisma),
-  providers: [
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID || "",
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
-    }),
-  ],
-  session: {
-    strategy: "jwt",
-  },
-  callbacks: {
-    async session({ session, token }) {
-      if (token && session.user) {
-        session.user.id = token.id as string;
-        session.user.role = token.role as string | null;
-        session.user.kycStatus = token.kycStatus as string | null;
-        session.user.handle = token.handle as string | null;
+/**
+ * Retrieves the current authenticated user from the database.
+ * If the user is authenticated with Clerk but doesn't exist in our DB yet,
+ * they will be created automatically (Lazy Sync).
+ */
+export async function getDbUser() {
+  const { userId } = auth();
+  if (!userId) return null;
+
+  let user = await prisma.user.findUnique({
+    where: { clerkId: userId }
+  });
+
+  if (!user) {
+    const clerkUser = await currentUser();
+    
+    // Fallback name if available
+    let name = "New User";
+    if (clerkUser?.firstName) {
+      name = `${clerkUser.firstName} ${clerkUser.lastName || ''}`.trim();
+    }
+
+    const email = clerkUser?.emailAddresses?.[0]?.emailAddress || null;
+    const photo = clerkUser?.imageUrl || null;
+
+    user = await prisma.user.create({
+      data: {
+        clerkId: userId,
+        name,
+        email,
+        photo,
+        // Using email username as default handle if available
+        handle: email ? email.split('@')[0] + Math.floor(Math.random() * 1000) : `user_${Math.floor(Math.random() * 10000)}`,
+        role: "Fan", // default role, will be updated in onboarding
       }
-      return session;
-    },
-    async jwt({ token, user }) {
-      if (user) {
-        token.id = user.id;
-        // When user signs in, we fetch the latest role from DB
-        const dbUser = await prisma.user.findUnique({
-          where: { id: user.id }
-        });
-        if (dbUser) {
-          token.role = dbUser.role;
-          token.kycStatus = dbUser.kycStatus;
-          token.handle = dbUser.handle;
-        }
-      }
-      return token;
-    },
-  },
-  pages: {
-    signIn: '/login',
-    newUser: '/onboarding',
+    });
   }
+
+  return user;
 }

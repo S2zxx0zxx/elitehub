@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
+import { useUser } from "@clerk/nextjs";
 import { Card, CardContent } from "@/components/Card";
 import { Button } from "@/components/Button";
 import { BottomNav } from "@/components/BottomNav";
@@ -19,7 +19,7 @@ interface DashboardData {
 }
 
 export default function DashboardPage() {
-  const { data: session } = useSession();
+  const { user, isLoaded, isSignedIn } = useUser();
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
   
@@ -67,7 +67,7 @@ export default function DashboardPage() {
     setPayoutLoading(false);
   };
 
-  if (!session) return <div className="p-8 text-center">Please login...</div>;
+  if (isLoaded && !isSignedIn) return <div className="p-8 text-center">Please login...</div>;
 
   return (
     <main className="min-h-screen bg-bg-dark pb-24">

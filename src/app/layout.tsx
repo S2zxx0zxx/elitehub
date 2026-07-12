@@ -1,3 +1,4 @@
+import {ClerkProvider} from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, Inter } from "next/font/google";
 import "@/styles/tokens.css";
@@ -26,9 +27,11 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className={`${display.variable} ${body.variable} font-body pb-24`}>
-        <Providers>
+        <ClerkProvider>
+          <Providers>
           {children}
-        </Providers>
+          </Providers>
+        </ClerkProvider>
       </body>
     </html>
   );

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
+import { useUser } from "@clerk/nextjs";
 import { Button } from "@/components/Button";
 import { Card, CardContent } from "@/components/Card";
 import { Chip } from "@/components/Chip";
@@ -12,7 +12,7 @@ const CATEGORIES = ["Video Editing", "VFX", "Music", "Design", "Education", "Art
 
 export default function OnboardingPage() {
   const router = useRouter();
-  const { data: session, update } = useSession();
+  const { user, isLoaded } = useUser();
   const [step, setStep] = useState(1);
   const [role, setRole] = useState<Role>(null);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
@@ -20,8 +20,8 @@ export default function OnboardingPage() {
   const [price, setPrice] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // If already onboarded, maybe redirect (could also be handled in middleware)
-  if (session?.user?.role) {
+  // If we had publicMetadata synced, we'd check user.publicMetadata.role
+  if (isLoaded && !user) {
     router.push("/");
     return null;
   }
@@ -41,7 +41,8 @@ export default function OnboardingPage() {
       });
 
       if (res.ok) {
-        await update(); // force session update
+        // Wait a bit or redirect
+        await user?.reload();
         router.push("/");
       } else {
         alert("Something went wrong");

@@ -1,9 +1,12 @@
 import React from 'react';
 import { Home, Compass, Plus, Bell, User } from 'lucide-react';
-import { cn } from './Button';
+import { useUser } from "@clerk/nextjs";
+import { usePathname } from 'next/navigation';
 
-// Mock routing or use next/link in the actual app
 export function BottomNav() {
+  const pathname = usePathname();
+  const { isSignedIn } = useUser();
+
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50 p-4 pb-safe flex justify-center">
       <div className="flex items-center justify-between w-full max-w-md px-6 py-3 bg-surface-light/80 dark:bg-surface-dark/80 backdrop-blur-xl border border-white/10 rounded-3xl shadow-[0_-4px_24px_rgba(0,0,0,0.2)]">

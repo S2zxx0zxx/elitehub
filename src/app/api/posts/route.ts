@@ -1,13 +1,13 @@
 import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/lib/auth";
+import { getDbUser } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 
 export async function POST(req: Request) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session || session.user.role !== "Creator") {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const user = await getDbUser();
+    
+    if (!user || user.role !== "Creator") {
+      return NextResponse.json({ error: "Unauthorized. Only creators can post." }, { status: 401 });
     }
 
     const { type, mediaKey, caption, category, hashtags, visibility, price } = await req.json();
@@ -18,7 +18,7 @@ export async function POST(req: Request) {
 
     const post = await prisma.post.create({
       data: {
-        creatorId: session.user.id,
+        creatorId: user.id,
         type,
         mediaKey,
         caption,
