@@ -11,9 +11,11 @@ interface CheckoutSheetProps {
   title: string;
   price: number;
   postId?: string;
+  creatorId?: string;
+  type?: "post" | "subscription";
 }
 
-export function CheckoutSheet({ isOpen, onClose, title, price, postId }: CheckoutSheetProps) {
+export function CheckoutSheet({ isOpen, onClose, title, price, postId, creatorId, type = "post" }: CheckoutSheetProps) {
   const [loading, setLoading] = useState(false);
 
   const handlePayment = async () => {
@@ -23,7 +25,10 @@ export function CheckoutSheet({ isOpen, onClose, title, price, postId }: Checkou
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ type: "post", targetId: postId })
+        body: JSON.stringify({ 
+          type: type, 
+          targetId: type === "subscription" ? creatorId : postId 
+        })
       });
       const data = await res.json();
 

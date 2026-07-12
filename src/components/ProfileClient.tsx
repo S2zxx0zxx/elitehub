@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { CheckoutSheet } from "./CheckoutSheet";
+import { Button } from "./Button";
 
 interface Post {
   id: string;
@@ -10,12 +11,45 @@ interface Post {
   price: number | null;
 }
 
-export function ProfileClient({ posts, creatorName, handle }: { posts: Post[], creatorName: string, handle: string }) {
+export function ProfileClient({ 
+  posts, 
+  creatorName, 
+  handle,
+  creatorId,
+  subscriptionPrice,
+  isSubscribed
+}: { 
+  posts: Post[], 
+  creatorName: string, 
+  handle: string,
+  creatorId: string,
+  subscriptionPrice: number,
+  isSubscribed: boolean
+}) {
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
   const [activeTab, setActiveTab] = useState<"posts" | "shop">("posts");
+  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+  const [isFollowing, setIsFollowing] = useState(false);
 
   return (
     <>
+      <div className="flex gap-3 mb-8">
+        <Button 
+          className="flex-1"
+          onClick={() => setIsCheckoutOpen(true)}
+          disabled={isSubscribed}
+        >
+          {isSubscribed ? "Subscribed" : `Subscribe ${subscriptionPrice ? `₹${subscriptionPrice}/mo` : 'Free'}`}
+        </Button>
+        <Button 
+          variant="secondary" 
+          className="px-6"
+          onClick={() => setIsFollowing(!isFollowing)}
+        >
+          {isFollowing ? "Following" : "Follow"}
+        </Button>
+      </div>
+
       {/* Tabs */}
       <div className="flex border-b border-white/10 mb-6">
         <button 
@@ -73,11 +107,16 @@ export function ProfileClient({ posts, creatorName, handle }: { posts: Post[], c
       )}
 
       <CheckoutSheet 
-        isOpen={!!selectedPost}
-        onClose={() => setSelectedPost(null)}
-        title={`Unlock exclusive content from ${creatorName}`}
-        price={selectedPost?.price || 0}
+        isOpen={!!selectedPost || isCheckoutOpen}
+        onClose={() => {
+          setSelectedPost(null);
+          setIsCheckoutOpen(false);
+        }}
+        title={selectedPost ? `Unlock exclusive content from ${creatorName}` : `Subscribe to ${creatorName}`}
+        price={selectedPost?.price || subscriptionPrice}
         postId={selectedPost?.id}
+        creatorId={creatorId}
+        type={selectedPost ? "post" : "subscription"}
       />
     </>
   );

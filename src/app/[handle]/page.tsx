@@ -109,18 +109,14 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
           <p className="text-sm">{creator.bio || "Welcome to my official EliteHub page! Subscribe for exclusive content."}</p>
         </div>
 
-        <div className="flex gap-3 mb-8">
-          <Button className="flex-1">
-            Subscribe {creator.subscriptionPrice ? `₹${creator.subscriptionPrice}/mo` : 'Free'}
-          </Button>
-          <Button variant="secondary" className="px-6">Follow</Button>
-        </div>
-
         {/* Tabs and Posts Grid handled by Client Component */}
         <ProfileClient 
           posts={sanitizedPosts} 
           creatorName={creator.name || creator.handle || "Creator"} 
           handle={creator.handle || ""}
+          creatorId={creator.id}
+          subscriptionPrice={creator.subscriptionPrice || 0}
+          isSubscribed={isSubscribed}
         />
       </div>
       
