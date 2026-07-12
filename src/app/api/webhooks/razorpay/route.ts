@@ -11,12 +11,20 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Missing signature" }, { status: 400 });
     }
 
+    const secret = process.env.RAZORPAY_WEBHOOK_SECRET;
+    if (!secret) {
+      return NextResponse.json({ error: "Webhook secret not configured" }, { status: 500 });
+    }
+
     const expectedSignature = crypto
-      .createHmac("sha256", process.env.RAZORPAY_WEBHOOK_SECRET || "mock_secret")
+      .createHmac("sha256", secret)
       .update(bodyText)
       .digest("hex");
 
-    if (expectedSignature !== signature) {
+    const expectedBuffer = Buffer.from(expectedSignature, "utf-8");
+    const signatureBuffer = Buffer.from(signature, "utf-8");
+
+    if (expectedBuffer.length !== signatureBuffer.length || !crypto.timingSafeEqual(expectedBuffer, signatureBuffer)) {
       return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
     }
 

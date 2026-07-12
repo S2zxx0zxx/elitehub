@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/db";
+import { getDbUser } from "@/lib/auth";
 import { Button } from "@/components/Button";
 import { Card, CardContent } from "@/components/Card";
 import { BottomNav } from "@/components/BottomNav";
@@ -26,6 +27,33 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
   if (!creator || creator.role !== "Creator") {
     notFound();
   }
+
+  const viewer = await getDbUser();
+  let isSubscribed = false;
+  let purchasedPostIds: string[] = [];
+
+  if (viewer) {
+    const sub = await prisma.subscription.findFirst({
+      where: { fanId: viewer.id, creatorId: creator.id, status: "active" }
+    });
+    if (sub) isSubscribed = true;
+
+    const purchases = await prisma.purchase.findMany({
+      where: { fanId: viewer.id, status: "completed" },
+      select: { postId: true }
+    });
+    purchasedPostIds = purchases.map(p => p.postId);
+  }
+
+  const isCreator = viewer?.id === creator.id;
+
+  const sanitizedPosts = creator.posts.map(post => {
+    if (post.visibility === "public" || isCreator || isSubscribed || purchasedPostIds.includes(post.id)) {
+      return post;
+    }
+    // Strip mediaKey for unauthorized viewers
+    return { ...post, mediaKey: "" };
+  });
 
   // Mock gamified tick for demo (blue/gold)
   const isGold = creator.tickTier === "gold";
@@ -90,7 +118,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
 
         {/* Tabs and Posts Grid handled by Client Component */}
         <ProfileClient 
-          posts={creator.posts} 
+          posts={sanitizedPosts} 
           creatorName={creator.name || creator.handle || "Creator"} 
           handle={creator.handle || ""}
         />

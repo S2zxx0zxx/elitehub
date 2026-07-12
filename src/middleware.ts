@@ -4,7 +4,6 @@ const isProtectedRoute = createRouteMatcher([
   "/dashboard(.*)", 
   "/create(.*)", 
   "/onboarding(.*)", 
-  "/wallet(.*)",
   "/api/onboarding(.*)",
   "/api/dashboard(.*)",
   "/api/posts(.*)",
@@ -23,5 +22,6 @@ export const config = {
   matcher: [
     "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
     "/(api|trpc)(.*)",
+    "/__clerk/:path*"
   ],
 };

@@ -1,9 +1,10 @@
+"use client";
+
 import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { UserButton, SignInButton, useUser } from "@clerk/nextjs";
 import { Search, BarChart2 } from 'lucide-react';
-import { WalletConnect } from './WalletConnect';
 
 export function TopBar() {
   const { isLoaded, isSignedIn } = useUser();
@@ -24,7 +25,6 @@ export function TopBar() {
               <Link href="/explore" className="hover:text-brand-yellow transition-colors">
                 <Search size={24} />
               </Link>
-              <WalletConnect />
               <UserButton afterSignOutUrl="/" />
             </>
           ) : (

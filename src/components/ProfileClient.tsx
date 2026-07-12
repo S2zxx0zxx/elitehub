@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { CheckoutSheet } from "./CheckoutSheet";
-import { CreatorCoinTab } from "./CreatorCoinTab";
 
 interface Post {
   id: string;
@@ -13,7 +12,7 @@ interface Post {
 
 export function ProfileClient({ posts, creatorName, handle }: { posts: Post[], creatorName: string, handle: string }) {
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
-  const [activeTab, setActiveTab] = useState<"posts" | "shop" | "coin">("posts");
+  const [activeTab, setActiveTab] = useState<"posts" | "shop">("posts");
 
   return (
     <>
@@ -31,18 +30,9 @@ export function ProfileClient({ posts, creatorName, handle }: { posts: Post[], c
         >
           Shop
         </button>
-        <button 
-          onClick={() => setActiveTab("coin")}
-          className={`flex-1 py-3 text-center transition-colors flex items-center justify-center gap-1 ${activeTab === "coin" ? "border-b-2 border-brand-yellow font-bold text-brand-yellow" : "text-text-lo hover:text-white"}`}
-        >
-          Coin <span className="text-xs bg-brand-yellow/20 text-brand-yellow px-1.5 py-0.5 rounded">New</span>
-        </button>
       </div>
 
       {/* Tab Content */}
-      {activeTab === "coin" && (
-        <CreatorCoinTab creatorName={creatorName} handle={handle} />
-      )}
 
       {activeTab === "shop" && (
         <div className="py-12 text-center text-text-lo">

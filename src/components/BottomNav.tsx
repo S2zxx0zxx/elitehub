@@ -1,3 +1,5 @@
+"use client";
+
 import React from 'react';
 import { Home, Compass, Plus, Bell, User } from 'lucide-react';
 import { useUser } from "@clerk/nextjs";
