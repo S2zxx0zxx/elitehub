@@ -36,7 +36,7 @@ export async function POST(req: Request) {
         categories: categories || [],
         handle: handle || null,
         subscriptionPrice: subscriptionPrice ? parseFloat(subscriptionPrice) : null,
-      },
+      } as any,
     });
 
     return NextResponse.json({ success: true, user: updatedUser });

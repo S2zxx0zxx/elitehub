@@ -19,7 +19,9 @@
     "@aws-sdk/client-s3": "^3.577.0",
     "@aws-sdk/s3-request-presigner": "^3.577.0",
     "@prisma/client": "^5.14.0",
-    "lucide-react": "^0.378.0"
+    "lucide-react": "^0.378.0",
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^2.3.0"
   },
   "devDependencies": {
     "typescript": "^5",
