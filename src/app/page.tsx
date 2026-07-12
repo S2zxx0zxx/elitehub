@@ -7,6 +7,8 @@ import { TopBar } from "@/components/TopBar";
 import { AdSlot } from "@/components/AdSlot";
 import { getTrendingCreators, getTrendingContent } from "@/lib/ranking";
 
+export const dynamic = "force-dynamic";
+
 export default async function Home() {
   const trendingCreators = await getTrendingCreators();
   const trendingContent = await getTrendingContent();
@@ -61,7 +63,7 @@ export default async function Home() {
                 <Link href={`/${creator.handle}`} key={creator.id} className="min-w-[140px]">
                   <Card className="h-full hover:border-brand-yellow/50 transition-colors border border-transparent">
                     <CardContent className="flex flex-col items-center text-center p-4">
-                      <div className="w-16 h-16 rounded-full bg-surface-dark mb-3 overflow-hidden">
+                      <div className="w-16 h-16 rounded-full bg-surface-dark border-2 border-brand-yellow mb-3 mx-auto overflow-hidden">
                         {creator.photo ? (
                           <img src={creator.photo} alt={creator.name || ""} className="w-full h-full object-cover" />
                         ) : (
@@ -71,7 +73,7 @@ export default async function Home() {
                         )}
                       </div>
                       <h4 className="font-bold text-sm text-elite-white line-clamp-1">{creator.name || creator.handle}</h4>
-                      <p className="text-xs text-text-lo mt-1 line-clamp-1">{creator.categories[0] || "Creator"}</p>
+                      <p className="text-xs text-text-lo mt-1 line-clamp-1">{creator.category || "Creator"}</p>
                     </CardContent>
                   </Card>
                 </Link>

@@ -8,6 +8,8 @@ import { BottomNav } from "@/components/BottomNav";
 import { TopBar } from "@/components/TopBar";
 import { motion } from "framer-motion";
 
+export const dynamic = "force-dynamic";
+
 interface DashboardData {
   totalEarnings: number;
   availableBalance: number;

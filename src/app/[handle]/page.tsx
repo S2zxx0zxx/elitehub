@@ -5,6 +5,8 @@ import { Card, CardContent } from "@/components/Card";
 import { BottomNav } from "@/components/BottomNav";
 import { ProfileClient } from "@/components/ProfileClient";
 
+export const dynamic = 'force-dynamic';
+
 interface ProfilePageProps {
   params: {
     handle: string;
@@ -26,8 +28,8 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
   }
 
   // Mock gamified tick for demo (blue/gold)
-  const isGold = (creator as any).tickTier === "gold";
-  const isBlue = (creator as any).tickTier === "blue";
+  const isGold = creator.tickTier === "gold";
+  const isBlue = creator.tickTier === "blue";
 
   return (
     <main className="min-h-screen bg-bg-dark pb-24">
@@ -47,8 +49,8 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
         <div className="flex justify-between items-end mb-4">
           <div className="relative">
             <div className="w-24 h-24 rounded-full border-4 border-bg-dark bg-surface-dark overflow-hidden">
-              {(creator as any).photo ? (
-                <img src={(creator as any).photo} alt={creator.name || ""} className="w-full h-full object-cover" />
+              {creator.photo ? (
+                <img src={creator.photo} alt={creator.name || ""} className="w-full h-full object-cover" />
               ) : (
                 <div className="w-full h-full bg-brand-yellow/20 flex items-center justify-center text-3xl">
                   {(creator.name || creator.handle || "C")[0].toUpperCase()}
@@ -75,13 +77,13 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
 
         <div className="mb-6">
           <h1 className="font-display text-2xl font-bold text-elite-white">{creator.name || creator.handle}</h1>
-          <p className="text-text-lo mb-2">@{creator.handle} • {(creator as any).categories?.[0] || "Creator"}</p>
+          <p className="text-text-lo mb-2">@{creator.handle} • {creator.category || "Creator"}</p>
           <p className="text-sm">{creator.bio || "Welcome to my official EliteHub page! Subscribe for exclusive content."}</p>
         </div>
 
         <div className="flex gap-3 mb-8">
           <Button className="flex-1">
-            Subscribe {(creator as any).subscriptionPrice ? `₹${(creator as any).subscriptionPrice}/mo` : 'Free'}
+            Subscribe {creator.subscriptionPrice ? `₹${creator.subscriptionPrice}/mo` : 'Free'}
           </Button>
           <Button variant="secondary" className="px-6">Follow</Button>
         </div>

@@ -33,10 +33,10 @@ export async function POST(req: Request) {
       where: { id: session.user.id },
       data: {
         role,
-        categories: categories || [],
+        category: categories?.[0] || null, // taking first item since onboarding might send array
         handle: handle || null,
         subscriptionPrice: subscriptionPrice ? parseFloat(subscriptionPrice) : null,
-      } as any,
+      },
     });
 
     return NextResponse.json({ success: true, user: updatedUser });
