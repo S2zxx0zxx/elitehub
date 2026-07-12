@@ -24,6 +24,7 @@ model User {
   tickTier          String   @default("none") // none, blue, gold
   subscriptionPrice Float?
   category          String?
+  status            String   @default("active") // active, suspended, banned
   createdAt         DateTime @default(now())
 
   posts         Post[]

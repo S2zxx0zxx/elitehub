@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, Inter } from "next/font/google";
 import "@/styles/tokens.css";
 import { Providers } from "@/components/Providers";
+import { getDbUser } from "@/lib/auth";
 
 const display = Plus_Jakarta_Sans({ 
   subsets: ["latin"], 
@@ -19,13 +20,16 @@ export const metadata: Metadata = {
   description: "India ke creators, seedha apne fans se kamayein",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const user = await getDbUser();
+  const theme = user?.theme === "light" ? "light" : "dark";
+
   return (
-    <html lang="en" className="dark">
+    <html lang="en" className={theme}>
       <body className={`${display.variable} ${body.variable} font-body pb-24`}>
         <ClerkProvider>
           <Providers>

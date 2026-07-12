@@ -45,6 +45,10 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
     purchasedPostIds = purchases.map(p => p.postId);
   }
 
+  const isFollowing = viewer ? await prisma.follow.findFirst({
+    where: { followerId: viewer.id, creatorId: creator.id }
+  }).then(f => !!f) : false;
+
   const isCreator = viewer?.id === creator.id;
 
   const sanitizedPosts = creator.posts.map(post => {
@@ -120,6 +124,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
           creatorId={creator.id}
           subscriptionPrice={creator.subscriptionPrice || 0}
           isSubscribed={isSubscribed}
+          initialIsFollowing={isFollowing}
         />
       </div>
       

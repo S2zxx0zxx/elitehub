@@ -47,6 +47,21 @@ export async function POST(req: Request) {
             razorpayPaymentId: payment.id // Overwrite with actual payment ID
           }
         });
+        
+        // Find fan details for notification
+        const fan = await prisma.user.findUnique({ where: { id: purchase.fanId } });
+        const post = await prisma.post.findUnique({ where: { id: purchase.postId } });
+        
+        if (post && fan) {
+          await prisma.notification.create({
+            data: {
+              userId: post.creatorId,
+              type: "promotion",
+              title: "Post Unlocked!",
+              body: `${fan.name || fan.handle || "Someone"} unlocked your post for ₹${purchase.amount}.`
+            }
+          });
+        }
       }
     }
 

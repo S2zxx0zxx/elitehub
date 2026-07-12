@@ -17,19 +17,39 @@ export function ProfileClient({
   handle,
   creatorId,
   subscriptionPrice,
-  isSubscribed
+  isSubscribed,
+  initialIsFollowing
 }: { 
   posts: Post[], 
   creatorName: string, 
   handle: string,
   creatorId: string,
   subscriptionPrice: number,
-  isSubscribed: boolean
+  isSubscribed: boolean,
+  initialIsFollowing?: boolean
 }) {
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
   const [activeTab, setActiveTab] = useState<"posts" | "shop">("posts");
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
-  const [isFollowing, setIsFollowing] = useState(false);
+  const [isFollowing, setIsFollowing] = useState(initialIsFollowing || false);
+  const [isFollowLoading, setIsFollowLoading] = useState(false);
+
+  const toggleFollow = async () => {
+    setIsFollowLoading(true);
+    const prev = isFollowing;
+    setIsFollowing(!prev);
+    try {
+      const res = await fetch("/api/follow", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ creatorId })
+      });
+      if (!res.ok) setIsFollowing(prev);
+    } catch {
+      setIsFollowing(prev);
+    }
+    setIsFollowLoading(false);
+  };
 
   return (
     <>
@@ -44,7 +64,8 @@ export function ProfileClient({
         <Button 
           variant="secondary" 
           className="px-6"
-          onClick={() => setIsFollowing(!isFollowing)}
+          onClick={toggleFollow}
+          disabled={isFollowLoading}
         >
           {isFollowing ? "Following" : "Follow"}
         </Button>

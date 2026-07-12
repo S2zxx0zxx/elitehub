@@ -1,18 +1,28 @@
 import { prisma } from "@/lib/db";
 
-// In a real production app, "engagement" would be calculated based on likes, comments, watch time.
-// For EliteHub v1, we mock "fair-reach" by combining recent creation date with a small randomizer
-// so that new creators (Naye) get surfaced alongside established (Trending) ones.
+// Scoring Formula: 
+// Trending = (Followers * 2) + (Purchases * 5) + (Recency Bonus up to 30 points)
+// New = Created in last 30 days, sorted by post count activity
 
 export async function getTrendingCreators() {
-  return await prisma.user.findMany({
+  const creators = await prisma.user.findMany({
     where: { role: "Creator" },
-    orderBy: { createdAt: 'desc' }, // In real app: orderBy engagement score
-    take: 10,
     include: {
-      posts: { take: 1 } // fetch 1 post for preview thumbnail
+      _count: {
+        select: { followers: true, purchases: true }
+      },
+      posts: { take: 1, orderBy: { createdAt: 'desc' } }
     }
   });
+
+  const scored = creators.map(creator => {
+    const daysSinceCreation = (new Date().getTime() - new Date(creator.createdAt).getTime()) / (1000 * 3600 * 24);
+    const recencyBonus = Math.max(0, 30 - daysSinceCreation); // Max 30 points for being brand new
+    const score = (creator._count.followers * 2) + (creator._count.purchases * 5) + recencyBonus;
+    return { ...creator, score };
+  });
+
+  return scored.sort((a, b) => b.score - a.score).slice(0, 10);
 }
 
 export async function getTrendingContent() {
@@ -27,9 +37,18 @@ export async function getTrendingContent() {
 }
 
 export async function getNewCreators() {
+  const thirtyDaysAgo = new Date(new Date().getTime() - 30 * 24 * 60 * 60 * 1000);
+  
   return await prisma.user.findMany({
-    where: { role: "Creator" },
-    orderBy: { createdAt: 'desc' },
+    where: { 
+      role: "Creator",
+      createdAt: { gte: thirtyDaysAgo }
+    },
+    orderBy: {
+      posts: {
+        _count: 'desc'
+      }
+    },
     take: 5,
   });
 }

@@ -4,7 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { UserButton, SignInButton, useUser } from "@clerk/nextjs";
-import { Search, BarChart2 } from 'lucide-react';
+import { Search, BarChart2, Settings } from 'lucide-react';
 
 export function TopBar() {
   const { isLoaded, isSignedIn } = useUser();
@@ -24,6 +24,9 @@ export function TopBar() {
               </Link>
               <Link href="/explore" className="hover:text-brand-yellow transition-colors">
                 <Search size={24} />
+              </Link>
+              <Link href="/settings" className="hover:text-brand-yellow transition-colors">
+                <Settings size={24} />
               </Link>
               <UserButton afterSignOutUrl="/" />
             </>

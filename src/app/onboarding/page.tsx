@@ -18,6 +18,7 @@ export default function OnboardingPage() {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [handle, setHandle] = useState("");
   const [price, setPrice] = useState("");
+  const [photo, setPhoto] = useState("");
   const [loading, setLoading] = useState(false);
 
   // If we had publicMetadata synced, we'd check user.publicMetadata.role
@@ -37,6 +38,7 @@ export default function OnboardingPage() {
           categories: selectedCategories,
           handle: role === "Creator" ? handle : undefined,
           subscriptionPrice: role === "Creator" ? parseFloat(price) : undefined,
+          photo: role === "Creator" ? photo : undefined,
         }),
       });
 
@@ -141,6 +143,17 @@ export default function OnboardingPage() {
                     placeholder="e.g. raj_editzz"
                     value={handle}
                     onChange={(e) => setHandle(e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, ''))}
+                  />
+                </div>
+
+                <div>
+                  <label className="text-sm font-bold text-text-lo mb-1 block">Profile Photo URL (or mediaKey)</label>
+                  <input 
+                    type="text" 
+                    className="w-full bg-surface-dark border border-white/10 rounded-xl p-3 text-elite-white focus:outline-none focus:border-brand-yellow"
+                    placeholder="e.g. key from R2"
+                    value={photo}
+                    onChange={(e) => setPhoto(e.target.value)}
                   />
                 </div>
                 
