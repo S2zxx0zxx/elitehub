@@ -12,9 +12,12 @@ const isProtectedRoute = createRouteMatcher([
   "/api/checkout(.*)"
 ]);
 
-export default clerkMiddleware(async (auth, request) => {
+export default clerkMiddleware((auth, request) => {
   if (isProtectedRoute(request)) {
-    await auth.protect();
+    const { userId, redirectToSignIn } = auth();
+    if (!userId) {
+      return redirectToSignIn();
+    }
   }
 });
 
