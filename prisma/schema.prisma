@@ -1,0 +1,168 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String?
+  handle    String?  @unique
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  photo         String?
+  role          String? // Fan or Creator
+  bio       String?
+  theme     String   @default("dark")
+  upiId     String?
+  kycStatus         String   @default("pending")
+  tickTier          String   @default("none") // none, blue, gold
+  subscriptionPrice Float?
+  categories        String[]
+  createdAt         DateTime @default(now())
+
+  posts         Post[]
+  follows       Follow[]       @relation("Follower")
+  followers     Follow[]       @relation("Following")
+  subscriptions Subscription[] @relation("FanSubscription")
+  subscribers   Subscription[] @relation("CreatorSubscription")
+  purchases     Purchase[]
+  payouts       Payout[]
+  accounts      Account[]
+  sessions      Session[]
+}
+
+model Post {
+  id         String   @id @default(uuid())
+  creatorId  String
+  type       String // photo, video, product
+  mediaKey   String
+  caption    String?
+  category   String?
+  hashtags   String?
+  visibility String // public, private
+  price      Float?
+  createdAt  DateTime @default(now())
+
+  creator   User       @relation(fields: [creatorId], references: [id])
+  purchases Purchase[]
+  reports   Report[]
+}
+
+model Follow {
+  followerId String
+  creatorId  String
+
+  follower User @relation("Follower", fields: [followerId], references: [id])
+  creator  User @relation("Following", fields: [creatorId], references: [id])
+
+  @@id([followerId, creatorId])
+}
+
+model Subscription {
+  id            String    @id @default(uuid())
+  fanId         String
+  creatorId     String
+  razorpaySubId String?
+  status        String // active, cancelled, past_due
+  startedAt     DateTime  @default(now())
+  renewsAt      DateTime?
+
+  fan     User @relation("FanSubscription", fields: [fanId], references: [id])
+  creator User @relation("CreatorSubscription", fields: [creatorId], references: [id])
+}
+
+model Purchase {
+  id                String   @id @default(uuid())
+  fanId             String
+  postId            String
+  amount            Float
+  commission        Float
+  creatorEarning    Float
+  razorpayPaymentId String?
+  status            String // pending, completed, failed
+  createdAt         DateTime @default(now())
+
+  fan  User @relation(fields: [fanId], references: [id])
+  post Post @relation(fields: [postId], references: [id])
+}
+
+model Payout {
+  id          String    @id @default(uuid())
+  creatorId   String
+  amount      Float
+  upiId       String
+  status      String // requested, paid
+  requestedAt DateTime  @default(now())
+  paidAt      DateTime?
+
+  creator User @relation(fields: [creatorId], references: [id])
+}
+
+model Report {
+  id         String   @id @default(uuid())
+  reporterId String
+  postId     String
+  reason     String
+  status     String   @default("open") // open, resolved
+  createdAt  DateTime @default(now())
+
+  post Post @relation(fields: [postId], references: [id])
+}
+
+model Broadcast {
+  id        String   @id @default(uuid())
+  title     String
+  body      String
+  createdAt DateTime @default(now())
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  type      String // promotion, utility, etc.
+  title     String
+  body      String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model Account {
+  id                 String  @id @default(cuid())
+  userId             String
+  type               String
+  provider           String
+  providerAccountId  String
+  refresh_token      String?  @db.Text
+  access_token       String?  @db.Text
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String?  @db.Text
+  session_state      String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
