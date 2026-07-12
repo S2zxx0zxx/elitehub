@@ -15,6 +15,7 @@
     "next-auth": "^4.24.7",
     "@next-auth/prisma-adapter": "^1.0.7",
     "framer-motion": "^11.2.10",
+    "razorpay": "^2.9.4",
     "@aws-sdk/client-s3": "^3.577.0",
     "@aws-sdk/s3-request-presigner": "^3.577.0",
     "@prisma/client": "^5.14.0",
