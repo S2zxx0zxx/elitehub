@@ -40,7 +40,55 @@ export async function GET(req: Request) {
       where: { creatorId: creatorId, status: "active" }
     });
 
-    // 5. Recent Ledger (Recent purchases)
+    // 5. Followers Count
+    const followersCount = await prisma.follow.count({
+      where: { creatorId: creatorId }
+    });
+
+    // 6. Weekly Growth Calculation (Earnings)
+    const now = new Date();
+    const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+    const fourteenDaysAgo = new Date(now.getTime() - 14 * 24 * 60 * 60 * 1000);
+
+    const thisWeekPurchases = await prisma.purchase.findMany({
+      where: { post: { creatorId: creatorId }, status: "completed", createdAt: { gte: sevenDaysAgo } }
+    });
+    const lastWeekPurchases = await prisma.purchase.findMany({
+      where: { post: { creatorId: creatorId }, status: "completed", createdAt: { gte: fourteenDaysAgo, lt: sevenDaysAgo } }
+    });
+
+    const thisWeekEarnings = thisWeekPurchases.reduce((sum, p) => sum + p.creatorEarning, 0);
+    const lastWeekEarnings = lastWeekPurchases.reduce((sum, p) => sum + p.creatorEarning, 0);
+    
+    let weeklyGrowth = 0;
+    if (lastWeekEarnings === 0 && thisWeekEarnings > 0) weeklyGrowth = 100;
+    else if (lastWeekEarnings > 0) weeklyGrowth = Math.round(((thisWeekEarnings - lastWeekEarnings) / lastWeekEarnings) * 100);
+
+    // 7. Chart Data (30 days earnings)
+    const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+    const recentPurchases = await prisma.purchase.findMany({
+      where: { post: { creatorId: creatorId }, status: "completed", createdAt: { gte: thirtyDaysAgo } },
+      select: { createdAt: true, creatorEarning: true }
+    });
+    
+    const chartDataMap: Record<string, number> = {};
+    for (let i = 29; i >= 0; i--) {
+      const d = new Date(now.getTime() - i * 24 * 60 * 60 * 1000);
+      const key = `${d.getMonth()+1}/${d.getDate()}`;
+      chartDataMap[key] = 0;
+    }
+    
+    recentPurchases.forEach(p => {
+      const d = new Date(p.createdAt);
+      const key = `${d.getMonth()+1}/${d.getDate()}`;
+      if (chartDataMap[key] !== undefined) {
+        chartDataMap[key] += p.creatorEarning;
+      }
+    });
+
+    const chartData = Object.keys(chartDataMap).map(date => ({ date, earnings: chartDataMap[date] }));
+
+    // 8. Recent Ledger (Recent purchases)
     const recentTransactions = await prisma.purchase.findMany({
       where: { 
         post: { creatorId: creatorId },
@@ -58,6 +106,9 @@ export async function GET(req: Request) {
       totalEarnings,
       availableBalance,
       subscribersCount,
+      followersCount,
+      weeklyGrowth,
+      chartData,
       recentTransactions,
       payouts
     });

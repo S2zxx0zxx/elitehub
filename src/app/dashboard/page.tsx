@@ -14,6 +14,9 @@ interface DashboardData {
   totalEarnings: number;
   availableBalance: number;
   subscribersCount: number;
+  followersCount: number;
+  weeklyGrowth: number;
+  chartData: { date: string; earnings: number }[];
   recentTransactions: any[];
   payouts: any[];
 }
@@ -151,11 +154,48 @@ export default function DashboardPage() {
               </Card>
               <Card>
                 <CardContent className="p-5 text-center">
-                  <p className="text-text-lo text-sm font-bold mb-1">Total Views</p>
-                  {/* Mock views for now */}
-                  <h3 className="font-display text-2xl font-bold text-elite-white">12.4K</h3>
+                  <p className="text-text-lo text-sm font-bold mb-1">Weekly Growth</p>
+                  <h3 className={`font-display text-2xl font-bold ${data.weeklyGrowth > 0 ? 'text-green-500' : 'text-elite-white'}`}>
+                    {data.weeklyGrowth > 0 ? '+' : ''}{data.weeklyGrowth}%
+                  </h3>
                 </CardContent>
               </Card>
+            </div>
+
+            {/* Achievement / Tick Progress */}
+            <Card className="mt-4 bg-surface-dark border border-white/5">
+              <CardContent className="p-5">
+                <h3 className="font-bold text-elite-white mb-3">Tick Progress</h3>
+                <div className="mb-2 flex justify-between items-end">
+                  <span className="text-sm font-bold text-blue-500">Blue Tick</span>
+                  <span className="text-xs text-text-lo">{data.followersCount} / 100 followers</span>
+                </div>
+                <div className="w-full bg-black rounded-full h-2 mb-4">
+                  <div className="bg-blue-500 h-2 rounded-full" style={{ width: `${Math.min(100, (data.followersCount / 100) * 100)}%` }} />
+                </div>
+                
+                <div className="mb-2 flex justify-between items-end">
+                  <span className="text-sm font-bold text-gold">Gold Tick</span>
+                  <span className="text-xs text-text-lo">{data.followersCount} / 100,000 followers</span>
+                </div>
+                <div className="w-full bg-black rounded-full h-2">
+                  <div className="bg-gold h-2 rounded-full" style={{ width: `${Math.min(100, (data.followersCount / 100000) * 100)}%` }} />
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Chart */}
+            <div className="mt-8">
+              <h3 className="font-display font-bold text-xl text-elite-white mb-4">30-Day Earnings</h3>
+              <div className="bg-surface-dark p-6 rounded-3xl border border-white/5 h-48 flex items-end gap-1">
+                {data.chartData.map((day, i) => (
+                  <div key={i} className="flex-1 bg-brand-yellow/30 hover:bg-brand-yellow transition-colors rounded-t-md relative group" style={{ height: `${Math.max(4, (day.earnings / (Math.max(...data.chartData.map(d => d.earnings)) || 1)) * 100)}%` }}>
+                    <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-10 whitespace-nowrap">
+                      ₹{day.earnings}
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
 
             {/* Ledger */}

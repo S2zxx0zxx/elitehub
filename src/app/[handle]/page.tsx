@@ -52,12 +52,15 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
       return post;
     }
     // Strip mediaKey for unauthorized viewers
-    return { ...post, mediaKey: "" };
+    return { ...post, mediaKey: null as any };
   });
 
-  // Mock gamified tick for demo (blue/gold)
-  const isGold = creator.tickTier === "gold";
-  const isBlue = creator.tickTier === "blue";
+  const followersCount = await prisma.follow.count({
+    where: { creatorId: creator.id }
+  });
+
+  const isBlue = creator.kycStatus === "verified" && followersCount >= 100;
+  const isGold = creator.tickTier === "gold" && followersCount >= 100000;
 
   return (
     <main className="min-h-screen bg-bg-dark pb-24">
@@ -93,7 +96,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
           </div>
           <div className="flex gap-4 text-center">
             <div>
-              <p className="font-bold text-lg">12K</p>
+              <p className="font-bold text-lg">{followersCount}</p>
               <p className="text-xs text-text-lo">Followers</p>
             </div>
             <div>
