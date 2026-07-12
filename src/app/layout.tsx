@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, Inter } from "next/font/google";
 import "@/styles/tokens.css";
+import { Providers } from "@/components/Providers";
 
 const display = Plus_Jakarta_Sans({ 
   subsets: ["latin"], 
@@ -25,7 +26,9 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className={`${display.variable} ${body.variable} font-body pb-24`}>
-        {children}
+        <Providers>
+          {children}
+        </Providers>
       </body>
     </html>
   );
