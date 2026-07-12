@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { Search } from 'lucide-react';
+import { Search, BarChart2 } from 'lucide-react';
 import { WalletConnect } from './WalletConnect';
 
 export function TopBar() {
@@ -11,6 +11,9 @@ export function TopBar() {
           EliteHub
         </Link>
         <div className="flex items-center gap-4 text-elite-white">
+          <Link href="/dashboard" className="hover:text-brand-yellow transition-colors">
+            <BarChart2 size={24} />
+          </Link>
           <Link href="/explore" className="hover:text-brand-yellow transition-colors">
             <Search size={24} />
           </Link>

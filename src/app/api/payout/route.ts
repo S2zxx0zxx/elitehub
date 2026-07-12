@@ -1,0 +1,53 @@
+import { NextResponse } from "next/server";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/lib/auth";
+import { prisma } from "@/lib/db";
+
+export async function POST(req: Request) {
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session || session.user.role !== "Creator") {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const creatorId = session.user.id;
+    const { amount, upiId } = await req.json();
+
+    if (!amount || amount <= 0 || !upiId) {
+      return NextResponse.json({ error: "Invalid amount or UPI ID" }, { status: 400 });
+    }
+
+    // Double check available balance
+    const purchases = await prisma.purchase.findMany({
+      where: { post: { creatorId: creatorId }, status: "completed" }
+    });
+    const totalEarnings = purchases.reduce((sum, p) => sum + p.creatorEarning, 0);
+
+    const payouts = await prisma.payout.findMany({
+      where: { creatorId: creatorId }
+    });
+    const totalPayouts = payouts.reduce((sum, p) => sum + p.amount, 0);
+
+    const availableBalance = totalEarnings - totalPayouts;
+
+    if (amount > availableBalance) {
+      return NextResponse.json({ error: "Insufficient balance" }, { status: 400 });
+    }
+
+    // Create the Payout record
+    const payout = await prisma.payout.create({
+      data: {
+        creatorId,
+        amount: parseFloat(amount),
+        upiId,
+        status: "requested"
+      }
+    });
+
+    return NextResponse.json({ success: true, payout });
+
+  } catch (error) {
+    console.error("Payout API Error:", error);
+    return NextResponse.json({ error: "Failed to request payout" }, { status: 500 });
+  }
+}
