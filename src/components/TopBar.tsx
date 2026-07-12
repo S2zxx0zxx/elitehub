@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
-import { Search, UserCircle } from 'lucide-react';
+import { Search } from 'lucide-react';
+import { WalletConnect } from './WalletConnect';
 
 export function TopBar() {
   return (
@@ -13,9 +14,7 @@ export function TopBar() {
           <Link href="/explore" className="hover:text-brand-yellow transition-colors">
             <Search size={24} />
           </Link>
-          <Link href="/settings" className="hover:text-brand-yellow transition-colors">
-            <UserCircle size={28} />
-          </Link>
+          <WalletConnect />
         </div>
       </div>
     </div>

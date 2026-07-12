@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { CheckoutSheet } from "./CheckoutSheet";
+import { CreatorCoinTab } from "./CreatorCoinTab";
 
 interface Post {
   id: string;
@@ -10,12 +11,47 @@ interface Post {
   price: number | null;
 }
 
-export function ProfileClient({ posts, creatorName }: { posts: Post[], creatorName: string }) {
+export function ProfileClient({ posts, creatorName, handle }: { posts: Post[], creatorName: string, handle: string }) {
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
+  const [activeTab, setActiveTab] = useState<"posts" | "shop" | "coin">("posts");
 
   return (
     <>
-      <div className="grid grid-cols-3 gap-1">
+      {/* Tabs */}
+      <div className="flex border-b border-white/10 mb-6">
+        <button 
+          onClick={() => setActiveTab("posts")}
+          className={`flex-1 py-3 text-center transition-colors ${activeTab === "posts" ? "border-b-2 border-brand-yellow font-bold text-brand-yellow" : "text-text-lo hover:text-white"}`}
+        >
+          Posts
+        </button>
+        <button 
+          onClick={() => setActiveTab("shop")}
+          className={`flex-1 py-3 text-center transition-colors ${activeTab === "shop" ? "border-b-2 border-brand-yellow font-bold text-brand-yellow" : "text-text-lo hover:text-white"}`}
+        >
+          Shop
+        </button>
+        <button 
+          onClick={() => setActiveTab("coin")}
+          className={`flex-1 py-3 text-center transition-colors flex items-center justify-center gap-1 ${activeTab === "coin" ? "border-b-2 border-brand-yellow font-bold text-brand-yellow" : "text-text-lo hover:text-white"}`}
+        >
+          Coin <span className="text-xs bg-brand-yellow/20 text-brand-yellow px-1.5 py-0.5 rounded">New</span>
+        </button>
+      </div>
+
+      {/* Tab Content */}
+      {activeTab === "coin" && (
+        <CreatorCoinTab creatorName={creatorName} handle={handle} />
+      )}
+
+      {activeTab === "shop" && (
+        <div className="py-12 text-center text-text-lo">
+          Digital products coming soon!
+        </div>
+      )}
+
+      {activeTab === "posts" && (
+        <div className="grid grid-cols-3 gap-1">
         {posts.length === 0 ? (
           <div className="col-span-3 py-12 text-center text-text-lo">
             No posts yet.
@@ -44,6 +80,7 @@ export function ProfileClient({ posts, creatorName }: { posts: Post[], creatorNa
           ))
         )}
       </div>
+      )}
 
       <CheckoutSheet 
         isOpen={!!selectedPost}

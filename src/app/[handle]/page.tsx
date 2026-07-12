@@ -86,18 +86,12 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
           <Button variant="secondary" className="px-6">Follow</Button>
         </div>
 
-        {/* Tabs */}
-        <div className="flex border-b border-white/10 mb-6">
-          <button className="flex-1 py-3 text-center border-b-2 border-brand-yellow font-bold text-brand-yellow">
-            Posts
-          </button>
-          <button className="flex-1 py-3 text-center text-text-lo hover:text-white transition-colors">
-            Shop
-          </button>
-        </div>
-
-        {/* Posts Grid via Client Component for Checkout interactivity */}
-        <ProfileClient posts={creator.posts} creatorName={creator.name || creator.handle || "Creator"} />
+        {/* Tabs and Posts Grid handled by Client Component */}
+        <ProfileClient 
+          posts={creator.posts} 
+          creatorName={creator.name || creator.handle || "Creator"} 
+          handle={creator.handle}
+        />
       </div>
       
       <BottomNav />
