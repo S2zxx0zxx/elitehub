@@ -52,10 +52,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
   const isCreator = viewer?.id === creator.id;
 
   const sanitizedPosts = creator.posts.map(post => {
-    if (post.visibility === "public" || isCreator || isSubscribed || purchasedPostIds.includes(post.id)) {
-      return post;
-    }
-    // Strip mediaKey for unauthorized viewers
+    // Strip mediaKey for all viewers - client will use /api/media/[postId]
     return { ...post, mediaKey: null as any };
   });
 

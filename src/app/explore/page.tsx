@@ -2,6 +2,7 @@ import React from "react";
 import { TopBar } from "@/components/TopBar";
 import { ExploreClient } from "@/components/ExploreClient";
 import { getTrendingCreators, getTrendingContent, getNewCreators } from "@/lib/ranking";
+import { BottomNav } from "@/components/BottomNav";
 
 export const dynamic = 'force-dynamic';
 

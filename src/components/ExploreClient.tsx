@@ -93,12 +93,12 @@ export function ExploreClient({ trendingContent, newCreators }: { trendingConten
                       loop 
                       playsInline
                     >
-                      <source src={`https://pub-your_r2_public_domain.r2.dev/${post.mediaKey}`} type="video/mp4" />
+                      <source src={`/api/media/${post.id}`} type="video/mp4" />
                     </video>
                   )}
                   {post.type === "photo" && (
                     <img 
-                      src={`https://pub-your_r2_public_domain.r2.dev/${post.mediaKey}`} 
+                      src={`/api/media/${post.id}`} 
                       alt="" 
                       className="absolute inset-0 w-full h-full object-cover"
                     />
