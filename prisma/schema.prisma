@@ -37,6 +37,8 @@ model User {
   payouts       Payout[]
   subPaymentsMade     SubscriptionPayment[] @relation("FanSubPayments")
   subPaymentsReceived SubscriptionPayment[] @relation("CreatorSubPayments")
+  likes         Like[]
+  comments      Comment[]
 }
 
 model Post {
@@ -53,6 +55,8 @@ model Post {
   creator   User       @relation(fields: [creatorId], references: [id])
   purchases Purchase[]
   reports   Report[]
+  likes     Like[]
+  comments  Comment[]
 }
 
 model Follow {
@@ -150,4 +154,25 @@ model Notification {
   createdAt DateTime @default(now())
 }
 
+model Like {
+  id        String   @id @default(uuid())
+  userId    String
+  postId    String
+  createdAt DateTime @default(now())
 
+  user User @relation(fields: [userId], references: [id])
+  post Post @relation(fields: [postId], references: [id])
+
+  @@unique([userId, postId])
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  userId    String
+  postId    String
+  text      String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+  post Post @relation(fields: [postId], references: [id])
+}

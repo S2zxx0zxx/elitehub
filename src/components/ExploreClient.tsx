@@ -5,6 +5,7 @@ import { Search } from "lucide-react";
 import { Card } from "@/components/Card";
 import { AdSlot } from "@/components/AdSlot";
 import { Chip } from "@/components/Chip";
+import { PostEngagement } from "@/components/PostEngagement";
 
 export function ExploreClient({ trendingContent, newCreators, topTags }: { trendingContent: any[], newCreators: any[], topTags: string[] }) {
   const [searchQuery, setSearchQuery] = useState("");
@@ -115,6 +116,11 @@ export function ExploreClient({ trendingContent, newCreators, topTags }: { trend
                           <span className="font-bold text-white text-shadow">{post.creator.name || post.creator.handle}</span>
                         </Link>
                         {post.caption && <p className="text-sm text-white text-shadow line-clamp-2">{post.caption}</p>}
+                        <PostEngagement 
+                          postId={post.id} 
+                          initialLikes={post._count?.likes || 0} 
+                          initialComments={post._count?.comments || 0} 
+                        />
                       </div>
                     </div>
                   </div>

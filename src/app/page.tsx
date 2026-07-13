@@ -8,6 +8,7 @@ import { AdSlot } from "@/components/AdSlot";
 import { HomeCategoryGrid } from "@/components/HomeCategoryGrid";
 import { getTrendingCreators, getTrendingContent } from "@/lib/ranking";
 import { timeAgo } from "@/lib/time";
+import { PostEngagement } from "@/components/PostEngagement";
 
 export const dynamic = "force-dynamic";
 
@@ -116,6 +117,11 @@ export default async function Home() {
                       )}
                     </div>
                     {post.caption && <p className="text-sm text-elite-white line-clamp-2">{post.caption}</p>}
+                    <PostEngagement 
+                      postId={post.id} 
+                      initialLikes={post._count?.likes || 0} 
+                      initialComments={post._count?.comments || 0} 
+                    />
                   </CardContent>
                 </Card>
               ))

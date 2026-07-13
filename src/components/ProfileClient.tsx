@@ -4,6 +4,7 @@ import { useState } from "react";
 import { CheckoutSheet } from "./CheckoutSheet";
 import { Button } from "./Button";
 import { AccessCard } from "./AccessCard";
+import { PostEngagement } from "./PostEngagement";
 
 interface Post {
   id: string;
@@ -11,6 +12,7 @@ interface Post {
   visibility: string;
   price: number | null;
   caption?: string | null;
+  _count?: { likes: number; comments: number };
 }
 
 export function ProfileClient({ 
@@ -168,6 +170,14 @@ export function ProfileClient({
               )}
               <div className="w-full h-full bg-text-lo/10 flex items-center justify-center">
                  {post.type === "video" ? "▶️" : "🖼️"}
+              </div>
+              
+              <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/80 to-transparent flex justify-center z-20" onClick={(e) => e.stopPropagation()}>
+                <PostEngagement 
+                  postId={post.id} 
+                  initialLikes={post._count?.likes || 0} 
+                  initialComments={post._count?.comments || 0} 
+                />
               </div>
             </div>
           ))

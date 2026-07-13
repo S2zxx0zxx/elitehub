@@ -19,7 +19,10 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
     where: { handle: params.handle },
     include: {
       posts: {
-        orderBy: { createdAt: 'desc' }
+        orderBy: { createdAt: 'desc' },
+        include: {
+          _count: { select: { likes: true, comments: true } }
+        }
       }
     }
   });
