@@ -65,6 +65,56 @@ export async function POST(req: Request) {
       }
     }
 
+    if (event.event === "subscription.charged") {
+      const subEntity = event.payload.subscription.entity;
+      const subId = subEntity.id;
+      
+      const subscription = await prisma.subscription.findFirst({
+        where: { razorpaySubId: subId }
+      });
+      
+      if (subscription) {
+        await prisma.subscription.update({
+          where: { id: subscription.id },
+          data: {
+            status: "active",
+            renewsAt: subEntity.current_end ? new Date(subEntity.current_end * 1000) : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+          }
+        });
+        
+        const fan = await prisma.user.findUnique({ where: { id: subscription.fanId } });
+        
+        if (fan) {
+          await prisma.notification.create({
+            data: {
+              userId: subscription.creatorId,
+              type: "promotion",
+              title: "New Subscriber!",
+              body: `${fan.name || fan.handle || "Someone"} subscribed to you.`
+            }
+          });
+        }
+      }
+    }
+
+    if (event.event === "subscription.cancelled" || event.event === "subscription.halted") {
+      const subEntity = event.payload.subscription.entity;
+      const subId = subEntity.id;
+      
+      const subscription = await prisma.subscription.findFirst({
+        where: { razorpaySubId: subId }
+      });
+      
+      if (subscription) {
+        await prisma.subscription.update({
+          where: { id: subscription.id },
+          data: {
+            status: "cancelled"
+          }
+        });
+      }
+    }
+
     return NextResponse.json({ status: "ok" });
   } catch (error) {
     console.error("Webhook Error:", error);

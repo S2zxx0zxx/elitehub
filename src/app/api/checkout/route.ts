@@ -51,9 +51,53 @@ export async function POST(req: Request) {
       return NextResponse.json({ orderId: order.id, amount: post.price * 100 });
     }
 
-    // Subscription logic can go here (similar flow, creating a subscription plan or recurring order)
-    return NextResponse.json({ error: "Subscription flow not fully implemented in demo" }, { status: 400 });
+    if (type === "subscription") {
+      const creator = await prisma.user.findUnique({
+        where: { id: targetId }
+      });
 
+      if (!creator || !creator.subscriptionPrice) {
+        return NextResponse.json({ error: "Invalid creator or price not set" }, { status: 400 });
+      }
+
+      let planId = creator.razorpayPlanId;
+
+      if (!planId) {
+        const plan = await razorpay.plans.create({
+          period: "monthly",
+          interval: 1,
+          item: {
+            name: `Subscription to ${creator.name || creator.handle}`,
+            amount: Math.round(creator.subscriptionPrice * 100),
+            currency: "INR",
+          }
+        });
+        planId = plan.id;
+        await prisma.user.update({
+          where: { id: creator.id },
+          data: { razorpayPlanId: planId }
+        });
+      }
+
+      const subscription = await razorpay.subscriptions.create({
+        plan_id: planId,
+        customer_notify: 0,
+        total_count: 120 // e.g. 10 years
+      });
+
+      await prisma.subscription.create({
+        data: {
+          fanId: user.id,
+          creatorId: creator.id,
+          razorpaySubId: subscription.id,
+          status: "pending"
+        }
+      });
+
+      return NextResponse.json({ subscriptionId: subscription.id, amount: creator.subscriptionPrice * 100 });
+    }
+
+    return NextResponse.json({ error: "Invalid type" }, { status: 400 });
   } catch (error) {
     console.error("Checkout Error:", error);
     return NextResponse.json({ error: "Failed to create checkout session" }, { status: 500 });

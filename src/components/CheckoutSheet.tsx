@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "./Button";
 import Script from "next/script";
@@ -13,10 +13,16 @@ interface CheckoutSheetProps {
   postId?: string;
   creatorId?: string;
   type?: "post" | "subscription";
+  subscriptionPrice?: number;
 }
 
-export function CheckoutSheet({ isOpen, onClose, title, price, postId, creatorId, type = "post" }: CheckoutSheetProps) {
+export function CheckoutSheet({ isOpen, onClose, title, price, postId, creatorId, type = "post", subscriptionPrice }: CheckoutSheetProps) {
   const [loading, setLoading] = useState(false);
+  const [selectedMode, setSelectedMode] = useState<"post" | "subscription">(type);
+
+  useEffect(() => {
+    setSelectedMode(type);
+  }, [type]);
 
   const handlePayment = async () => {
     setLoading(true);
@@ -26,8 +32,8 @@ export function CheckoutSheet({ isOpen, onClose, title, price, postId, creatorId
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
-          type: type, 
-          targetId: type === "subscription" ? creatorId : postId 
+          type: selectedMode, 
+          targetId: selectedMode === "subscription" ? creatorId : postId 
         })
       });
       const data = await res.json();
@@ -35,23 +41,27 @@ export function CheckoutSheet({ isOpen, onClose, title, price, postId, creatorId
       if (data.error) throw new Error(data.error);
 
       // 2. Open Razorpay Checkout Widget
-      const options = {
+      const options: any = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || "rzp_test_mock", 
         amount: data.amount,
         currency: "INR",
         name: "EliteHub",
         description: title,
-        order_id: data.orderId,
         handler: function (response: any) {
           // Success! Webhook will handle the DB update in the background.
-          // For UX, we can optimistically reload the page or show success.
-          alert(`Payment successful! Payment ID: ${response.razorpay_payment_id}`);
+          alert(`Payment successful!`);
           window.location.reload();
         },
         theme: {
           color: "#F5C518" // Brand Yellow
         }
       };
+
+      if (data.subscriptionId) {
+        options.subscription_id = data.subscriptionId;
+      } else {
+        options.order_id = data.orderId;
+      }
 
       const rzp = new (window as any).Razorpay(options);
       rzp.on("payment.failed", function (response: any) {
@@ -92,12 +102,38 @@ export function CheckoutSheet({ isOpen, onClose, title, price, postId, creatorId
             >
               <div className="w-12 h-1.5 bg-white/20 rounded-full mx-auto mb-6" />
               
-              <h2 className="font-display text-2xl font-bold text-elite-white mb-2">Unlock Content</h2>
+              <h2 className="font-display text-2xl font-bold text-elite-white mb-2">{type === "post" ? "Unlock Content" : "Subscribe"}</h2>
               <p className="text-text-lo mb-6">{title}</p>
               
-              <div className="flex justify-between items-center bg-black/50 p-4 rounded-xl mb-8 border border-white/5">
-                <span className="font-bold">Total Amount</span>
-                <span className="font-display text-2xl font-bold text-brand-yellow">₹{price}</span>
+              <div className="space-y-4 mb-8">
+                {type === "post" && (
+                  <div 
+                    className={`p-4 rounded-xl border cursor-pointer transition-colors ${selectedMode === "post" ? "bg-black/50 border-brand-yellow" : "bg-black/20 border-white/5 hover:border-white/20"}`}
+                    onClick={() => setSelectedMode("post")}
+                  >
+                    <div className="flex justify-between items-center mb-1">
+                      <span className="font-bold text-elite-white">One-time Unlock</span>
+                      <span className="font-display text-xl font-bold text-brand-yellow">₹{price}</span>
+                    </div>
+                    <p className="text-xs text-text-lo">Lifetime access to this post only.</p>
+                  </div>
+                )}
+                
+                {(type === "subscription" || (type === "post" && subscriptionPrice)) && (
+                  <div 
+                    className={`p-4 rounded-xl border cursor-pointer transition-colors relative overflow-hidden ${selectedMode === "subscription" ? "bg-black/50 border-brand-yellow" : "bg-black/20 border-white/5 hover:border-white/20"}`}
+                    onClick={() => setSelectedMode("subscription")}
+                  >
+                    {type === "post" && selectedMode === "subscription" && (
+                      <div className="absolute top-0 right-0 bg-brand-yellow text-black text-[10px] font-bold px-2 py-0.5 rounded-bl-lg">RECOMMENDED</div>
+                    )}
+                    <div className="flex justify-between items-center mb-1">
+                      <span className="font-bold text-elite-white">Subscribe</span>
+                      <span className="font-display text-xl font-bold text-brand-yellow">₹{type === "subscription" ? price : subscriptionPrice}<span className="text-sm text-text-lo font-normal">/mo</span></span>
+                    </div>
+                    <p className="text-xs text-text-lo">Unlock ALL premium content and support the creator.</p>
+                  </div>
+                )}
               </div>
               
               <div className="space-y-3">
@@ -106,7 +142,7 @@ export function CheckoutSheet({ isOpen, onClose, title, price, postId, creatorId
                   onClick={handlePayment}
                   disabled={loading}
                 >
-                  {loading ? "Processing..." : "Pay via UPI"}
+                  {loading ? "Processing..." : `Pay ₹${selectedMode === "post" ? price : (type === "subscription" ? price : subscriptionPrice)} via UPI`}
                 </Button>
                 <Button 
                   variant="outline" 

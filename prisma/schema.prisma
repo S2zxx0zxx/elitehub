@@ -23,6 +23,7 @@ model User {
   kycStatus         String   @default("pending")
   tickTier          String   @default("none") // none, blue, gold
   subscriptionPrice Float?
+  razorpayPlanId    String?
   category          String?
   status            String   @default("active") // active, suspended, banned
   createdAt         DateTime @default(now())
