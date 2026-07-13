@@ -2,12 +2,14 @@
 
 import { useState } from "react";
 import { useClerk } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 import { TopBar } from "@/components/TopBar";
 import { BottomNav } from "@/components/BottomNav";
 import { Button } from "@/components/Button";
 
 export default function SettingsClient({ user }: { user: any }) {
   const { signOut } = useClerk();
+  const router = useRouter();
   
   const [name, setName] = useState(user.name || "");
   const [bio, setBio] = useState(user.bio || "");
@@ -27,8 +29,12 @@ export default function SettingsClient({ user }: { user: any }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, bio, upiId, theme })
       });
-      if (res.ok) alert("Settings saved successfully!");
-      else alert("Error saving settings");
+      if (res.ok) {
+        alert("Settings saved successfully!");
+        router.refresh();
+      } else {
+        alert("Error saving settings");
+      }
     } catch (e) {
       alert("Error saving settings");
     }
@@ -139,6 +145,29 @@ export default function SettingsClient({ user }: { user: any }) {
           <Button variant="secondary" className="w-full !text-red-500 !border-red-500/20" onClick={() => signOut()}>
             Log Out
           </Button>
+
+          <div className="mt-8 pt-8 border-t border-red-500/10">
+            <h3 className="text-red-500 font-bold mb-2">Danger Zone</h3>
+            <p className="text-text-lo text-xs mb-4">Once you delete your account, there is no going back. Please be certain.</p>
+            <Button 
+              className="w-full bg-red-500/10 text-red-500 border border-red-500/20 hover:bg-red-500/20" 
+              onClick={async () => {
+                if (confirm("Are you sure you want to permanently delete your account? This action cannot be undone.")) {
+                  setLoading(true);
+                  const res = await fetch("/api/settings/delete-account", { method: "POST" });
+                  if (res.ok) {
+                    await signOut();
+                  } else {
+                    alert("Failed to delete account");
+                    setLoading(false);
+                  }
+                }
+              }}
+              disabled={loading}
+            >
+              Delete Account
+            </Button>
+          </div>
         </div>
       </div>
       <BottomNav />
