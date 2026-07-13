@@ -123,6 +123,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
           isSubscribed={isSubscribed}
           initialIsFollowing={isFollowing}
           purchasedPostIds={purchasedPostIds}
+          fullCreator={creator}
         />
       </div>
       

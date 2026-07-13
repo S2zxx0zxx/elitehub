@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { CheckoutSheet } from "./CheckoutSheet";
 import { Button } from "./Button";
+import { AccessCard } from "./AccessCard";
 
 interface Post {
   id: string;
@@ -29,13 +30,15 @@ export function ProfileClient({
   subscriptionPrice: number,
   isSubscribed: boolean,
   initialIsFollowing?: boolean,
-  purchasedPostIds?: string[]
+  purchasedPostIds?: string[],
+  fullCreator?: any
 }) {
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
   const [activeTab, setActiveTab] = useState<"posts" | "shop">("posts");
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [isFollowing, setIsFollowing] = useState(initialIsFollowing || false);
   const [isFollowLoading, setIsFollowLoading] = useState(false);
+  const [showAccessCard, setShowAccessCard] = useState(false);
 
   const toggleFollow = async () => {
     setIsFollowLoading(true);
@@ -74,6 +77,16 @@ export function ProfileClient({
           disabled={isFollowLoading}
         >
           {isFollowing ? "Following" : "Follow"}
+        </Button>
+      </div>
+
+      <div className="mb-6">
+        <Button 
+          variant="secondary" 
+          className="w-full border border-brand-yellow/30 bg-brand-yellow/5 hover:bg-brand-yellow/10 text-brand-yellow flex items-center justify-center gap-2"
+          onClick={() => setShowAccessCard(true)}
+        >
+          <span className="text-lg">✨</span> Explore Benefits
         </Button>
       </div>
 
@@ -173,6 +186,21 @@ export function ProfileClient({
         creatorId={creatorId}
         type={selectedPost ? "post" : "subscription"}
       />
+
+      {/* Access Card Modal */}
+      {showAccessCard && fullCreator && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in">
+          <div className="w-full max-w-sm mx-auto relative">
+            <button 
+              className="absolute -top-12 right-0 text-white p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+              onClick={() => setShowAccessCard(false)}
+            >
+              ✕
+            </button>
+            <AccessCard user={fullCreator} />
+          </div>
+        </div>
+      )}
     </>
   );
 }
