@@ -21,7 +21,8 @@ export function ProfileClient({
   subscriptionPrice,
   isSubscribed,
   initialIsFollowing,
-  purchasedPostIds
+  purchasedPostIds,
+  fullCreator
 }: { 
   posts: Post[], 
   creatorName: string, 
