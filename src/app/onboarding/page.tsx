@@ -8,7 +8,6 @@ import { Card, CardContent } from "@/components/Card";
 import { Chip } from "@/components/Chip";
 
 type Role = "Fan" | "Creator" | null;
-const CATEGORIES = ["Video Editing", "VFX", "Music", "Design", "Education", "Art", "Fitness"];
 
 export default function OnboardingPage() {
   const router = useRouter();
@@ -20,6 +19,7 @@ export default function OnboardingPage() {
   const [price, setPrice] = useState("");
   const [photo, setPhoto] = useState("");
   const [loading, setLoading] = useState(false);
+  const [tagInput, setTagInput] = useState("");
 
   // If we had publicMetadata synced, we'd check user.publicMetadata.role
   if (isLoaded && !user) {
@@ -55,10 +55,19 @@ export default function OnboardingPage() {
     setLoading(false);
   };
 
-  const toggleCategory = (cat: string) => {
-    setSelectedCategories(prev => 
-      prev.includes(cat) ? prev.filter(c => c !== cat) : [...prev, cat]
-    );
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' || e.key === ',') {
+      e.preventDefault();
+      const newTag = tagInput.trim().toLowerCase();
+      if (newTag && !selectedCategories.includes(newTag) && selectedCategories.length < 5) {
+        setSelectedCategories([...selectedCategories, newTag]);
+      }
+      setTagInput("");
+    }
+  };
+
+  const removeTag = (tagToRemove: string) => {
+    setSelectedCategories(selectedCategories.filter(t => t !== tagToRemove));
   };
 
   return (
@@ -106,16 +115,27 @@ export default function OnboardingPage() {
                 <h1 className="font-display text-2xl font-bold">What interests you?</h1>
                 <p className="text-text-lo">Pick a few categories to personalize your feed.</p>
               </div>
-              <div className="flex flex-wrap gap-2 justify-center">
-                {CATEGORIES.map(cat => (
-                  <Chip 
-                    key={cat} 
-                    active={selectedCategories.includes(cat)}
-                    onClick={() => toggleCategory(cat)}
-                  >
-                    {cat}
-                  </Chip>
-                ))}
+              <div className="space-y-4">
+                <input 
+                  type="text" 
+                  className="w-full bg-surface-dark border border-white/10 rounded-xl p-3 text-elite-white focus:outline-none focus:border-brand-yellow"
+                  placeholder="Type a tag and press Enter (max 5)"
+                  value={tagInput}
+                  onChange={(e) => setTagInput(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  disabled={selectedCategories.length >= 5}
+                />
+                <div className="flex flex-wrap gap-2 justify-center">
+                  {selectedCategories.map(cat => (
+                    <Chip 
+                      key={cat} 
+                      active={true}
+                      onClick={() => removeTag(cat)}
+                    >
+                      {cat} ✕
+                    </Chip>
+                  ))}
+                </div>
               </div>
               <Button 
                 className="w-full" 
@@ -158,15 +178,24 @@ export default function OnboardingPage() {
                 </div>
                 
                 <div>
-                  <label className="text-sm font-bold text-text-lo mb-1 block">Primary Category</label>
+                  <label className="text-sm font-bold text-text-lo mb-1 block">Your Tags (Max 5)</label>
+                  <input 
+                    type="text" 
+                    className="w-full bg-surface-dark border border-white/10 rounded-xl p-3 text-elite-white focus:outline-none focus:border-brand-yellow mb-2"
+                    placeholder="Type a tag and press Enter"
+                    value={tagInput}
+                    onChange={(e) => setTagInput(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    disabled={selectedCategories.length >= 5}
+                  />
                   <div className="flex flex-wrap gap-2">
-                    {CATEGORIES.map(cat => (
+                    {selectedCategories.map(cat => (
                       <Chip 
                         key={cat} 
-                        active={selectedCategories.includes(cat)}
-                        onClick={() => setSelectedCategories([cat])}
+                        active={true}
+                        onClick={() => removeTag(cat)}
                       >
-                        {cat}
+                        {cat} ✕
                       </Chip>
                     ))}
                   </div>

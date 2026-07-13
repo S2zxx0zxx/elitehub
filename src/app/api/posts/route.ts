@@ -10,7 +10,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Unauthorized. Only creators can post." }, { status: 401 });
     }
 
-    const { type, mediaKey, caption, category, hashtags, visibility, price } = await req.json();
+    const { type, mediaKey, caption, tags, visibility, price } = await req.json();
 
     if (!mediaKey || !type || !visibility) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
@@ -22,8 +22,7 @@ export async function POST(req: Request) {
         type,
         mediaKey,
         caption,
-        category,
-        hashtags,
+        tags: tags || [],
         visibility,
         price: price ? parseFloat(price) : null,
       }

@@ -77,3 +77,17 @@ export async function getNewCreators() {
     take: 5,
   });
 }
+
+export async function getTopTags(limit: number = 10) {
+  const posts = await prisma.post.findMany({ select: { tags: true } });
+  const tagCounts: Record<string, number> = {};
+  posts.forEach(p => {
+    p.tags.forEach(t => {
+      tagCounts[t] = (tagCounts[t] || 0) + 1;
+    });
+  });
+  return Object.entries(tagCounts)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, limit)
+    .map(entry => entry[0]);
+}

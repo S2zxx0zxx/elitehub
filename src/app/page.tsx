@@ -5,6 +5,7 @@ import { Chip } from "@/components/Chip";
 import { BottomNav } from "@/components/BottomNav";
 import { TopBar } from "@/components/TopBar";
 import { AdSlot } from "@/components/AdSlot";
+import { HomeCategoryGrid } from "@/components/HomeCategoryGrid";
 import { getTrendingCreators, getTrendingContent } from "@/lib/ranking";
 import { timeAgo } from "@/lib/time";
 
@@ -36,14 +37,9 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* Category Strip */}
-        <section className="mb-8 flex gap-3 overflow-x-auto pb-2 -mx-4 px-4 scrollbar-hide">
-          <Chip active>Trending</Chip>
-          <Chip>VFX & Edits</Chip>
-          <Chip>Music</Chip>
-          <Chip>Design</Chip>
-          <Chip>Education</Chip>
-          <Chip>Art</Chip>
+        {/* Visual Category Grid */}
+        <section className="mb-8">
+          <HomeCategoryGrid />
         </section>
 
         <AdSlot 
@@ -74,7 +70,7 @@ export default async function Home() {
                         )}
                       </div>
                       <h4 className="font-bold text-sm text-elite-white line-clamp-1">{creator.name || creator.handle}</h4>
-                      <p className="text-xs text-text-lo mt-1 line-clamp-1">{creator.category || "Creator"}</p>
+                      <p className="text-xs text-text-lo mt-1 line-clamp-1">{creator.tags && creator.tags.length > 0 ? creator.tags.join(", ") : "Creator"}</p>
                     </CardContent>
                   </Card>
                 </Link>

@@ -24,7 +24,7 @@ model User {
   tickTier          String   @default("none") // none, blue, gold
   subscriptionPrice Float?
   razorpayPlanId    String?
-  category          String?
+  tags              String[]
   status            String   @default("active") // active, suspended, banned
   createdAt         DateTime @default(now())
 
@@ -45,8 +45,7 @@ model Post {
   type       String // photo, video, product
   mediaKey   String
   caption    String?
-  category   String?
-  hashtags   String?
+  tags       String[]
   visibility String // public, private
   price      Float?
   createdAt  DateTime @default(now())

@@ -11,7 +11,7 @@ export async function POST(req: Request) {
     }
 
     const body = await req.json();
-    const { role, categories, handle, subscriptionPrice, photo } = body;
+    const { role, tags, handle, subscriptionPrice, photo } = body;
 
     if (!role || (role !== "Fan" && role !== "Creator")) {
       return NextResponse.json({ error: "Invalid role" }, { status: 400 });
@@ -32,7 +32,7 @@ export async function POST(req: Request) {
       where: { id: user.id },
       data: {
         role,
-        category: categories?.join(",") || null,
+        tags: tags || [],
         handle: handle || null,
         subscriptionPrice: subscriptionPrice ? parseFloat(subscriptionPrice) : null,
         photo: photo || null,

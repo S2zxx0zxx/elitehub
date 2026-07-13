@@ -27,6 +27,8 @@ export default function CreatePage() {
 
   // Form states
   const [caption, setCaption] = useState("");
+  const [tags, setTags] = useState<string[]>([]);
+  const [tagInput, setTagInput] = useState("");
   const [visibility, setVisibility] = useState<"public" | "private">("public");
   const [price, setPrice] = useState("");
   
@@ -135,7 +137,7 @@ export default function CreatePage() {
           caption,
           visibility,
           price: visibility === "private" ? price : null,
-          category: "General",
+          tags: tags,
         }),
       });
 
@@ -221,6 +223,39 @@ export default function CreatePage() {
                   value={caption}
                   onChange={(e) => setCaption(e.target.value)}
                 />
+              </div>
+
+              <div>
+                <label className="text-sm font-bold text-text-lo mb-1 block">Tags (Max 5)</label>
+                <input 
+                  type="text" 
+                  className="w-full bg-surface-dark border border-white/10 rounded-xl p-3 text-elite-white focus:outline-none focus:border-brand-yellow mb-2"
+                  placeholder="Type a tag and press Enter"
+                  value={tagInput}
+                  onChange={(e) => setTagInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ',') {
+                      e.preventDefault();
+                      const newTag = tagInput.trim().toLowerCase();
+                      if (newTag && !tags.includes(newTag) && tags.length < 5) {
+                        setTags([...tags, newTag]);
+                      }
+                      setTagInput("");
+                    }
+                  }}
+                  disabled={tags.length >= 5}
+                />
+                <div className="flex flex-wrap gap-2">
+                  {tags.map(tag => (
+                    <div 
+                      key={tag} 
+                      className="bg-brand-yellow/20 text-brand-yellow px-3 py-1 rounded-full text-sm font-bold cursor-pointer"
+                      onClick={() => setTags(tags.filter(t => t !== tag))}
+                    >
+                      {tag} ✕
+                    </div>
+                  ))}
+                </div>
               </div>
 
               <div className="flex items-center justify-between p-4 bg-surface-dark rounded-xl border border-white/10">

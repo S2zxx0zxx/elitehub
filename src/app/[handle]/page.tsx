@@ -109,7 +109,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
 
         <div className="mb-6">
           <h1 className="font-display text-2xl font-bold text-elite-white">{creator.name || creator.handle}</h1>
-          <p className="text-text-lo mb-2">@{creator.handle} • {creator.category || "Creator"}</p>
+          <p className="text-text-lo mb-2">@{creator.handle} • {creator.tags && creator.tags.length > 0 ? creator.tags.join(", ") : "Creator"}</p>
           <p className="text-sm">{creator.bio || "Welcome to my official EliteHub page! Subscribe for exclusive content."}</p>
         </div>
 

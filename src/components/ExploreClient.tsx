@@ -6,11 +6,11 @@ import { Card } from "@/components/Card";
 import { AdSlot } from "@/components/AdSlot";
 import { Chip } from "@/components/Chip";
 
-export function ExploreClient({ trendingContent, newCreators }: { trendingContent: any[], newCreators: any[] }) {
+export function ExploreClient({ trendingContent, newCreators, topTags }: { trendingContent: any[], newCreators: any[], topTags: string[] }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
 
-  const categories = ["All", "VFX", "Gaming", "Music", "Tech", "Fitness", "Comedy"];
+  const categories = ["All", ...topTags];
 
   const filteredContent = trendingContent.filter(post => {
     const matchesSearch = 
@@ -18,7 +18,7 @@ export function ExploreClient({ trendingContent, newCreators }: { trendingConten
       post.creator.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       post.creator.handle?.toLowerCase().includes(searchQuery.toLowerCase());
       
-    const matchesCategory = activeCategory === "All" || post.category === activeCategory;
+    const matchesCategory = activeCategory === "All" || (post.tags && post.tags.includes(activeCategory));
     
     return matchesSearch && matchesCategory;
   });
