@@ -6,6 +6,7 @@ import { BottomNav } from "@/components/BottomNav";
 import { TopBar } from "@/components/TopBar";
 import { AdSlot } from "@/components/AdSlot";
 import { getTrendingCreators, getTrendingContent } from "@/lib/ranking";
+import { timeAgo } from "@/lib/time";
 
 export const dynamic = "force-dynamic";
 
@@ -111,7 +112,7 @@ export default async function Home() {
                         </div>
                         <div>
                           <h4 className="font-bold text-sm text-elite-white">{post.creator.name || post.creator.handle}</h4>
-                          <p className="text-xs text-text-lo">2 hours ago</p>
+                          <p className="text-xs text-text-lo">{timeAgo(post.createdAt)}</p>
                         </div>
                       </Link>
                       {post.price && (
