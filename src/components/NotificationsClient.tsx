@@ -1,11 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { TopBar } from "@/components/TopBar";
 import { BottomNav } from "@/components/BottomNav";
 
 export function NotificationsClient({ notifications, broadcasts }: { notifications: any[], broadcasts: any[] }) {
   const [filter, setFilter] = useState("All");
+
+  useEffect(() => {
+    // Mark all notifications as read when the page is opened
+    fetch("/api/notifications/mark-read", { method: "POST" }).catch(console.error);
+  }, []);
 
   const allAlerts = [
     ...notifications,
@@ -54,8 +59,11 @@ export function NotificationsClient({ notifications, broadcasts }: { notificatio
             filteredAlerts.map(alert => (
               <div key={alert.id} className={`p-4 rounded-2xl border ${alert.isBroadcast ? 'bg-brand-yellow/10 border-brand-yellow/30' : 'bg-surface-dark border-white/5'}`}>
                 <div className="flex gap-3">
-                  <div className="mt-1 text-2xl">
+                  <div className="mt-1 text-2xl relative">
                     {alert.isBroadcast ? "📢" : (alert.type === "promotion" ? "🎉" : "⚙️")}
+                    {!alert.isBroadcast && !alert.read && (
+                      <div className="absolute -top-1 -right-1 w-3 h-3 bg-brand-yellow rounded-full border-2 border-surface-dark" />
+                    )}
                   </div>
                   <div>
                     <h4 className="font-bold text-sm text-elite-white mb-1">{alert.title}</h4>
