@@ -102,7 +102,7 @@ export default async function Home() {
             {trendingContent.length === 0 ? (
               <p className="text-text-lo text-sm">No content found yet.</p>
             ) : (
-              trendingContent.slice(0,3).map(post => (
+              (trendingContent as any[]).slice(0,3).map((post: any) => (
                 <Card key={post.id} className="overflow-hidden">
                   <div className="w-full aspect-[4/5] bg-surface-dark relative">
                     {/* Public content plays automatically in real app */}

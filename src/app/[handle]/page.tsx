@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: ProfilePageProps): Promise<Me
     where: { handle: params.handle }
   });
 
-  if (!creator || creator.role !== "Creator") {
+  if (creator?.role !== "Creator") {
     return {
       title: "Not Found",
       description: "Creator not found on EliteHub"
@@ -53,13 +53,13 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
       posts: {
         orderBy: { createdAt: 'desc' },
         include: {
-          _count: { select: { likes: true, comments: true } }
+          _count: { select: { likes: true, comments: true } as any }
         }
       }
     }
   });
 
-  if (!creator || creator.role !== "Creator") {
+  if (creator?.role !== "Creator") {
     notFound();
   }
 
@@ -84,7 +84,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
     where: { followerId: viewer.id, creatorId: creator.id }
   })) !== null : false;
 
-  const sanitizedPosts = creator.posts.map(post => {
+  const sanitizedPosts = (creator.posts as any[]).map((post: any) => {
     // Strip mediaKey for all viewers - client will use /api/media/[postId]
     return { ...post, mediaKey: null as any };
   });
@@ -134,7 +134,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
               <p className="text-xs text-text-lo">Followers</p>
             </div>
             <div>
-              <p className="font-bold text-lg">{creator.posts.length}</p>
+              <p className="font-bold text-lg">{(creator as any).posts.length}</p>
               <p className="text-xs text-text-lo">Posts</p>
             </div>
           </div>

@@ -109,16 +109,13 @@ export function PostEngagement({ postId, initialLikes = 0, initialComments = 0, 
       <AnimatePresence>
         {showComments && (
           <>
-            <motion.div 
+            <motion.button 
               initial={{ opacity: 0 }} 
               animate={{ opacity: 1 }} 
               exit={{ opacity: 0 }}
-              onClick={() => setShowComments(false)}
-              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setShowComments(false); }}
-              role="button"
-              tabIndex={0}
               aria-label="Close comments"
-              className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[60]"
+              onClick={() => setShowComments(false)}
+              className="fixed inset-0 w-full h-full bg-black/80 backdrop-blur-sm z-[60] cursor-default border-none outline-none"
             />
             
             <motion.div 
@@ -128,13 +125,11 @@ export function PostEngagement({ postId, initialLikes = 0, initialComments = 0, 
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
               className="fixed bottom-0 left-0 right-0 h-[70vh] bg-surface-dark border-t border-white/10 rounded-t-3xl p-4 sm:p-6 z-[60] flex flex-col shadow-2xl pb-safe"
             >
-              <div 
-                className="w-12 h-1.5 bg-white/20 rounded-full mx-auto mb-6 shrink-0 cursor-pointer" 
-                onClick={() => setShowComments(false)}
-                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setShowComments(false); }}
-                role="button"
-                tabIndex={0}
+              <button 
+                type="button"
                 aria-label="Close comments panel"
+                onClick={() => setShowComments(false)}
+                className="w-12 h-1.5 bg-white/20 rounded-full mx-auto mb-6 shrink-0 cursor-pointer border-none outline-none block" 
               />
               
               <h3 className="font-display text-xl font-bold mb-4 shrink-0">Comments</h3>
