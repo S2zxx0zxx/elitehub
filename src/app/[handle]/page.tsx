@@ -122,6 +122,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
           subscriptionPrice={creator.subscriptionPrice || 0}
           isSubscribed={isSubscribed}
           initialIsFollowing={isFollowing}
+          purchasedPostIds={purchasedPostIds}
         />
       </div>
       

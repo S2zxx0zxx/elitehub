@@ -9,6 +9,7 @@ interface Post {
   type: string;
   visibility: string;
   price: number | null;
+  caption?: string | null;
 }
 
 export function ProfileClient({ 
@@ -18,7 +19,8 @@ export function ProfileClient({
   creatorId,
   subscriptionPrice,
   isSubscribed,
-  initialIsFollowing
+  initialIsFollowing,
+  purchasedPostIds
 }: { 
   posts: Post[], 
   creatorName: string, 
@@ -26,7 +28,8 @@ export function ProfileClient({
   creatorId: string,
   subscriptionPrice: number,
   isSubscribed: boolean,
-  initialIsFollowing?: boolean
+  initialIsFollowing?: boolean,
+  purchasedPostIds?: string[]
 }) {
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
   const [activeTab, setActiveTab] = useState<"posts" | "shop">("posts");
@@ -50,6 +53,9 @@ export function ProfileClient({
     }
     setIsFollowLoading(false);
   };
+
+  const feedPosts = posts.filter(p => p.type !== "product");
+  const shopProducts = posts.filter(p => p.type === "product");
 
   return (
     <>
@@ -90,19 +96,47 @@ export function ProfileClient({
       {/* Tab Content */}
 
       {activeTab === "shop" && (
-        <div className="py-12 text-center text-text-lo">
-          Digital products coming soon!
+        <div className="space-y-4">
+          {shopProducts.length === 0 ? (
+            <div className="py-12 text-center text-text-lo">
+              No products yet.
+            </div>
+          ) : (
+            shopProducts.map(product => {
+              const isPurchased = purchasedPostIds?.includes(product.id);
+              return (
+                <div key={product.id} className="bg-surface-dark p-4 rounded-2xl border border-white/5 flex items-center justify-between">
+                  <div className="flex items-center gap-4">
+                    <div className="w-16 h-16 bg-white/5 rounded-xl flex items-center justify-center text-2xl">📦</div>
+                    <div>
+                      <h4 className="font-bold text-white mb-1">{product.caption || "Digital Product"}</h4>
+                      <p className="text-sm font-bold text-brand-yellow">₹{product.price || 0}</p>
+                    </div>
+                  </div>
+                  <div>
+                    {isPurchased ? (
+                      <a href={`/api/media/${product.id}`} download target="_blank" rel="noreferrer" className="inline-block bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-full font-bold text-sm transition-colors">
+                        Download
+                      </a>
+                    ) : (
+                      <Button onClick={() => setSelectedPost(product)}>Buy</Button>
+                    )}
+                  </div>
+                </div>
+              );
+            })
+          )}
         </div>
       )}
 
       {activeTab === "posts" && (
         <div className="grid grid-cols-3 gap-1">
-        {posts.length === 0 ? (
+        {feedPosts.length === 0 ? (
           <div className="col-span-3 py-12 text-center text-text-lo">
             No posts yet.
           </div>
         ) : (
-          posts.map(post => (
+          feedPosts.map(post => (
             <div 
               key={post.id} 
               className="aspect-square bg-surface-dark relative group overflow-hidden cursor-pointer"

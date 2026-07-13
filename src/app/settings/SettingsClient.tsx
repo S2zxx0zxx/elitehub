@@ -141,7 +141,10 @@ export default function SettingsClient({ user }: { user: any }) {
           )}
         </div>
 
-        <div className="pt-4">
+        <div className="pt-4 space-y-3">
+          <Button variant="secondary" className="w-full !border-white/10" onClick={() => router.push("/purchases")}>
+            My Purchases & Downloads
+          </Button>
           <Button variant="secondary" className="w-full !text-red-500 !border-red-500/20" onClick={() => signOut()}>
             Log Out
           </Button>
