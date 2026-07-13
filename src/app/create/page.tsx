@@ -1,11 +1,15 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import { Button } from "@/components/Button";
 import { Card, CardContent } from "@/components/Card";
 import { BottomNav } from "@/components/BottomNav";
+import Cropper from "react-easy-crop";
+import "react-easy-crop/react-easy-crop.css";
+import { getCroppedImg } from "@/lib/cropImage";
+import { Point, Area } from "react-easy-crop";
 
 export default function CreatePage() {
   const router = useRouter();
@@ -13,10 +17,23 @@ export default function CreatePage() {
   
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
+  
+  // Crop states
+  const [crop, setCrop] = useState<Point>({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
+  const [croppedBlob, setCroppedBlob] = useState<Blob | null>(null);
+  const [isCropping, setIsCropping] = useState(false);
+
+  // Form states
   const [caption, setCaption] = useState("");
   const [visibility, setVisibility] = useState<"public" | "private">("public");
   const [price, setPrice] = useState("");
+  
+  // Upload states
   const [uploading, setUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   if (isLoaded && !isSignedIn) return null; // Or redirect
@@ -26,33 +43,87 @@ export default function CreatePage() {
       const selectedFile = e.target.files[0];
       setFile(selectedFile);
       setPreview(URL.createObjectURL(selectedFile));
+      
+      // If it's an image, start crop mode
+      if (selectedFile.type.startsWith("image/")) {
+        setIsCropping(true);
+      } else {
+        // Video doesn't use cropping currently
+        setCroppedBlob(selectedFile);
+      }
     }
   };
 
+  const onCropComplete = useCallback((croppedArea: Area, croppedAreaPixels: Area) => {
+    setCroppedAreaPixels(croppedAreaPixels);
+  }, []);
+
+  const handleCropSave = async () => {
+    if (!preview || !croppedAreaPixels) return;
+    try {
+      const blob = await getCroppedImg(preview, croppedAreaPixels);
+      setCroppedBlob(blob);
+      setIsCropping(false);
+      if (blob) {
+        setPreview(URL.createObjectURL(blob));
+      }
+    } catch (e) {
+      console.error(e);
+      alert("Failed to crop image.");
+    }
+  };
+
+  const uploadToR2 = (signedUrl: string, fileData: Blob, contentType: string): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      
+      xhr.upload.addEventListener("progress", (event) => {
+        if (event.lengthComputable) {
+          const percentComplete = Math.round((event.loaded / event.total) * 100);
+          setUploadProgress(percentComplete);
+        }
+      });
+
+      xhr.addEventListener("load", () => {
+        if (xhr.status >= 200 && xhr.status < 300) {
+          resolve();
+        } else {
+          reject(new Error(`Upload failed with status ${xhr.status}`));
+        }
+      });
+
+      xhr.addEventListener("error", () => reject(new Error("Upload network error")));
+      xhr.addEventListener("abort", () => reject(new Error("Upload aborted")));
+
+      xhr.open("PUT", signedUrl, true);
+      xhr.setRequestHeader("Content-Type", contentType);
+      xhr.send(fileData);
+    });
+  };
+
   const handlePublish = async () => {
-    if (!file) return;
+    if (!file || !croppedBlob) return;
     setUploading(true);
+    setUploadProgress(0);
 
     try {
+      const contentType = file.type;
+      
       // 1. Get Presigned URL
       const urlRes = await fetch("/api/upload", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           filename: file.name,
-          contentType: file.type,
+          contentType: contentType,
         }),
       });
       const { signedUrl, key } = await urlRes.json();
 
       if (!signedUrl) throw new Error("Failed to get signed URL");
 
-      // 2. Upload file direct to R2
-      await fetch(signedUrl, {
-        method: "PUT",
-        headers: { "Content-Type": file.type },
-        body: file,
-      });
+      // 2. Upload file direct to R2 with XMLHttpRequest for progress
+      await uploadToR2(signedUrl, croppedBlob, contentType);
 
       // 3. Save post to database
       const postRes = await fetch("/api/posts", {
@@ -94,6 +165,28 @@ export default function CreatePage() {
               <span className="text-3xl mb-2">+</span>
               <p>Tap to select media</p>
             </div>
+          ) : isCropping && preview ? (
+            <div className="space-y-4">
+              <div className="relative w-full rounded-2xl overflow-hidden bg-black aspect-[4/5] h-[400px]">
+                <Cropper
+                  image={preview}
+                  crop={crop}
+                  zoom={zoom}
+                  aspect={4 / 5}
+                  onCropChange={setCrop}
+                  onCropComplete={onCropComplete}
+                  onZoomChange={setZoom}
+                />
+              </div>
+              <div className="flex justify-between items-center gap-4">
+                <Button variant="secondary" className="flex-1" onClick={() => { setFile(null); setPreview(null); setIsCropping(false); }}>
+                  Cancel
+                </Button>
+                <Button className="flex-1" onClick={handleCropSave}>
+                  Save Crop
+                </Button>
+              </div>
+            </div>
           ) : (
             <div className="relative w-full rounded-2xl overflow-hidden bg-black aspect-[4/5]">
               {file?.type.startsWith("video/") ? (
@@ -102,7 +195,7 @@ export default function CreatePage() {
                 <img src={preview} className="w-full h-full object-cover" alt="Preview" />
               )}
               <button 
-                onClick={() => { setFile(null); setPreview(null); }}
+                onClick={() => { setFile(null); setPreview(null); setCroppedBlob(null); }}
                 className="absolute top-2 right-2 bg-black/50 text-white rounded-full w-8 h-8 flex items-center justify-center backdrop-blur"
               >
                 ✕
@@ -118,7 +211,7 @@ export default function CreatePage() {
             onChange={handleFileChange}
           />
 
-          {file && (
+          {!isCropping && file && (
             <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4">
               <div>
                 <label className="text-sm font-bold text-text-lo mb-1 block">Caption</label>
@@ -162,6 +255,18 @@ export default function CreatePage() {
                     onChange={(e) => setPrice(e.target.value)}
                   />
                   <p className="text-xs text-text-lo mt-1">Leave blank to use your default subscription access.</p>
+                </div>
+              )}
+
+              {uploading && (
+                <div className="w-full bg-surface-dark rounded-full h-4 overflow-hidden border border-white/10 relative">
+                  <div 
+                    className="bg-brand-yellow h-full transition-all duration-300 ease-out"
+                    style={{ width: `${uploadProgress}%` }}
+                  />
+                  <span className="absolute inset-0 flex items-center justify-center text-[10px] font-bold text-black mix-blend-difference">
+                    {uploadProgress}%
+                  </span>
                 </div>
               )}
 
