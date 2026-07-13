@@ -37,7 +37,7 @@ export function AccessCard({ user, domain = "elitehub.com" }: AccessCardProps) {
       </div>
 
       {/* Middle Section: Member Name & ID */}
-      <div className="absolute top-1/2 left-6 -translate-y-1/2 relative z-10 mt-6">
+      <div className="absolute top-1/2 left-6 -translate-y-1/2 z-10 mt-6">
         <h2 className="font-mono text-2xl font-bold uppercase tracking-wider mb-1 line-clamp-1">
           {user.name || user.handle || "MEMBER"}
         </h2>
@@ -51,7 +51,7 @@ export function AccessCard({ user, domain = "elitehub.com" }: AccessCardProps) {
       </div>
 
       {/* Bottom Section: Role & QR */}
-      <div className="absolute bottom-6 left-6 right-6 flex justify-between items-end relative z-10">
+      <div className="absolute bottom-6 left-6 right-6 flex justify-between items-end z-10">
         <div>
           <p className="text-[10px] font-bold tracking-widest text-white/40 uppercase mb-1">
             MEMBER TYPE

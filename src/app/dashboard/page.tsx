@@ -8,6 +8,7 @@ import { BottomNav } from "@/components/BottomNav";
 import { TopBar } from "@/components/TopBar";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
+import { AreaChart, Area, Tooltip, ResponsiveContainer } from "recharts";
 
 export const dynamic = "force-dynamic";
 
@@ -23,7 +24,7 @@ interface DashboardData {
 }
 
 export default function DashboardPage() {
-  const { user, isLoaded, isSignedIn } = useUser();
+  const { isLoaded, isSignedIn } = useUser();
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
   
@@ -47,7 +48,7 @@ export default function DashboardPage() {
 
   const handlePayout = async () => {
     if (!upiId || !payoutAmount) return toast.error("Enter UPI ID and Amount");
-    if (data && parseFloat(payoutAmount) > data.availableBalance) return toast.error("Insufficient balance");
+    if (data && Number.parseFloat(payoutAmount) > data.availableBalance) return toast.error("Insufficient balance");
     setPayoutLoading(true);
     
     try {
@@ -68,6 +69,7 @@ export default function DashboardPage() {
         window.location.reload();
       }
     } catch (error) {
+      console.error(error);
       toast.error("Failed to request payout");
     }
     setPayoutLoading(false);
@@ -121,8 +123,9 @@ export default function DashboardPage() {
                 <h3 className="font-bold text-elite-white mb-4">Request Payout</h3>
                 <div className="space-y-4">
                   <div>
-                    <label className="text-xs font-bold text-text-lo mb-1 block">UPI ID</label>
+                    <label htmlFor="upiId" className="text-xs font-bold text-text-lo mb-1 block">UPI ID</label>
                     <input 
+                      id="upiId"
                       type="text" 
                       placeholder="e.g. 9876543210@ybl"
                       className="w-full bg-black border border-white/10 rounded-xl p-3 text-elite-white focus:border-brand-yellow focus:outline-none"
@@ -131,8 +134,9 @@ export default function DashboardPage() {
                     />
                   </div>
                   <div>
-                    <label className="text-xs font-bold text-text-lo mb-1 block">Amount (₹)</label>
+                    <label htmlFor="payoutAmount" className="text-xs font-bold text-text-lo mb-1 block">Amount (₹)</label>
                     <input 
+                      id="payoutAmount"
                       type="number" 
                       placeholder={`Max ₹${data.availableBalance}`}
                       className="w-full bg-black border border-white/10 rounded-xl p-3 text-brand-yellow font-bold text-lg focus:border-brand-yellow focus:outline-none"
@@ -190,14 +194,32 @@ export default function DashboardPage() {
             {/* Chart */}
             <div className="mt-8">
               <h3 className="font-display font-bold text-xl text-elite-white mb-4">30-Day Earnings</h3>
-              <div className="bg-surface-dark p-6 rounded-3xl border border-white/5 h-48 flex items-end gap-1">
-                {data.chartData.map((day, i) => (
-                  <div key={i} className="flex-1 bg-brand-yellow/30 hover:bg-brand-yellow transition-colors rounded-t-md relative group" style={{ height: `${Math.max(4, (day.earnings / (Math.max(...data.chartData.map(d => d.earnings)) || 1)) * 100)}%` }}>
-                    <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-10 whitespace-nowrap">
-                      ₹{day.earnings}
-                    </div>
-                  </div>
-                ))}
+              <div className="bg-surface-dark p-4 rounded-3xl border border-white/5 h-64">
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={data.chartData} margin={{ top: 10, right: 0, left: 0, bottom: 0 }}>
+                    <defs>
+                      <linearGradient id="colorEarnings" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#F5C518" stopOpacity={0.4} />
+                        <stop offset="95%" stopColor="#F5C518" stopOpacity={0} />
+                      </linearGradient>
+                    </defs>
+                    <Tooltip 
+                      contentStyle={{ backgroundColor: '#1C1C1E', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px' }}
+                      itemStyle={{ color: '#F5C518', fontWeight: 'bold' }}
+                      labelStyle={{ color: '#A0A0A0', marginBottom: '4px' }}
+                      formatter={(value: any) => [`₹${value}`, 'Earnings']}
+                      labelFormatter={(label) => `Date: ${label}`}
+                    />
+                    <Area 
+                      type="monotone" 
+                      dataKey="earnings" 
+                      stroke="#F5C518" 
+                      strokeWidth={3}
+                      fillOpacity={1} 
+                      fill="url(#colorEarnings)" 
+                    />
+                  </AreaChart>
+                </ResponsiveContainer>
               </div>
             </div>
 

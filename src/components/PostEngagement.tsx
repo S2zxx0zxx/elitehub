@@ -1,14 +1,15 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Heart, MessageCircle, Send } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { ShareButton } from "./ShareButton";
 
 interface PostEngagementProps {
-  postId: string;
-  initialLikes?: number;
-  initialComments?: number;
-  isLikedInitially?: boolean;
+  readonly postId: string;
+  readonly initialLikes?: number;
+  readonly initialComments?: number;
+  readonly isLikedInitially?: boolean;
 }
 
 export function PostEngagement({ postId, initialLikes = 0, initialComments = 0, isLikedInitially = false }: PostEngagementProps) {
@@ -30,7 +31,7 @@ export function PostEngagement({ postId, initialLikes = 0, initialComments = 0, 
 
     try {
       const res = await fetch(`/api/posts/${postId}/like`, { method: "POST" });
-      if (!res.ok) throw new Error();
+      if (!res.ok) throw new Error("Failed to like post");
       const data = await res.json();
       setLiked(data.liked);
       // In a real app we might fetch the exact count again
@@ -95,6 +96,14 @@ export function PostEngagement({ postId, initialLikes = 0, initialComments = 0, 
           <MessageCircle className="w-6 h-6 text-white group-hover:text-white/80" />
           <span className="font-bold text-sm">{commentsCount}</span>
         </button>
+        <div className="ml-auto flex items-center">
+          <ShareButton 
+            url={`/explore`} 
+            title="Post on EliteHub" 
+            text="Check out this post on EliteHub!" 
+            variant="icon"
+          />
+        </div>
       </div>
 
       <AnimatePresence>
@@ -105,6 +114,10 @@ export function PostEngagement({ postId, initialLikes = 0, initialComments = 0, 
               animate={{ opacity: 1 }} 
               exit={{ opacity: 0 }}
               onClick={() => setShowComments(false)}
+              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setShowComments(false); }}
+              role="button"
+              tabIndex={0}
+              aria-label="Close comments"
               className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[60]"
             />
             
@@ -115,7 +128,14 @@ export function PostEngagement({ postId, initialLikes = 0, initialComments = 0, 
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
               className="fixed bottom-0 left-0 right-0 h-[70vh] bg-surface-dark border-t border-white/10 rounded-t-3xl p-4 sm:p-6 z-[60] flex flex-col shadow-2xl pb-safe"
             >
-              <div className="w-12 h-1.5 bg-white/20 rounded-full mx-auto mb-6 shrink-0" onClick={() => setShowComments(false)} />
+              <div 
+                className="w-12 h-1.5 bg-white/20 rounded-full mx-auto mb-6 shrink-0 cursor-pointer" 
+                onClick={() => setShowComments(false)}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setShowComments(false); }}
+                role="button"
+                tabIndex={0}
+                aria-label="Close comments panel"
+              />
               
               <h3 className="font-display text-xl font-bold mb-4 shrink-0">Comments</h3>
               

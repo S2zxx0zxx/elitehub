@@ -5,6 +5,7 @@ import { CheckoutSheet } from "./CheckoutSheet";
 import { Button } from "./Button";
 import { AccessCard } from "./AccessCard";
 import { PostEngagement } from "./PostEngagement";
+import { ShareButton } from "./ShareButton";
 import { Package, Lock, Play, Image as ImageIcon, Sparkles } from "lucide-react";
 
 interface Post {
@@ -82,6 +83,14 @@ export function ProfileClient({
         >
           {isFollowing ? "Following" : "Follow"}
         </Button>
+        <div className="flex items-center ml-2">
+          <ShareButton 
+            url={`/${handle}`} 
+            title={creatorName} 
+            text={`Check out ${creatorName} on EliteHub!`} 
+            variant="icon"
+          />
+        </div>
       </div>
 
       <div className="mb-6">

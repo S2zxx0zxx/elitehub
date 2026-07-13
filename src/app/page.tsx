@@ -1,7 +1,7 @@
+import { Metadata } from "next";
 import Link from "next/link";
 import { Button } from "@/components/Button";
 import { Card, CardContent } from "@/components/Card";
-import { Chip } from "@/components/Chip";
 import { BottomNav } from "@/components/BottomNav";
 import { TopBar } from "@/components/TopBar";
 import { AdSlot } from "@/components/AdSlot";
@@ -12,6 +12,16 @@ import { PostEngagement } from "@/components/PostEngagement";
 import { Play, Image as ImageIcon } from "lucide-react";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  title: "EliteHub | The premium creator platform",
+  description: "Monetize your exclusive content directly with your fans. No middlemen. Fast payouts.",
+  openGraph: {
+    title: "EliteHub",
+    description: "Monetize your exclusive content directly with your fans.",
+    type: "website",
+  }
+};
 
 export default async function Home() {
   const trendingCreators = await getTrendingCreators();

@@ -1,8 +1,7 @@
+import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { getDbUser } from "@/lib/auth";
-import { Button } from "@/components/Button";
-import { Card, CardContent } from "@/components/Card";
 import { BottomNav } from "@/components/BottomNav";
 import { ProfileClient } from "@/components/ProfileClient";
 
@@ -11,6 +10,39 @@ export const dynamic = 'force-dynamic';
 interface ProfilePageProps {
   params: {
     handle: string;
+  };
+}
+
+export async function generateMetadata({ params }: ProfilePageProps): Promise<Metadata> {
+  const creator = await prisma.user.findUnique({
+    where: { handle: params.handle }
+  });
+
+  if (!creator || creator.role !== "Creator") {
+    return {
+      title: "Not Found",
+      description: "Creator not found on EliteHub"
+    };
+  }
+
+  const name = creator.name || creator.handle;
+  const description = creator.bio || `Check out ${name}'s exclusive content on EliteHub.`;
+
+  return {
+    title: `${name} | EliteHub`,
+    description: description,
+    openGraph: {
+      title: `${name} on EliteHub`,
+      description: description,
+      images: creator.photo ? [creator.photo] : [],
+      type: "profile",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${name} on EliteHub`,
+      description: description,
+      images: creator.photo ? [creator.photo] : [],
+    }
   };
 }
 
@@ -48,11 +80,9 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
     purchasedPostIds = purchases.map(p => p.postId);
   }
 
-  const isFollowing = viewer ? await prisma.follow.findFirst({
+  const isFollowing = viewer ? (await prisma.follow.findFirst({
     where: { followerId: viewer.id, creatorId: creator.id }
-  }).then(f => !!f) : false;
-
-  const isCreator = viewer?.id === creator.id;
+  })) !== null : false;
 
   const sanitizedPosts = creator.posts.map(post => {
     // Strip mediaKey for all viewers - client will use /api/media/[postId]
