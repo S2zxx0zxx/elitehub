@@ -83,6 +83,27 @@ export async function POST(req: Request) {
         });
         
         const fan = await prisma.user.findUnique({ where: { id: subscription.fanId } });
+        const creator = await prisma.user.findUnique({ where: { id: subscription.creatorId } });
+        
+        if (creator && creator.subscriptionPrice) {
+          const amount = creator.subscriptionPrice;
+          const commissionRate = creator.tickTier === "gold" ? 0.01 : 0.05;
+          const commission = amount * commissionRate;
+          const creatorEarning = amount - commission;
+
+          // Record the subscription payment for analytics
+          await prisma.subscriptionPayment.create({
+            data: {
+              fanId: subscription.fanId,
+              creatorId: subscription.creatorId,
+              subscriptionId: subscription.id,
+              amount: amount,
+              commission: commission,
+              creatorEarning: creatorEarning,
+              razorpayPaymentId: event.payload.payment?.entity?.id || "unknown"
+            }
+          });
+        }
         
         if (fan) {
           await prisma.notification.create({

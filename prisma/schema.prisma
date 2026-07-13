@@ -35,6 +35,8 @@ model User {
   subscribers   Subscription[] @relation("CreatorSubscription")
   purchases     Purchase[]
   payouts       Payout[]
+  subPaymentsMade     SubscriptionPayment[] @relation("FanSubPayments")
+  subPaymentsReceived SubscriptionPayment[] @relation("CreatorSubPayments")
 }
 
 model Post {
@@ -75,6 +77,7 @@ model Subscription {
 
   fan     User @relation("FanSubscription", fields: [fanId], references: [id])
   creator User @relation("CreatorSubscription", fields: [creatorId], references: [id])
+  payments SubscriptionPayment[]
 }
 
 model Purchase {
@@ -90,6 +93,22 @@ model Purchase {
 
   fan  User @relation(fields: [fanId], references: [id])
   post Post @relation(fields: [postId], references: [id])
+}
+
+model SubscriptionPayment {
+  id                String   @id @default(uuid())
+  fanId             String
+  creatorId         String
+  subscriptionId    String
+  amount            Float
+  commission        Float
+  creatorEarning    Float
+  razorpayPaymentId String
+  createdAt         DateTime @default(now())
+
+  fan          User         @relation("FanSubPayments", fields: [fanId], references: [id])
+  creator      User         @relation("CreatorSubPayments", fields: [creatorId], references: [id])
+  subscription Subscription @relation(fields: [subscriptionId], references: [id])
 }
 
 model Payout {

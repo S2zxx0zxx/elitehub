@@ -15,15 +15,20 @@ export async function GET(req: Request) {
 
     const creatorId = user.id;
 
-    // 1. Calculate Total Earnings from Purchases
+    // 1. Calculate Total Earnings from Purchases and Subscriptions
     const purchases = await prisma.purchase.findMany({
       where: { 
         post: { creatorId: creatorId },
         status: "completed"
       }
     });
+    const subPayments = await prisma.subscriptionPayment.findMany({
+      where: { creatorId: creatorId }
+    });
 
-    const totalEarnings = purchases.reduce((sum, p) => sum + p.creatorEarning, 0);
+    const totalEarnings = 
+      purchases.reduce((sum, p) => sum + p.creatorEarning, 0) +
+      subPayments.reduce((sum, p) => sum + p.creatorEarning, 0);
 
     // 2. Calculate requested/paid payouts
     const payouts = await prisma.payout.findMany({
@@ -35,7 +40,7 @@ export async function GET(req: Request) {
     // 3. Available Balance
     const availableBalance = totalEarnings - totalPayouts;
 
-    // 4. Subscriber Count (Mocked for now since Subscriptions aren't fully implemented in mock checkout)
+    // 4. Subscriber Count
     const subscribersCount = await prisma.subscription.count({
       where: { creatorId: creatorId, status: "active" }
     });
@@ -56,9 +61,20 @@ export async function GET(req: Request) {
     const lastWeekPurchases = await prisma.purchase.findMany({
       where: { post: { creatorId: creatorId }, status: "completed", createdAt: { gte: fourteenDaysAgo, lt: sevenDaysAgo } }
     });
+    const thisWeekSubs = await prisma.subscriptionPayment.findMany({
+      where: { creatorId: creatorId, createdAt: { gte: sevenDaysAgo } }
+    });
+    const lastWeekSubs = await prisma.subscriptionPayment.findMany({
+      where: { creatorId: creatorId, createdAt: { gte: fourteenDaysAgo, lt: sevenDaysAgo } }
+    });
 
-    const thisWeekEarnings = thisWeekPurchases.reduce((sum, p) => sum + p.creatorEarning, 0);
-    const lastWeekEarnings = lastWeekPurchases.reduce((sum, p) => sum + p.creatorEarning, 0);
+    const thisWeekEarnings = 
+      thisWeekPurchases.reduce((sum, p) => sum + p.creatorEarning, 0) +
+      thisWeekSubs.reduce((sum, p) => sum + p.creatorEarning, 0);
+      
+    const lastWeekEarnings = 
+      lastWeekPurchases.reduce((sum, p) => sum + p.creatorEarning, 0) +
+      lastWeekSubs.reduce((sum, p) => sum + p.creatorEarning, 0);
     
     let weeklyGrowth = 0;
     if (lastWeekEarnings === 0 && thisWeekEarnings > 0) weeklyGrowth = 100;
@@ -70,6 +86,10 @@ export async function GET(req: Request) {
       where: { post: { creatorId: creatorId }, status: "completed", createdAt: { gte: thirtyDaysAgo } },
       select: { createdAt: true, creatorEarning: true }
     });
+    const recentSubs = await prisma.subscriptionPayment.findMany({
+      where: { creatorId: creatorId, createdAt: { gte: thirtyDaysAgo } },
+      select: { createdAt: true, creatorEarning: true }
+    });
     
     const chartDataMap: Record<string, number> = {};
     for (let i = 29; i >= 0; i--) {
@@ -78,7 +98,9 @@ export async function GET(req: Request) {
       chartDataMap[key] = 0;
     }
     
-    recentPurchases.forEach(p => {
+    const allRecentTransactions = [...recentPurchases, ...recentSubs];
+    
+    allRecentTransactions.forEach(p => {
       const d = new Date(p.createdAt);
       const key = `${d.getMonth()+1}/${d.getDate()}`;
       if (chartDataMap[key] !== undefined) {
@@ -88,8 +110,8 @@ export async function GET(req: Request) {
 
     const chartData = Object.keys(chartDataMap).map(date => ({ date, earnings: chartDataMap[date] }));
 
-    // 8. Recent Ledger (Recent purchases)
-    const recentTransactions = await prisma.purchase.findMany({
+    // 8. Recent Ledger (Recent purchases + subscriptions)
+    const recentPostPurchases = await prisma.purchase.findMany({
       where: { 
         post: { creatorId: creatorId },
         status: "completed"
@@ -101,6 +123,27 @@ export async function GET(req: Request) {
         post: true
       }
     });
+
+    const recentSubPayments = await prisma.subscriptionPayment.findMany({
+      where: { creatorId: creatorId },
+      orderBy: { createdAt: 'desc' },
+      take: 5,
+      include: {
+        fan: true
+      }
+    });
+
+    const recentTransactions = [...recentPostPurchases, ...recentSubPayments]
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+      .slice(0, 5)
+      .map(tx => ({
+        id: tx.id,
+        type: 'post' in tx ? 'Post Unlock' : 'Subscription',
+        fan: tx.fan,
+        creatorEarning: tx.creatorEarning,
+        commission: tx.commission,
+        createdAt: tx.createdAt
+      }));
 
     return NextResponse.json({
       totalEarnings,

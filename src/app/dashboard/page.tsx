@@ -214,7 +214,7 @@ export default function DashboardPage() {
                           {tx.fan?.name?.[0] || tx.fan?.handle?.[0] || "?"}
                         </div>
                         <div>
-                          <p className="font-bold text-sm text-elite-white">Post Unlock</p>
+                          <p className="font-bold text-sm text-elite-white">{tx.type || "Post Unlock"}</p>
                           <p className="text-xs text-text-lo">by {tx.fan?.name || tx.fan?.handle}</p>
                         </div>
                       </div>
