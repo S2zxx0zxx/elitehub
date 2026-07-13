@@ -7,6 +7,7 @@ import { Button } from "@/components/Button";
 import { BottomNav } from "@/components/BottomNav";
 import { TopBar } from "@/components/TopBar";
 import { motion } from "framer-motion";
+import { toast } from "sonner";
 
 export const dynamic = "force-dynamic";
 
@@ -45,7 +46,8 @@ export default function DashboardPage() {
   }, []);
 
   const handlePayout = async () => {
-    if (!upiId || !payoutAmount) return alert("Enter UPI ID and Amount");
+    if (!upiId || !payoutAmount) return toast.error("Enter UPI ID and Amount");
+    if (data && parseFloat(payoutAmount) > data.availableBalance) return toast.error("Insufficient balance");
     setPayoutLoading(true);
     
     try {
@@ -56,16 +58,17 @@ export default function DashboardPage() {
       });
       const result = await res.json();
       
-      if (result.error) {
-        alert(result.error);
+      if (!res.ok) {
+        toast.error(result.error);
       } else {
-        alert("Payout requested successfully!");
+        toast.success("Payout requested successfully!");
         setShowPayout(false);
+        setPayoutAmount("");
         // Refresh data
         window.location.reload();
       }
     } catch (error) {
-      alert("Failed to request payout");
+      toast.error("Failed to request payout");
     }
     setPayoutLoading(false);
   };

@@ -5,6 +5,7 @@ import { TopBar } from "@/components/TopBar";
 import { BottomNav } from "@/components/BottomNav";
 import { Card, CardContent } from "@/components/Card";
 import { Button } from "@/components/Button";
+import { toast } from "sonner";
 
 export default function AdminClient() {
   const [data, setData] = useState<any>(null);
@@ -176,7 +177,7 @@ export default function AdminClient() {
             <Button className="w-full" onClick={() => {
               handleAction("createBroadcast", { title: broadcastTitle, body: broadcastBody });
               setBroadcastTitle(""); setBroadcastBody("");
-              alert("Broadcast sent!");
+              toast.success("Broadcast sent!");
             }}>Send to all users</Button>
           </div>
         </section>

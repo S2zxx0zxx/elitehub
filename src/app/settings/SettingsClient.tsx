@@ -3,6 +3,9 @@
 import { useState } from "react";
 import { useClerk } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
+import { useTheme } from "next-themes";
+import { toast } from "sonner";
+import { CheckCircle2, Clock } from "lucide-react";
 import { TopBar } from "@/components/TopBar";
 import { BottomNav } from "@/components/BottomNav";
 import { Button } from "@/components/Button";
@@ -14,7 +17,7 @@ export default function SettingsClient({ user }: { user: any }) {
   const [name, setName] = useState(user.name || "");
   const [bio, setBio] = useState(user.bio || "");
   const [upiId, setUpiId] = useState(user.upiId || "");
-  const [theme, setTheme] = useState(user.theme || "dark");
+  const { theme, setTheme } = useTheme();
   const [loading, setLoading] = useState(false);
   const [kycLoading, setKycLoading] = useState(false);
   const [kycId, setKycId] = useState("");
@@ -30,13 +33,12 @@ export default function SettingsClient({ user }: { user: any }) {
         body: JSON.stringify({ name, bio, upiId, theme })
       });
       if (res.ok) {
-        alert("Settings saved successfully!");
-        router.refresh();
+        toast.success("Settings saved successfully!");
       } else {
-        alert("Error saving settings");
+        toast.error("Error saving settings");
       }
     } catch (e) {
-      alert("Error saving settings");
+      toast.error("Error saving settings");
     }
     setLoading(false);
   };
@@ -95,10 +97,10 @@ export default function SettingsClient({ user }: { user: any }) {
         <div className="bg-surface-dark p-6 rounded-2xl border border-white/5 space-y-4">
           <h2 className="font-display font-bold text-xl text-elite-white">Verification (KYC)</h2>
           {kycStatus === "verified" && (
-            <p className="text-green-500 font-bold text-sm">✅ Your identity is verified.</p>
+            <p className="text-green-500 font-bold text-sm flex items-center gap-2"><CheckCircle2 size={16}/> Your identity is verified.</p>
           )}
           {kycStatus === "pending" && (
-            <p className="text-brand-yellow font-bold text-sm">⏳ Verification pending admin approval.</p>
+            <p className="text-brand-yellow font-bold text-sm flex items-center gap-2"><Clock size={16}/> Verification pending admin approval.</p>
           )}
           {(kycStatus === "none" || kycStatus === "rejected") && (
             <>
@@ -161,7 +163,7 @@ export default function SettingsClient({ user }: { user: any }) {
                   if (res.ok) {
                     await signOut();
                   } else {
-                    alert("Failed to delete account");
+                    toast.error("Failed to delete account");
                     setLoading(false);
                   }
                 }

@@ -10,6 +10,7 @@ import Cropper from "react-easy-crop";
 import "react-easy-crop/react-easy-crop.css";
 import { getCroppedImg } from "@/lib/cropImage";
 import { Point, Area } from "react-easy-crop";
+import { toast } from "sonner";
 
 export default function CreatePage() {
   const router = useRouter();
@@ -71,7 +72,7 @@ export default function CreatePage() {
       }
     } catch (e) {
       console.error(e);
-      alert("Failed to crop image.");
+      toast.error("Failed to crop image.");
     }
   };
 
@@ -144,13 +145,14 @@ export default function CreatePage() {
       if (postRes.ok) {
         router.push(`/dashboard`);
       } else {
-        alert("Failed to save post");
+        toast.error("Failed to save post");
+        setUploading(false);
       }
     } catch (error) {
       console.error(error);
-      alert("Upload failed");
+      toast.error("Upload failed");
+      setUploading(false);
     }
-    setUploading(false);
   };
 
   return (

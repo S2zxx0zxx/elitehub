@@ -26,10 +26,9 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const user = await getDbUser();
-  const theme = user?.theme === "light" ? "light" : "dark";
 
   return (
-    <html lang="en" className={theme}>
+    <html lang="en" suppressHydrationWarning>
       <body className={`${display.variable} ${body.variable} font-body pb-24`}>
         <ClerkProvider>
           <Providers>

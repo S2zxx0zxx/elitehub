@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "./Button";
 import Script from "next/script";
+import { toast } from "sonner";
 
 interface CheckoutSheetProps {
   isOpen: boolean;
@@ -49,8 +50,8 @@ export function CheckoutSheet({ isOpen, onClose, title, price, postId, creatorId
         description: title,
         handler: function (response: any) {
           // Success! Webhook will handle the DB update in the background.
-          alert(`Payment successful!`);
-          window.location.reload();
+          toast.success(`Payment successful!`);
+          setTimeout(() => window.location.reload(), 1000);
         },
         theme: {
           color: "#F5C518" // Brand Yellow
@@ -65,13 +66,13 @@ export function CheckoutSheet({ isOpen, onClose, title, price, postId, creatorId
 
       const rzp = new (window as any).Razorpay(options);
       rzp.on("payment.failed", function (response: any) {
-        alert(`Payment failed: ${response.error.description}`);
+        toast.error(`Payment failed: ${response.error.description}`);
       });
       rzp.open();
 
     } catch (error) {
       console.error(error);
-      alert("Failed to initialize payment.");
+      toast.error("Failed to initialize payment.");
     } finally {
       setLoading(false);
       onClose();

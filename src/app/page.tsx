@@ -9,6 +9,7 @@ import { HomeCategoryGrid } from "@/components/HomeCategoryGrid";
 import { getTrendingCreators, getTrendingContent } from "@/lib/ranking";
 import { timeAgo } from "@/lib/time";
 import { PostEngagement } from "@/components/PostEngagement";
+import { Play, Image as ImageIcon } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -96,9 +97,9 @@ export default async function Home() {
                   <div className="w-full aspect-[4/5] bg-surface-dark relative">
                     {/* Public content plays automatically in real app */}
                     {post.type === "video" ? (
-                      <div className="absolute inset-0 flex items-center justify-center text-white/50 text-4xl bg-black/20 backdrop-blur-sm">▶️</div>
+                      <div className="absolute inset-0 flex items-center justify-center text-white/50 bg-black/20 backdrop-blur-sm"><Play size={48} /></div>
                     ) : (
-                      <div className="absolute inset-0 flex items-center justify-center text-white/50 text-4xl bg-black/20 backdrop-blur-sm">🖼️</div>
+                      <div className="absolute inset-0 flex items-center justify-center text-white/50 bg-black/20 backdrop-blur-sm"><ImageIcon size={48} /></div>
                     )}
                   </div>
                   <CardContent>

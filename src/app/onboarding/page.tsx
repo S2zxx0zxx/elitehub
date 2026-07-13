@@ -6,6 +6,7 @@ import { useUser } from "@clerk/nextjs";
 import { Button } from "@/components/Button";
 import { Card, CardContent } from "@/components/Card";
 import { Chip } from "@/components/Chip";
+import { toast } from "sonner";
 
 type Role = "Fan" | "Creator" | null;
 
@@ -45,12 +46,12 @@ export default function OnboardingPage() {
       if (res.ok) {
         // Wait a bit or redirect
         await user?.reload();
-        router.push("/");
+        router.push(role === "Creator" ? "/dashboard" : "/explore");
       } else {
-        alert("Something went wrong");
+        toast.error("Something went wrong");
       }
     } catch (error) {
-      console.error(error);
+      toast.error("Something went wrong");
     }
     setLoading(false);
   };

@@ -5,6 +5,7 @@ import { CheckoutSheet } from "./CheckoutSheet";
 import { Button } from "./Button";
 import { AccessCard } from "./AccessCard";
 import { PostEngagement } from "./PostEngagement";
+import { Package, Lock, Play, Image as ImageIcon, Sparkles } from "lucide-react";
 
 interface Post {
   id: string;
@@ -89,7 +90,7 @@ export function ProfileClient({
           className="w-full border border-brand-yellow/30 bg-brand-yellow/5 hover:bg-brand-yellow/10 text-brand-yellow flex items-center justify-center gap-2"
           onClick={() => setShowAccessCard(true)}
         >
-          <span className="text-lg">✨</span> Explore Benefits
+          <Sparkles size={18} /> Explore Benefits
         </Button>
       </div>
 
@@ -123,7 +124,9 @@ export function ProfileClient({
               return (
                 <div key={product.id} className="bg-surface-dark p-4 rounded-2xl border border-white/5 flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <div className="w-16 h-16 bg-white/5 rounded-xl flex items-center justify-center text-2xl">📦</div>
+                    <div className="w-16 h-16 bg-white/5 rounded-xl flex items-center justify-center text-text-lo">
+                      <Package size={24} />
+                    </div>
                     <div>
                       <h4 className="font-bold text-white mb-1">{product.caption || "Digital Product"}</h4>
                       <p className="text-sm font-bold text-brand-yellow">₹{product.price || 0}</p>
@@ -164,12 +167,12 @@ export function ProfileClient({
             >
               {post.visibility === "private" && (
                 <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center z-10 backdrop-blur-sm transition-colors group-hover:bg-black/50">
-                  <span className="text-2xl mb-1">🔒</span>
+                  <Lock size={24} className="mb-1 text-white" />
                   {post.price && <span className="text-xs font-bold text-brand-yellow bg-black/50 px-2 py-1 rounded">₹{post.price}</span>}
                 </div>
               )}
-              <div className="w-full h-full bg-text-lo/10 flex items-center justify-center">
-                 {post.type === "video" ? "▶️" : "🖼️"}
+              <div className="w-full h-full bg-text-lo/10 flex items-center justify-center text-text-lo">
+                 {post.type === "video" ? <Play size={32} /> : <ImageIcon size={32} />}
               </div>
               
               <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/80 to-transparent flex justify-center z-20" onClick={(e) => e.stopPropagation()}>
