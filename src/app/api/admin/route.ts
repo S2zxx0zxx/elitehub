@@ -2,9 +2,11 @@ import { NextResponse } from "next/server";
 import { getDbUser } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 
+const ADMIN_IDS = process.env.ADMIN_CLERK_IDS ? process.env.ADMIN_CLERK_IDS.split(",") : [];
+
 export async function GET(req: Request) {
   const user = await getDbUser();
-  if (!user || (user.role !== "Admin" && !["user_2id_placeholder"].includes(user.clerkId || ""))) {
+  if (!user || (user.role !== "Admin" && !ADMIN_IDS.includes(user.clerkId || ""))) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -37,7 +39,7 @@ export async function GET(req: Request) {
 
 export async function POST(req: Request) {
   const user = await getDbUser();
-  if (!user || (user.role !== "Admin" && !["user_2id_placeholder"].includes(user.clerkId || ""))) {
+  if (!user || (user.role !== "Admin" && !ADMIN_IDS.includes(user.clerkId || ""))) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -63,6 +65,27 @@ export async function POST(req: Request) {
       await prisma.broadcast.create({
         data: { title: payload.title, body: payload.body }
       });
+    } else if (action === "resolveReport") {
+      await prisma.report.update({
+        where: { id: payload.reportId },
+        data: { status: "resolved" }
+      });
+    } else if (action === "deletePostAndResolveReport") {
+      await prisma.post.delete({ where: { id: payload.postId } });
+      await prisma.report.update({
+        where: { id: payload.reportId },
+        data: { status: "resolved" }
+      });
+    } else if (action === "banUser") {
+      await prisma.user.update({
+        where: { id: payload.userId },
+        data: { status: "banned" }
+      });
+    } else if (action === "searchUser") {
+      const searchedUser = await prisma.user.findFirst({
+        where: { handle: payload.handle }
+      });
+      return NextResponse.json({ success: true, user: searchedUser });
     }
 
     return NextResponse.json({ success: true });

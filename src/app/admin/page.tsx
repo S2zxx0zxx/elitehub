@@ -4,9 +4,8 @@ import AdminClient from "./AdminClient";
 
 export const dynamic = "force-dynamic";
 
-// Hardcoded allow-list of Admin Clerk IDs or DB IDs.
-// For now, we'll use a placeholder array. In a real app, populate with actual IDs.
-const ADMIN_IDS = ["user_2id_placeholder", "admin_clerk_id_here"];
+// Allow-list from ENV
+const ADMIN_IDS = process.env.ADMIN_CLERK_IDS ? process.env.ADMIN_CLERK_IDS.split(",") : [];
 
 export default async function AdminPage() {
   const user = await getDbUser();
@@ -15,9 +14,7 @@ export default async function AdminPage() {
     redirect("/sign-in");
   }
 
-  // Allow-list check or role check. 
-  // If we had a role === "Admin", we'd check it here.
-  // For safety in this demo, we'll allow access if the user's role is "Admin" or if they are in the allow-list.
+  // Allow-list check
   const isAdmin = user.role === "Admin" || ADMIN_IDS.includes(user.clerkId || "");
   
   if (!isAdmin) {
