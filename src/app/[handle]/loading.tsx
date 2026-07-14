@@ -10,7 +10,7 @@ export default function ProfileLoading() {
       
       <div className="max-w-md mx-auto px-4 -mt-12 relative z-10">
         <div className="flex justify-between items-end mb-4">
-          <Skeleton className="w-24 h-24 rounded-full border-4 border-bg-dark" />
+          <Skeleton className="w-24 h-24 rounded-full border-4 border-bg" />
           <div className="flex gap-4">
             <Skeleton className="w-12 h-10" />
             <Skeleton className="w-12 h-10" />
