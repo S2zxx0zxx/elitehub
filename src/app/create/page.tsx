@@ -152,6 +152,7 @@ export default function CreatePage() {
       });
 
       if (postRes.ok) {
+        router.refresh();
         router.push(`/dashboard`);
       } else {
         toast.error("Failed to save post");

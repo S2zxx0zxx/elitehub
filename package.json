@@ -13,6 +13,7 @@
     "@aws-sdk/s3-request-presigner": "^3.577.0",
     "@clerk/nextjs": "^5.7.6",
     "@prisma/client": "^5.14.0",
+    "@sentry/nextjs": "^10.65.0",
     "clsx": "^2.1.1",
     "framer-motion": "^11.2.10",
     "lucide-react": "^0.378.0",

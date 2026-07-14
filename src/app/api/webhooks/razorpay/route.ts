@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
-import crypto from "crypto";
+
 import { prisma } from "@/lib/db";
 
 export async function POST(req: Request) {
   try {
     const bodyText = await req.text();
+    const crypto = await import("crypto");
     const signature = req.headers.get("x-razorpay-signature");
 
     if (!signature) {
