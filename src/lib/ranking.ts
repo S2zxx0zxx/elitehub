@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/db";
+import { Prisma } from "@prisma/client";
 
 // Scoring Formula: 
 // Trending = (Followers * 2) + (Purchases * 5) + (Recency Bonus up to 30 points)
@@ -9,20 +10,27 @@ export async function getTrendingCreators() {
     where: { role: "Creator" },
     include: {
       _count: {
-        select: { followers: true } // Removed purchases since User.purchases is fan purchases
-      },
-      posts: { 
-        include: { _count: { select: { purchases: true } } }
+        select: { followers: true }
       }
     }
   });
 
+  const creatorIds = creators.map(c => c.id);
+  const postPurchases = await prisma.post.findMany({
+    where: { creatorId: { in: creatorIds } },
+    select: { creatorId: true, _count: { select: { purchases: true } } }
+  });
+
+  const purchasesByCreator: Record<string, number> = {};
+  for (const p of postPurchases) {
+    purchasesByCreator[p.creatorId] = (purchasesByCreator[p.creatorId] || 0) + p._count.purchases;
+  }
+
   const scored = creators.map(creator => {
     const daysSinceCreation = (new Date().getTime() - new Date(creator.createdAt).getTime()) / (1000 * 3600 * 24);
-    const recencyBonus = Math.max(0, 30 - daysSinceCreation); // Max 30 points for being brand new
+    const recencyBonus = Math.max(0, 30 - daysSinceCreation); 
     
-    // Sum purchases from all posts
-    const totalContentPurchases = creator.posts.reduce((sum: number, post) => sum + post._count.purchases, 0);
+    const totalContentPurchases = purchasesByCreator[creator.id] || 0;
 
     const score = (creator._count.followers * 2) + (totalContentPurchases * 5) + recencyBonus;
     return { ...creator, score };
@@ -39,26 +47,33 @@ export async function getTrendingContent() {
       _count: { select: { likes: true, comments: true, saves: true } },
       creator: {
         include: {
-          _count: { select: { followers: true } },
-          posts: { include: { _count: { select: { purchases: true } } } }
+          _count: { select: { followers: true } }
         }
       }
     }
   });
 
+  const creatorIds = Array.from(new Set(posts.map(p => p.creatorId)));
+  const allCreatorPosts = await prisma.post.findMany({
+    where: { creatorId: { in: creatorIds } },
+    select: { creatorId: true, _count: { select: { purchases: true } } }
+  });
+
+  const purchasesByCreator: Record<string, number> = {};
+  for (const p of allCreatorPosts) {
+    purchasesByCreator[p.creatorId] = (purchasesByCreator[p.creatorId] || 0) + p._count.purchases;
+  }
+
   const scored = posts.map(post => {
-    // Creator base score based on followers and overall purchases
-    const totalCreatorPurchases = post.creator.posts.reduce((sum: number, p) => sum + p._count.purchases, 0);
+    const totalCreatorPurchases = purchasesByCreator[post.creatorId] || 0;
     const creatorScore = (post.creator._count.followers * 2) + (totalCreatorPurchases * 5);
     
-    // Post engagement score
     const engagementScore = (post._count?.likes || 0) * 2 + (post._count?.comments || 0) * 3 + (post._count?.saves || 0) * 4 + (post.viewCount || 0) * 1;
 
-    // Post recency bonus
     const hoursSinceCreation = (new Date().getTime() - new Date(post.createdAt).getTime()) / (1000 * 3600);
-    const recencyBonus = Math.max(0, 100 - hoursSinceCreation); // decays by 1 pt per hour
+    const recencyBonus = Math.max(0, 100 - hoursSinceCreation); 
 
-    const score = creatorScore + engagementScore + (recencyBonus * 2); // favor recency in feed
+    const score = creatorScore + engagementScore + (recencyBonus * 2); 
     return { ...post, score };
   });
 
