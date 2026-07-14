@@ -114,6 +114,12 @@ export default function CreatePage() {
 
   const handlePublish = async () => {
     if (!file || !croppedBlob) return;
+    
+    if (postType === "product" && !price) {
+      toast.error("Please enter a price for your digital product.");
+      return;
+    }
+
     setUploading(true);
     setUploadProgress(0);
 
