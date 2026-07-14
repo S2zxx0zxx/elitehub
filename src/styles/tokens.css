@@ -4,14 +4,18 @@
 
 @layer base {
   :root {
-    /* Light mode tokens (for toggle) */
+    /* LIGHT MODE */
+    --bg-dark: #FAFAF7; /* Maps dark to light value */
+    --surface-dark: #FFFFFF;
+    --text-hi: #10131A;
+    --text-lo: #64748B;
+    --elite-white: #10131A; /* White text becomes dark */
+    
+    /* Keep original light tokens */
     --bg-light: #FAFAF7;
     --surface-light: #FFFFFF;
-    --text-light-hi: #10131A;
-    --text-light-lo: #64748B;
     
     /* Global tokens */
-    --elite-white: #FFFFFF;
     --brand-yellow: #F5C518;
     --yellow-deep: #E0A800;
     --cta: #F5C518;
@@ -21,14 +25,15 @@
   }
 
   .dark {
-    /* Dark mode (default) */
+    /* DARK MODE */
     --bg-dark: #0B0B0D;
     --surface-dark: #16161A;
     --text-hi: #FFFFFF;
     --text-lo: #9AA4B2;
+    --elite-white: #FFFFFF;
   }
 
   body {
-    @apply bg-[var(--bg-light)] text-[var(--text-light-hi)] dark:bg-[var(--bg-dark)] dark:text-[var(--text-hi)] antialiased;
+    @apply bg-[var(--bg-dark)] text-[var(--text-hi)] antialiased;
   }
 }

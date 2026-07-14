@@ -31,8 +31,8 @@ export default async function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${display.variable} ${body.variable} font-body pb-24`}>
         <ClerkProvider>
-          <Providers>
-          {children}
+          <Providers userTheme={user?.theme || "dark"}>
+            {children}
           </Providers>
         </ClerkProvider>
       </body>

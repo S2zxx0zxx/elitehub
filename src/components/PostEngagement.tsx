@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Heart, MessageCircle, Send, Bookmark, Eye } from "lucide-react";
+import { Heart, MessageCircle, Send, Bookmark, Eye, Flag, AlertTriangle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ShareButton } from "./ShareButton";
 
@@ -34,6 +34,9 @@ export function PostEngagement({
   const [newComment, setNewComment] = useState("");
   const [loading, setLoading] = useState(false);
   const [hasViewed, setHasViewed] = useState(false);
+  const [showReport, setShowReport] = useState(false);
+  const [reportReason, setReportReason] = useState("");
+  const [reportSuccess, setReportSuccess] = useState(false);
 
   useEffect(() => {
     if (!hasViewed) {
@@ -74,6 +77,30 @@ export function PostEngagement({
     } catch {
       setSaved(wasSaved);
       setSaves(prev => wasSaved ? prev + 1 : prev - 1);
+    }
+  };
+
+  const submitReport = async () => {
+    if (!reportReason) return;
+    setLoading(true);
+    try {
+      const res = await fetch(`/api/report`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ postId, reason: reportReason })
+      });
+      if (res.ok) {
+        setReportSuccess(true);
+        setTimeout(() => {
+          setShowReport(false);
+          setReportSuccess(false);
+          setReportReason("");
+        }, 2000);
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -139,6 +166,9 @@ export function PostEngagement({
           <Eye className="w-5 h-5" />
           <span className="font-bold text-sm">{initialViews}</span>
         </div>
+        <button onClick={() => setShowReport(true)} className="flex items-center gap-2 transition-transform hover:scale-105 active:scale-95 group ml-2">
+          <Flag className="w-5 h-5 text-text-lo hover:text-white transition-colors" />
+        </button>
         <div className="ml-auto flex items-center">
           <ShareButton 
             url={`/explore`} 
@@ -219,6 +249,78 @@ export function PostEngagement({
                   <Send className="w-4 h-4 ml-[-2px]" />
                 </button>
               </form>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {showReport && (
+          <>
+            <motion.button 
+              initial={{ opacity: 0 }} 
+              animate={{ opacity: 1 }} 
+              exit={{ opacity: 0 }}
+              onClick={() => setShowReport(false)}
+              className="fixed inset-0 w-full h-full bg-black/80 backdrop-blur-sm z-[70] cursor-default border-none outline-none"
+            />
+            
+            <motion.div 
+              initial={{ y: "100%", opacity: 0 }} 
+              animate={{ y: "-50%", top: "50%", opacity: 1 }} 
+              exit={{ y: "100%", opacity: 0 }}
+              className="fixed left-4 right-4 sm:left-1/2 sm:-translate-x-1/2 sm:w-96 bg-surface-dark border border-white/10 rounded-3xl p-6 z-[70] flex flex-col shadow-2xl"
+            >
+              {reportSuccess ? (
+                <div className="text-center py-6">
+                  <div className="w-16 h-16 bg-green-500/20 text-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                    ✓
+                  </div>
+                  <h3 className="font-bold text-xl mb-2">Report Submitted</h3>
+                  <p className="text-text-lo text-sm">Thanks for keeping the community safe. Our team will review this.</p>
+                </div>
+              ) : (
+                <>
+                  <div className="flex items-center gap-3 mb-6">
+                    <AlertTriangle className="text-red-500 w-6 h-6" />
+                    <h3 className="font-display text-xl font-bold">Report Content</h3>
+                  </div>
+                  
+                  <p className="text-sm text-text-lo mb-4">Why are you reporting this post?</p>
+                  
+                  <div className="space-y-2 mb-6">
+                    {["Spam", "Inappropriate", "Copyright Violation", "Other"].map(reason => (
+                      <label key={reason} className="flex items-center gap-3 p-3 rounded-xl border border-white/5 bg-black/20 cursor-pointer hover:bg-white/5 transition-colors">
+                        <input 
+                          type="radio" 
+                          name="reportReason" 
+                          value={reason}
+                          checked={reportReason === reason}
+                          onChange={(e) => setReportReason(e.target.value)}
+                          className="w-4 h-4 accent-brand-yellow"
+                        />
+                        <span className="text-sm font-bold">{reason}</span>
+                      </label>
+                    ))}
+                  </div>
+                  
+                  <div className="flex gap-3 mt-auto">
+                    <button 
+                      className="flex-1 py-3 rounded-full font-bold text-sm bg-white/5 hover:bg-white/10 transition-colors"
+                      onClick={() => setShowReport(false)}
+                    >
+                      Cancel
+                    </button>
+                    <button 
+                      className="flex-1 py-3 rounded-full font-bold text-sm bg-red-500 text-white hover:bg-red-600 transition-colors disabled:opacity-50"
+                      onClick={submitReport}
+                      disabled={!reportReason || loading}
+                    >
+                      {loading ? "Submitting..." : "Report"}
+                    </button>
+                  </div>
+                </>
+              )}
             </motion.div>
           </>
         )}
