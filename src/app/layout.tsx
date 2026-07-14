@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, Inter } from "next/font/google";
 import "@/styles/tokens.css";
 import { Providers } from "@/components/Providers";
-import { getDbUser } from "@/lib/auth";
+
 
 const display = Plus_Jakarta_Sans({ 
   subsets: ["latin"], 

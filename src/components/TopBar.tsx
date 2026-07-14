@@ -2,13 +2,11 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { UserButton, SignInButton, useUser } from "@clerk/nextjs";
 import { Search, BarChart2, Settings } from 'lucide-react';
 
 export function TopBar() {
   const { isLoaded, isSignedIn } = useUser();
-  const router = useRouter();
 
   return (
     <div className="sticky top-0 z-40 w-full bg-bg/80 backdrop-blur-xl border-b border-white/5">
@@ -28,7 +26,7 @@ export function TopBar() {
               <Link href="/settings" className="hover:text-brand-yellow transition-colors">
                 <Settings size={24} />
               </Link>
-              <UserButton afterSignOutUrl="/" />
+              <UserButton />
             </>
           ) : (
             isLoaded && (

@@ -22,9 +22,9 @@ const categories = [
 export function HomeCategoryGrid() {
   return (
     <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
-      {categories.map((cat, i) => (
+      {categories.map((cat) => (
         <div 
-          key={i} 
+          key={cat.label} 
           className="bg-surface border border-white/5 rounded-3xl p-4 flex flex-col items-center justify-center text-center gap-2 hover:border-brand-yellow/30 transition-colors"
         >
           <cat.icon className="text-brand-yellow w-6 h-6" />

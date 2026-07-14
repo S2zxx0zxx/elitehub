@@ -3,14 +3,14 @@ import { QRCodeSVG } from "qrcode.react";
 import { Box, BadgeCheck } from "lucide-react";
 
 interface AccessCardProps {
-  user: {
-    id: string;
-    name?: string | null;
-    handle?: string | null;
-    role?: string | null;
-    tickTier?: string | null; // "none", "blue", "gold"
+  readonly user: {
+    readonly id: string;
+    readonly name?: string | null;
+    readonly handle?: string | null;
+    readonly role?: string | null;
+    readonly tickTier?: string | null; // "none", "blue", "gold"
   };
-  domain?: string;
+  readonly domain?: string;
 }
 
 export function AccessCard({ user, domain = "elitehub.com" }: AccessCardProps) {
