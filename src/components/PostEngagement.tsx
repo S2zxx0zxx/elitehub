@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { Heart, MessageCircle, Send } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Heart, MessageCircle, Send, Bookmark, Eye } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ShareButton } from "./ShareButton";
 
@@ -9,17 +9,38 @@ interface PostEngagementProps {
   readonly postId: string;
   readonly initialLikes?: number;
   readonly initialComments?: number;
+  readonly initialSaves?: number;
+  readonly initialViews?: number;
   readonly isLikedInitially?: boolean;
+  readonly isSavedInitially?: boolean;
 }
 
-export function PostEngagement({ postId, initialLikes = 0, initialComments = 0, isLikedInitially = false }: PostEngagementProps) {
+export function PostEngagement({ 
+  postId, 
+  initialLikes = 0, 
+  initialComments = 0, 
+  initialSaves = 0,
+  initialViews = 0,
+  isLikedInitially = false,
+  isSavedInitially = false
+}: PostEngagementProps) {
   const [liked, setLiked] = useState(isLikedInitially);
   const [likes, setLikes] = useState(initialLikes);
+  const [saved, setSaved] = useState(isSavedInitially);
+  const [saves, setSaves] = useState(initialSaves);
   const [commentsCount, setCommentsCount] = useState(initialComments);
   const [showComments, setShowComments] = useState(false);
   const [comments, setComments] = useState<any[]>([]);
   const [newComment, setNewComment] = useState("");
   const [loading, setLoading] = useState(false);
+  const [hasViewed, setHasViewed] = useState(false);
+
+  useEffect(() => {
+    if (!hasViewed) {
+      setHasViewed(true);
+      fetch(`/api/posts/${postId}/view`, { method: "POST" }).catch(() => {});
+    }
+  }, [postId, hasViewed]);
 
   // Note: To truly reflect isLikedInitially, we need the parent to pass it.
   // But for now, we just allow the user to toggle it.
@@ -34,11 +55,25 @@ export function PostEngagement({ postId, initialLikes = 0, initialComments = 0, 
       if (!res.ok) throw new Error("Failed to like post");
       const data = await res.json();
       setLiked(data.liked);
-      // In a real app we might fetch the exact count again
     } catch {
-      // Revert on error
       setLiked(wasLiked);
       setLikes(prev => wasLiked ? prev + 1 : prev - 1);
+    }
+  };
+
+  const handleSave = async () => {
+    const wasSaved = saved;
+    setSaved(!wasSaved);
+    setSaves(prev => wasSaved ? prev - 1 : prev + 1);
+
+    try {
+      const res = await fetch(`/api/posts/${postId}/save`, { method: "POST" });
+      if (!res.ok) throw new Error("Failed to save post");
+      const data = await res.json();
+      setSaved(data.saved);
+    } catch {
+      setSaved(wasSaved);
+      setSaves(prev => wasSaved ? prev + 1 : prev - 1);
     }
   };
 
@@ -96,6 +131,14 @@ export function PostEngagement({ postId, initialLikes = 0, initialComments = 0, 
           <MessageCircle className="w-6 h-6 text-white group-hover:text-white/80" />
           <span className="font-bold text-sm">{commentsCount}</span>
         </button>
+        <button onClick={handleSave} className="flex items-center gap-2 transition-transform hover:scale-105 active:scale-95 group">
+          <Bookmark className={`w-6 h-6 transition-colors ${saved ? "fill-brand-yellow text-brand-yellow" : "text-white group-hover:text-white/80"}`} />
+          <span className="font-bold text-sm">{saves}</span>
+        </button>
+        <div className="flex items-center gap-2 text-text-lo">
+          <Eye className="w-5 h-5" />
+          <span className="font-bold text-sm">{initialViews}</span>
+        </div>
         <div className="ml-auto flex items-center">
           <ShareButton 
             url={`/explore`} 

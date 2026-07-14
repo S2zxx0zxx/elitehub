@@ -36,7 +36,7 @@ export async function getTrendingContent() {
     where: { visibility: "public" },
     take: 50,
     include: {
-      _count: { select: { likes: true, comments: true } },
+      _count: { select: { likes: true, comments: true, saves: true } },
       creator: {
         include: {
           _count: { select: { followers: true } },
@@ -52,7 +52,7 @@ export async function getTrendingContent() {
     const creatorScore = (post.creator._count.followers * 2) + (totalCreatorPurchases * 5);
     
     // Post engagement score
-    const engagementScore = (post._count?.likes || 0) * 2 + (post._count?.comments || 0) * 3;
+    const engagementScore = (post._count?.likes || 0) * 2 + (post._count?.comments || 0) * 3 + (post._count?.saves || 0) * 4 + (post.viewCount || 0) * 1;
 
     // Post recency bonus
     const hoursSinceCreation = (new Date().getTime() - new Date(post.createdAt).getTime()) / (1000 * 3600);

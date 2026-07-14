@@ -53,7 +53,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
       posts: {
         orderBy: { createdAt: 'desc' },
         include: {
-          _count: { select: { likes: true, comments: true } }
+          _count: { select: { likes: true, comments: true, saves: true } }
         }
       }
     }

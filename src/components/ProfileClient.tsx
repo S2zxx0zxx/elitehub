@@ -14,7 +14,8 @@ interface Post {
   visibility: string;
   price: number | null;
   caption?: string | null;
-  _count?: { likes: number; comments: number };
+  viewCount?: number;
+  _count?: { likes: number; comments: number; saves: number };
 }
 
 export function ProfileClient({ 
@@ -189,6 +190,8 @@ export function ProfileClient({
                   postId={post.id} 
                   initialLikes={post._count?.likes || 0} 
                   initialComments={post._count?.comments || 0} 
+                  initialSaves={post._count?.saves || 0}
+                  initialViews={post.viewCount || 0}
                 />
               </div>
             </div>

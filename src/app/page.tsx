@@ -131,7 +131,9 @@ export default async function Home() {
                     <PostEngagement 
                       postId={post.id} 
                       initialLikes={post._count?.likes || 0} 
-                      initialComments={post._count?.comments || 0} 
+                      initialComments={post._count?.comments || 0}
+                      initialSaves={post._count?.saves || 0}
+                      initialViews={post.viewCount || 0}
                     />
                   </CardContent>
                 </Card>

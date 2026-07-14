@@ -11,7 +11,7 @@ import { Prisma } from "@prisma/client";
 
 type TrendingContent = Prisma.PostGetPayload<{
   include: {
-    _count: { select: { likes: true, comments: true } },
+    _count: { select: { likes: true, comments: true, saves: true } },
     creator: {
       include: {
         _count: { select: { followers: true } },
@@ -134,6 +134,8 @@ export function ExploreClient({ trendingContent, newCreators, topTags }: { trend
                           postId={post.id} 
                           initialLikes={post._count?.likes || 0} 
                           initialComments={post._count?.comments || 0} 
+                          initialSaves={post._count?.saves || 0}
+                          initialViews={post.viewCount || 0}
                         />
                       </div>
                     </div>
