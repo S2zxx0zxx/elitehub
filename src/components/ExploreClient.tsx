@@ -5,6 +5,8 @@ import { Search } from "lucide-react";
 import { Card } from "@/components/Card";
 import { AdSlot } from "@/components/AdSlot";
 import { Chip } from "@/components/Chip";
+import { EmptyState } from "@/components/EmptyState";
+import { PackageOpen } from "lucide-react";
 import { PostEngagement } from "@/components/PostEngagement";
 
 import { Prisma } from "@prisma/client";
@@ -91,7 +93,13 @@ export function ExploreClient({ trendingContent, newCreators, topTags }: { trend
         <h3 className="font-display font-bold text-xl mb-2">Explore Feed</h3>
         
         {filteredContent.length === 0 ? (
-          <p className="text-text-lo text-sm">No content found matching your criteria.</p>
+          <EmptyState 
+            icon={PackageOpen}
+            title="No content found"
+            description="We couldn't find anything matching your search criteria. Try a different tag."
+            ctaText="Clear Filters"
+            ctaLink="/explore"
+          />
         ) : (
           filteredContent.map((post, i) => (
             <React.Fragment key={post.id}>

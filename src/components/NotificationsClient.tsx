@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import { TopBar } from "@/components/TopBar";
 import { BottomNav } from "@/components/BottomNav";
+import { EmptyState } from "@/components/EmptyState";
+import { Bell } from "lucide-react";
 
 export function NotificationsClient({ notifications, broadcasts }: { notifications: any[], broadcasts: any[] }) {
   const [filter, setFilter] = useState("All");
@@ -48,13 +50,11 @@ export function NotificationsClient({ notifications, broadcasts }: { notificatio
         {/* Feed */}
         <div className="space-y-4">
           {filteredAlerts.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-20 text-center">
-              <div className="w-16 h-16 bg-surface rounded-full flex items-center justify-center mb-4 border border-white/5">
-                <span className="text-2xl">🔔</span>
-              </div>
-              <h3 className="font-bold text-lg mb-1 text-text-hi">No alerts yet</h3>
-              <p className="text-text-lo text-sm">When you get new subscribers or messages, they will show up here.</p>
-            </div>
+            <EmptyState 
+              icon={Bell}
+              title="No alerts yet"
+              description="When you get new subscribers or messages, they will show up here."
+            />
           ) : (
             filteredAlerts.map(alert => (
               <div key={alert.id} className={`p-4 rounded-3xl border ${alert.isBroadcast ? 'bg-brand-yellow/10 border-brand-yellow/30' : 'bg-surface border-white/5'}`}>

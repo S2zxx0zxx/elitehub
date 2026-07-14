@@ -12,6 +12,7 @@
     "@aws-sdk/client-s3": "^3.577.0",
     "@aws-sdk/s3-request-presigner": "^3.577.0",
     "@clerk/nextjs": "^5.7.6",
+    "@clerk/themes": "^2.4.57",
     "@prisma/client": "^5.14.0",
     "@sentry/nextjs": "^10.65.0",
     "clsx": "^2.1.1",
@@ -38,6 +39,10 @@
     "postcss": "^8",
     "prisma": "^5.14.0",
     "tailwindcss": "^3.4.1",
+    "tsx": "^4.23.1",
     "typescript": "^5"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
   }
 }
