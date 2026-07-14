@@ -20,7 +20,7 @@ export function AccessCard({ user, domain = "elitehub.com" }: AccessCardProps) {
   const isBlue = user.tickTier === "blue";
 
   return (
-    <div className="relative w-full max-w-sm mx-auto aspect-[1.6/1] bg-[#1c1c1e] rounded-[24px] p-6 text-white shadow-2xl overflow-hidden group transition-transform duration-300 hover:scale-[1.02] hover:rotate-1 animate-in fade-in zoom-in-95">
+    <div className="relative w-full max-w-sm mx-auto aspect-[1.6/1] bg-[#1c1c1e] rounded-[30px] p-6 text-white shadow-2xl overflow-hidden group transition-transform duration-300 hover:scale-[1.02] hover:rotate-1 animate-in fade-in zoom-in-95">
       {/* Glossy Sheen Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/40 pointer-events-none" />
       <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 bg-gradient-to-tr from-transparent via-white/5 to-transparent pointer-events-none transform -translate-x-full group-hover:translate-x-full" />

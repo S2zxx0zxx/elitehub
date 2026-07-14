@@ -25,7 +25,7 @@ export function HomeCategoryGrid() {
       {categories.map((cat, i) => (
         <div 
           key={i} 
-          className="bg-surface border border-white/5 rounded-2xl p-4 flex flex-col items-center justify-center text-center gap-2 hover:border-brand-yellow/30 transition-colors"
+          className="bg-surface border border-white/5 rounded-3xl p-4 flex flex-col items-center justify-center text-center gap-2 hover:border-brand-yellow/30 transition-colors"
         >
           <cat.icon className="text-brand-yellow w-6 h-6" />
           <span className="text-text-hi text-xs font-bold">{cat.label}</span>

@@ -113,7 +113,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
       <div className="max-w-md mx-auto px-4 -mt-12 relative z-10">
         <div className="flex justify-between items-end mb-4">
           <div className="relative">
-            <div className="w-24 h-24 rounded-full border-4 border-bg-dark bg-surface overflow-hidden">
+            <div className="w-24 h-24 rounded-full border-4 border-bg bg-surface overflow-hidden">
               {creator.photo ? (
                 <img src={creator.photo} alt={creator.name || ""} className="w-full h-full object-cover" />
               ) : (
@@ -123,7 +123,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
               )}
             </div>
             {(isGold || isBlue) && (
-              <div className={`absolute bottom-0 right-0 w-6 h-6 rounded-full border-2 border-bg-dark flex items-center justify-center ${isGold ? 'bg-gold' : 'bg-blue-500'}`}>
+              <div className={`absolute bottom-0 right-0 w-6 h-6 rounded-full border-2 border-bg flex items-center justify-center ${isGold ? 'bg-gold' : 'bg-blue-500'}`}>
                 ✓
               </div>
             )}

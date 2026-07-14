@@ -33,7 +33,7 @@ export function TopBar() {
           ) : (
             isLoaded && (
               <SignInButton mode="modal">
-                <button className="text-sm font-bold bg-brand-yellow text-bg-dark px-4 py-2 rounded-full">
+                <button className="text-sm font-bold bg-brand-yellow text-bg px-4 py-2 rounded-full">
                   Sign In
                 </button>
               </SignInButton>

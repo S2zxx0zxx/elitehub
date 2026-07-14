@@ -95,7 +95,7 @@ export default function DashboardPage() {
         ) : (
           <>
             {/* Main KPI */}
-            <Card className="bg-gradient-to-br from-brand-yellow/20 to-surface-dark border-brand-yellow/30 relative overflow-hidden">
+            <Card className="bg-gradient-to-br from-brand-yellow/20 to-surface border-brand-yellow/30 relative overflow-hidden">
               <div className="absolute top-0 right-0 p-4 opacity-10 text-brand-yellow">
                 <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
               </div>
