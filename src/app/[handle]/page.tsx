@@ -5,7 +5,7 @@ import { getDbUser } from "@/lib/auth";
 import { BottomNav } from "@/components/BottomNav";
 import { ProfileClient } from "@/components/ProfileClient";
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 60;
 
 interface ProfilePageProps {
   params: {

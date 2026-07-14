@@ -11,7 +11,7 @@ import { timeAgo } from "@/lib/time";
 import { PostEngagement } from "@/components/PostEngagement";
 import { Play, Image as ImageIcon } from "lucide-react";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60; // Revalidate every 60 seconds instead of blocking every request
 
 export const metadata: Metadata = {
   title: "EliteHub | The premium creator platform",

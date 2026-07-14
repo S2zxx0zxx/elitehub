@@ -5,7 +5,7 @@ import { ExploreClient } from "@/components/ExploreClient";
 import { getTrendingCreators, getTrendingContent, getNewCreators, getTopTags } from "@/lib/ranking";
 import { BottomNav } from "@/components/BottomNav";
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: "Explore | EliteHub",

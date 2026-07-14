@@ -20,18 +20,16 @@ export const metadata: Metadata = {
   description: "India ke creators, seedha apne fans se kamayein",
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const user = await getDbUser();
-
   return (
     <ClerkProvider>
       <html lang="en" className="dark" suppressHydrationWarning>
         <body className={`${display.variable} ${body.variable} font-body pb-24`}>
-          <Providers userTheme={user?.theme || "dark"}>
+          <Providers userTheme="dark">
             {children}
           </Providers>
         </body>
