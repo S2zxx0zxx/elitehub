@@ -7,7 +7,21 @@ import { AdSlot } from "@/components/AdSlot";
 import { Chip } from "@/components/Chip";
 import { PostEngagement } from "@/components/PostEngagement";
 
-export function ExploreClient({ trendingContent, newCreators, topTags }: { trendingContent: any[], newCreators: any[], topTags: string[] }) {
+import { Prisma } from "@prisma/client";
+
+type TrendingContent = Prisma.PostGetPayload<{
+  include: {
+    _count: { select: { likes: true, comments: true } },
+    creator: {
+      include: {
+        _count: { select: { followers: true } },
+        posts: { include: { _count: { select: { purchases: true } } } }
+      }
+    }
+  }
+}>;
+
+export function ExploreClient({ trendingContent, newCreators, topTags }: { trendingContent: TrendingContent[], newCreators: Prisma.UserGetPayload<{}>[], topTags: string[] }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
 

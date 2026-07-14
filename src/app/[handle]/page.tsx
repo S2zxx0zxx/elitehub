@@ -53,7 +53,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
       posts: {
         orderBy: { createdAt: 'desc' },
         include: {
-          _count: { select: { likes: true, comments: true } as any }
+          _count: { select: { likes: true, comments: true } }
         }
       }
     }
@@ -84,9 +84,9 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
     where: { followerId: viewer.id, creatorId: creator.id }
   })) !== null : false;
 
-  const sanitizedPosts = (creator.posts as any[]).map((post: any) => {
+  const sanitizedPosts = creator.posts.map((post) => {
     // Strip mediaKey for all viewers - client will use /api/media/[postId]
-    return { ...post, mediaKey: null as any };
+    return { ...post, mediaKey: "" };
   });
 
   const followersCount = await prisma.follow.count({
@@ -134,7 +134,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
               <p className="text-xs text-text-lo">Followers</p>
             </div>
             <div>
-              <p className="font-bold text-lg">{(creator as any).posts.length}</p>
+              <p className="font-bold text-lg">{creator.posts.length}</p>
               <p className="text-xs text-text-lo">Posts</p>
             </div>
           </div>

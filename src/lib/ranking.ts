@@ -22,7 +22,7 @@ export async function getTrendingCreators() {
     const recencyBonus = Math.max(0, 30 - daysSinceCreation); // Max 30 points for being brand new
     
     // Sum purchases from all posts
-    const totalContentPurchases = creator.posts.reduce((sum, post) => sum + post._count.purchases, 0);
+    const totalContentPurchases = creator.posts.reduce((sum: number, post) => sum + post._count.purchases, 0);
 
     const score = (creator._count.followers * 2) + (totalContentPurchases * 5) + recencyBonus;
     return { ...creator, score };
@@ -48,7 +48,7 @@ export async function getTrendingContent() {
 
   const scored = posts.map(post => {
     // Creator base score based on followers and overall purchases
-    const totalCreatorPurchases = post.creator.posts.reduce((sum, p) => sum + p._count.purchases, 0);
+    const totalCreatorPurchases = post.creator.posts.reduce((sum: number, p) => sum + p._count.purchases, 0);
     const creatorScore = (post.creator._count.followers * 2) + (totalCreatorPurchases * 5);
     
     // Post engagement score

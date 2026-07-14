@@ -15,8 +15,8 @@ export async function GET(req: Request) {
     const totalCreators = await prisma.user.count({ where: { role: "Creator" } });
     
     const purchases = await prisma.purchase.findMany({ where: { status: "completed" } });
-    const totalSalesVolume = purchases.reduce((acc, p) => acc + p.amount, 0);
-    const totalCommission = purchases.reduce((acc, p) => acc + p.commission, 0);
+    const totalSalesVolume = purchases.reduce((acc: number, p) => acc + p.amount, 0);
+    const totalCommission = purchases.reduce((acc: number, p) => acc + p.commission, 0);
     
     const today = new Date();
     today.setHours(0,0,0,0);

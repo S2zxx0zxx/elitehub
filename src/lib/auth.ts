@@ -7,7 +7,7 @@ import { prisma } from "./db";
  * they will be created automatically (Lazy Sync).
  */
 export async function getDbUser() {
-  const { userId } = auth();
+  const { userId } = await auth();
   if (!userId) return null;
 
   let user = await prisma.user.findUnique({
