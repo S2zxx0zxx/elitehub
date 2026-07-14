@@ -97,9 +97,9 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
   const isGold = creator.tickTier === "gold" && followersCount >= 100000;
 
   return (
-    <main className="min-h-screen bg-bg-dark pb-24">
+    <main className="min-h-screen bg-bg pb-24">
       {/* Cover Banner */}
-      <div className="h-48 w-full bg-surface-dark relative">
+      <div className="h-48 w-full bg-surface relative">
         <div className="absolute top-4 left-4 right-4 flex justify-between">
           <button className="w-10 h-10 bg-black/50 backdrop-blur rounded-full flex items-center justify-center text-white">
             ←
@@ -113,7 +113,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
       <div className="max-w-md mx-auto px-4 -mt-12 relative z-10">
         <div className="flex justify-between items-end mb-4">
           <div className="relative">
-            <div className="w-24 h-24 rounded-full border-4 border-bg-dark bg-surface-dark overflow-hidden">
+            <div className="w-24 h-24 rounded-full border-4 border-bg-dark bg-surface overflow-hidden">
               {creator.photo ? (
                 <img src={creator.photo} alt={creator.name || ""} className="w-full h-full object-cover" />
               ) : (
@@ -141,7 +141,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
         </div>
 
         <div className="mb-6">
-          <h1 className="font-display text-2xl font-bold text-elite-white">{creator.name || creator.handle}</h1>
+          <h1 className="font-display text-2xl font-bold text-text-hi">{creator.name || creator.handle}</h1>
           <p className="text-text-lo mb-2">@{creator.handle} • {creator.tags && creator.tags.length > 0 ? creator.tags.join(", ") : "Creator"}</p>
           <p className="text-sm">{creator.bio || "Welcome to my official EliteHub page! Subscribe for exclusive content."}</p>
         </div>

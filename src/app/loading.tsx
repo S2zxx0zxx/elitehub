@@ -4,7 +4,7 @@ import { Skeleton } from "@/components/Skeleton";
 
 export default function Loading() {
   return (
-    <main className="min-h-screen bg-bg-dark pb-24">
+    <main className="min-h-screen bg-bg pb-24">
       <TopBar />
       <div className="max-w-md mx-auto p-4 sm:p-8 space-y-6 mt-4">
         <Skeleton className="h-40 w-full rounded-2xl" />

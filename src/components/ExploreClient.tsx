@@ -48,7 +48,7 @@ export function ExploreClient({ trendingContent, newCreators, topTags }: { trend
         <input 
           type="text" 
           placeholder="Search creators, posts, or tags..." 
-          className="w-full bg-surface-dark border border-white/10 rounded-2xl py-4 pl-12 pr-4 text-elite-white focus:outline-none focus:border-brand-yellow transition-colors"
+          className="w-full bg-surface border border-white/10 rounded-2xl py-4 pl-12 pr-4 text-text-hi focus:outline-none focus:border-brand-yellow transition-colors"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
@@ -70,8 +70,8 @@ export function ExploreClient({ trendingContent, newCreators, topTags }: { trend
           {newCreators.map(creator => (
             <Link href={`/${creator.handle}`} key={creator.id} className="min-w-[120px]">
               <div className="flex flex-col items-center">
-                <div className="w-20 h-20 rounded-full bg-surface-dark border-2 border-brand-yellow/50 p-1 mb-2">
-                  <div className="w-full h-full rounded-full overflow-hidden bg-surface-light text-black flex items-center justify-center font-bold text-xl">
+                <div className="w-20 h-20 rounded-full bg-surface border-2 border-brand-yellow/50 p-1 mb-2">
+                  <div className="w-full h-full rounded-full overflow-hidden bg-surface text-black flex items-center justify-center font-bold text-xl">
                     {creator.photo ? (
                       <img src={creator.photo} alt="" className="w-full h-full object-cover" />
                     ) : (
@@ -79,7 +79,7 @@ export function ExploreClient({ trendingContent, newCreators, topTags }: { trend
                     )}
                   </div>
                 </div>
-                <h4 className="font-bold text-sm text-elite-white line-clamp-1 text-center w-full">{creator.name || creator.handle}</h4>
+                <h4 className="font-bold text-sm text-text-hi line-clamp-1 text-center w-full">{creator.name || creator.handle}</h4>
                 <p className="text-xs text-text-lo text-center w-full">New</p>
               </div>
             </Link>
@@ -98,7 +98,7 @@ export function ExploreClient({ trendingContent, newCreators, topTags }: { trend
             <React.Fragment key={post.id}>
               <Card className="overflow-hidden bg-black border-none rounded-3xl">
                 <div className="w-full aspect-[9/16] relative">
-                  <div className="absolute inset-0 bg-surface-dark animate-pulse" />
+                  <div className="absolute inset-0 bg-surface animate-pulse" />
                   
                   {post.type === "video" && (
                     <video 

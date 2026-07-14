@@ -51,28 +51,28 @@ export default function AdminClient() {
   if (loading || !data) return <div className="p-8 text-center text-white">Loading Admin...</div>;
 
   return (
-    <main className="min-h-screen bg-bg-dark pb-24">
+    <main className="min-h-screen bg-bg pb-24">
       <TopBar />
       <div className="max-w-md mx-auto p-4 sm:p-8 space-y-8 mt-4">
         <h1 className="font-display text-3xl font-bold text-red-500">Admin Panel</h1>
         
         {/* Overview Stats */}
         <section>
-          <h2 className="text-xl font-bold text-elite-white mb-4">Overview</h2>
+          <h2 className="text-xl font-bold text-text-hi mb-4">Overview</h2>
           <div className="grid grid-cols-2 gap-4">
-            <Card className="bg-surface-dark border-white/5"><CardContent className="p-4 text-center">
+            <Card className="bg-surface border-white/5"><CardContent className="p-4 text-center">
               <p className="text-xs text-text-lo mb-1">Total Users</p>
               <p className="text-xl font-bold text-white">{data.stats.totalUsers}</p>
             </CardContent></Card>
-            <Card className="bg-surface-dark border-white/5"><CardContent className="p-4 text-center">
+            <Card className="bg-surface border-white/5"><CardContent className="p-4 text-center">
               <p className="text-xs text-text-lo mb-1">Creators</p>
               <p className="text-xl font-bold text-white">{data.stats.totalCreators}</p>
             </CardContent></Card>
-            <Card className="bg-surface-dark border-white/5"><CardContent className="p-4 text-center">
+            <Card className="bg-surface border-white/5"><CardContent className="p-4 text-center">
               <p className="text-xs text-text-lo mb-1">Sales Volume</p>
               <p className="text-xl font-bold text-green-400">₹{data.stats.totalSalesVolume}</p>
             </CardContent></Card>
-            <Card className="bg-surface-dark border-white/5"><CardContent className="p-4 text-center">
+            <Card className="bg-surface border-white/5"><CardContent className="p-4 text-center">
               <p className="text-xs text-text-lo mb-1">Commission</p>
               <p className="text-xl font-bold text-brand-yellow">₹{data.stats.totalCommission}</p>
             </CardContent></Card>
@@ -81,10 +81,10 @@ export default function AdminClient() {
 
         {/* KYC Queue */}
         <section>
-          <h2 className="text-xl font-bold text-elite-white mb-4">KYC Approvals ({data.pendingKyc.length})</h2>
+          <h2 className="text-xl font-bold text-text-hi mb-4">KYC Approvals ({data.pendingKyc.length})</h2>
           <div className="space-y-3">
             {data.pendingKyc.map((user: any) => (
-              <div key={user.id} className="bg-surface-dark p-4 rounded-xl border border-white/5">
+              <div key={user.id} className="bg-surface p-4 rounded-xl border border-white/5">
                 <p className="font-bold text-white mb-1">{user.name || user.handle}</p>
                 <div className="flex gap-2 mt-3">
                   <Button className="flex-1 text-xs py-2" onClick={() => handleAction("approveKyc", { userId: user.id, tier: "blue" })}>Approve Blue</Button>
@@ -99,10 +99,10 @@ export default function AdminClient() {
 
         {/* Payouts Queue */}
         <section>
-          <h2 className="text-xl font-bold text-elite-white mb-4">Pending Payouts ({data.pendingPayouts.length})</h2>
+          <h2 className="text-xl font-bold text-text-hi mb-4">Pending Payouts ({data.pendingPayouts.length})</h2>
           <div className="space-y-3">
             {data.pendingPayouts.map((payout: any) => (
-              <div key={payout.id} className="bg-surface-dark p-4 rounded-xl border border-white/5 flex justify-between items-center">
+              <div key={payout.id} className="bg-surface p-4 rounded-xl border border-white/5 flex justify-between items-center">
                 <div>
                   <p className="font-bold text-white">₹{payout.amount}</p>
                   <p className="text-xs text-text-lo">to {payout.creator.name} ({payout.upiId})</p>
@@ -116,10 +116,10 @@ export default function AdminClient() {
 
         {/* Reports Queue */}
         <section>
-          <h2 className="text-xl font-bold text-elite-white mb-4">Reports ({data.openReports.length})</h2>
+          <h2 className="text-xl font-bold text-text-hi mb-4">Reports ({data.openReports.length})</h2>
           <div className="space-y-3">
             {data.openReports.map((report: any) => (
-              <div key={report.id} className="bg-surface-dark p-4 rounded-xl border border-white/5">
+              <div key={report.id} className="bg-surface p-4 rounded-xl border border-white/5">
                 <p className="font-bold text-red-500 mb-1">Reason: {report.reason}</p>
                 <p className="text-xs text-text-lo mb-3">Post ID: {report.postId}</p>
                 <div className="flex gap-2">
@@ -134,8 +134,8 @@ export default function AdminClient() {
 
         {/* Manage Users */}
         <section>
-          <h2 className="text-xl font-bold text-elite-white mb-4">Manage Users</h2>
-          <div className="bg-surface-dark p-4 rounded-xl border border-white/5 space-y-3">
+          <h2 className="text-xl font-bold text-text-hi mb-4">Manage Users</h2>
+          <div className="bg-surface p-4 rounded-xl border border-white/5 space-y-3">
             <div className="flex gap-2">
               <input 
                 type="text" 
@@ -161,8 +161,8 @@ export default function AdminClient() {
 
         {/* Broadcast */}
         <section>
-          <h2 className="text-xl font-bold text-elite-white mb-4">New Broadcast</h2>
-          <div className="bg-surface-dark p-4 rounded-xl border border-white/5 space-y-3">
+          <h2 className="text-xl font-bold text-text-hi mb-4">New Broadcast</h2>
+          <div className="bg-surface p-4 rounded-xl border border-white/5 space-y-3">
             <input 
               type="text" 
               placeholder="Title" 

@@ -44,17 +44,17 @@ export default function SettingsClient({ user }: { user: any }) {
   };
 
   return (
-    <main className="min-h-screen bg-bg-dark pb-24">
+    <main className="min-h-screen bg-bg pb-24">
       <TopBar />
       <div className="max-w-md mx-auto p-4 sm:p-8 space-y-6 mt-4">
-        <h1 className="font-display text-3xl font-bold text-elite-white">Settings</h1>
+        <h1 className="font-display text-3xl font-bold text-text-hi">Settings</h1>
         
         <div className="space-y-4">
           <div>
             <label className="text-xs font-bold text-text-lo mb-1 block">Display Name</label>
             <input 
               type="text" 
-              className="w-full bg-surface-dark border border-white/10 rounded-xl p-3 text-elite-white focus:border-brand-yellow focus:outline-none"
+              className="w-full bg-surface border border-white/10 rounded-xl p-3 text-text-hi focus:border-brand-yellow focus:outline-none"
               value={name}
               onChange={e => setName(e.target.value)}
             />
@@ -62,7 +62,7 @@ export default function SettingsClient({ user }: { user: any }) {
           <div>
             <label className="text-xs font-bold text-text-lo mb-1 block">Bio</label>
             <textarea 
-              className="w-full bg-surface-dark border border-white/10 rounded-xl p-3 text-elite-white focus:border-brand-yellow focus:outline-none h-24"
+              className="w-full bg-surface border border-white/10 rounded-xl p-3 text-text-hi focus:border-brand-yellow focus:outline-none h-24"
               value={bio}
               onChange={e => setBio(e.target.value)}
             />
@@ -71,7 +71,7 @@ export default function SettingsClient({ user }: { user: any }) {
             <label className="text-xs font-bold text-text-lo mb-1 block">UPI ID (For Payouts)</label>
             <input 
               type="text" 
-              className="w-full bg-surface-dark border border-white/10 rounded-xl p-3 text-elite-white focus:border-brand-yellow focus:outline-none"
+              className="w-full bg-surface border border-white/10 rounded-xl p-3 text-text-hi focus:border-brand-yellow focus:outline-none"
               value={upiId}
               onChange={e => setUpiId(e.target.value)}
             />
@@ -79,7 +79,7 @@ export default function SettingsClient({ user }: { user: any }) {
           <div>
             <label className="text-xs font-bold text-text-lo mb-1 block">Theme</label>
             <select 
-              className="w-full bg-surface-dark border border-white/10 rounded-xl p-3 text-elite-white focus:border-brand-yellow focus:outline-none"
+              className="w-full bg-surface border border-white/10 rounded-xl p-3 text-text-hi focus:border-brand-yellow focus:outline-none"
               value={theme}
               onChange={e => setTheme(e.target.value)}
             >
@@ -94,8 +94,8 @@ export default function SettingsClient({ user }: { user: any }) {
         </div>
 
         {/* KYC Section */}
-        <div className="bg-surface-dark p-6 rounded-2xl border border-white/5 space-y-4">
-          <h2 className="font-display font-bold text-xl text-elite-white">Verification (KYC)</h2>
+        <div className="bg-surface p-6 rounded-2xl border border-white/5 space-y-4">
+          <h2 className="font-display font-bold text-xl text-text-hi">Verification (KYC)</h2>
           {kycStatus === "verified" && (
             <p className="text-green-500 font-bold text-sm flex items-center gap-2"><CheckCircle2 size={16}/> Your identity is verified.</p>
           )}
@@ -109,7 +109,7 @@ export default function SettingsClient({ user }: { user: any }) {
                 <label className="text-xs font-bold text-text-lo mb-1 block">Legal Name</label>
                 <input 
                   type="text" 
-                  className="w-full bg-black border border-white/10 rounded-xl p-3 text-elite-white focus:border-brand-yellow focus:outline-none"
+                  className="w-full bg-black border border-white/10 rounded-xl p-3 text-text-hi focus:border-brand-yellow focus:outline-none"
                   value={kycName}
                   onChange={e => setKycName(e.target.value)}
                 />
@@ -118,7 +118,7 @@ export default function SettingsClient({ user }: { user: any }) {
                 <label className="text-xs font-bold text-text-lo mb-1 block">ID Number (Aadhaar/PAN)</label>
                 <input 
                   type="text" 
-                  className="w-full bg-black border border-white/10 rounded-xl p-3 text-elite-white focus:border-brand-yellow focus:outline-none"
+                  className="w-full bg-black border border-white/10 rounded-xl p-3 text-text-hi focus:border-brand-yellow focus:outline-none"
                   value={kycId}
                   onChange={e => setKycId(e.target.value)}
                 />

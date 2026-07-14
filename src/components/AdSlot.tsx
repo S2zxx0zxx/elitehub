@@ -16,8 +16,8 @@ export function AdSlot({ title, description, ctaText, imageColor = "bg-blue-600"
         Sponsored
       </div>
       <div className={`w-full h-32 ${imageColor} opacity-80 group-hover:opacity-100 transition-opacity`} />
-      <CardContent className="bg-surface-dark">
-        <h4 className="font-bold text-elite-white mb-1">{title}</h4>
+      <CardContent className="bg-surface">
+        <h4 className="font-bold text-text-hi mb-1">{title}</h4>
         <p className="text-sm text-text-lo mb-3">{description}</p>
         <Button variant="outline" size="sm" className="w-full text-brand-yellow border-brand-yellow hover:bg-brand-yellow/10">
           {ctaText}

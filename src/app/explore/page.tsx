@@ -18,7 +18,7 @@ export default async function ExplorePage() {
   const topTags = await getTopTags();
 
   return (
-    <main className="min-h-screen bg-bg-dark pb-24">
+    <main className="min-h-screen bg-bg pb-24">
       <TopBar />
       
       <ExploreClient trendingContent={trendingContent} newCreators={newCreators} topTags={topTags} />

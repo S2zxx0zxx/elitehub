@@ -99,11 +99,11 @@ export function CheckoutSheet({ isOpen, onClose, title, price, postId, creatorId
               animate={{ y: 0 }} 
               exit={{ y: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-surface-dark border-t border-white/10 rounded-t-3xl p-6 z-50 pb-safe shadow-2xl"
+              className="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-surface border-t border-white/10 rounded-t-3xl p-6 z-50 pb-safe shadow-2xl"
             >
               <div className="w-12 h-1.5 bg-white/20 rounded-full mx-auto mb-6" />
               
-              <h2 className="font-display text-2xl font-bold text-elite-white mb-2">{type === "post" ? "Unlock Content" : "Subscribe"}</h2>
+              <h2 className="font-display text-2xl font-bold text-text-hi mb-2">{type === "post" ? "Unlock Content" : "Subscribe"}</h2>
               <p className="text-text-lo mb-6">{title}</p>
               
               <div className="space-y-4 mb-8">
@@ -113,7 +113,7 @@ export function CheckoutSheet({ isOpen, onClose, title, price, postId, creatorId
                     onClick={() => setSelectedMode("post")}
                   >
                     <div className="flex justify-between items-center mb-1">
-                      <span className="font-bold text-elite-white">One-time Unlock</span>
+                      <span className="font-bold text-text-hi">One-time Unlock</span>
                       <span className="font-display text-xl font-bold text-brand-yellow">₹{price}</span>
                     </div>
                     <p className="text-xs text-text-lo">Lifetime access to this post only.</p>
@@ -129,7 +129,7 @@ export function CheckoutSheet({ isOpen, onClose, title, price, postId, creatorId
                       <div className="absolute top-0 right-0 bg-brand-yellow text-black text-[10px] font-bold px-2 py-0.5 rounded-bl-lg">RECOMMENDED</div>
                     )}
                     <div className="flex justify-between items-center mb-1">
-                      <span className="font-bold text-elite-white">Subscribe</span>
+                      <span className="font-bold text-text-hi">Subscribe</span>
                       <span className="font-display text-xl font-bold text-brand-yellow">₹{type === "subscription" ? price : subscriptionPrice}<span className="text-sm text-text-lo font-normal">/mo</span></span>
                     </div>
                     <p className="text-xs text-text-lo">Unlock ALL premium content and support the creator.</p>

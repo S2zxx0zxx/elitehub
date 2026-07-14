@@ -4,10 +4,10 @@ import { Skeleton } from "@/components/Skeleton";
 
 export default function ExploreLoading() {
   return (
-    <main className="min-h-screen bg-bg-dark pb-24 h-screen overflow-hidden">
+    <main className="min-h-screen bg-bg pb-24 h-screen overflow-hidden">
       <TopBar />
       <div className="max-w-md mx-auto h-[calc(100vh-120px)] relative bg-black">
-        <Skeleton className="absolute inset-0 rounded-none bg-surface-dark" />
+        <Skeleton className="absolute inset-0 rounded-none bg-surface" />
         <div className="absolute top-4 right-4 space-y-4">
           <Skeleton className="w-10 h-10 rounded-full" />
           <Skeleton className="w-10 h-10 rounded-full" />

@@ -237,7 +237,7 @@ export default function CreatePage() {
               </button>
             </div>
           ) : (
-            <div className="w-full h-32 bg-surface-dark border border-white/10 rounded-2xl flex flex-col items-center justify-center relative">
+            <div className="w-full h-32 bg-surface border border-white/10 rounded-2xl flex flex-col items-center justify-center relative">
               <span className="font-bold text-brand-yellow">{file.name}</span>
               <p className="text-xs text-text-lo mt-1">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
               <button 
@@ -264,7 +264,7 @@ export default function CreatePage() {
                   {postType === "product" ? "Product Name / Title" : "Caption"}
                 </label>
                 <textarea 
-                  className="w-full bg-surface-dark border border-white/10 rounded-xl p-3 text-elite-white focus:outline-none focus:border-brand-yellow resize-none h-24"
+                  className="w-full bg-surface border border-white/10 rounded-xl p-3 text-text-hi focus:outline-none focus:border-brand-yellow resize-none h-24"
                   placeholder={postType === "product" ? "e.g. 100+ Reels Bundle" : "What's this about?"}
                   value={caption}
                   onChange={(e) => setCaption(e.target.value)}
@@ -275,7 +275,7 @@ export default function CreatePage() {
                 <label className="text-sm font-bold text-text-lo mb-1 block">Tags (Max 5)</label>
                 <input 
                   type="text" 
-                  className="w-full bg-surface-dark border border-white/10 rounded-xl p-3 text-elite-white focus:outline-none focus:border-brand-yellow mb-2"
+                  className="w-full bg-surface border border-white/10 rounded-xl p-3 text-text-hi focus:outline-none focus:border-brand-yellow mb-2"
                   placeholder="Type a tag and press Enter"
                   value={tagInput}
                   onChange={(e) => setTagInput(e.target.value)}
@@ -305,7 +305,7 @@ export default function CreatePage() {
               </div>
 
               {postType !== "product" && (
-                <div className="flex items-center justify-between p-4 bg-surface-dark rounded-xl border border-white/10">
+                <div className="flex items-center justify-between p-4 bg-surface rounded-xl border border-white/10">
                 <div>
                   <h4 className="font-bold">Visibility</h4>
                   <p className="text-xs text-text-lo">Lock this post for fans?</p>
@@ -334,7 +334,7 @@ export default function CreatePage() {
                   </label>
                   <input 
                     type="number" 
-                    className="w-full bg-surface-dark border border-white/10 rounded-xl p-3 text-brand-yellow focus:outline-none focus:border-brand-yellow font-bold text-lg"
+                    className="w-full bg-surface border border-white/10 rounded-xl p-3 text-brand-yellow focus:outline-none focus:border-brand-yellow font-bold text-lg"
                     placeholder="e.g. 199"
                     value={price}
                     onChange={(e) => setPrice(e.target.value)}
@@ -345,7 +345,7 @@ export default function CreatePage() {
               )}
 
               {uploading && (
-                <div className="w-full bg-surface-dark rounded-full h-4 overflow-hidden border border-white/10 relative">
+                <div className="w-full bg-surface rounded-full h-4 overflow-hidden border border-white/10 relative">
                   <div 
                     className="bg-brand-yellow h-full transition-all duration-300 ease-out"
                     style={{ width: `${uploadProgress}%` }}

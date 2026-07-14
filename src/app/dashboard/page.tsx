@@ -78,18 +78,18 @@ export default function DashboardPage() {
   if (isLoaded && !isSignedIn) return <div className="p-8 text-center">Please login...</div>;
 
   return (
-    <main className="min-h-screen bg-bg-dark pb-24">
+    <main className="min-h-screen bg-bg pb-24">
       <TopBar />
       
       <div className="max-w-md mx-auto p-4 sm:p-8 space-y-8 mt-4">
-        <h1 className="font-display text-3xl font-bold text-elite-white mb-2">Analytics</h1>
+        <h1 className="font-display text-3xl font-bold text-text-hi mb-2">Analytics</h1>
         
         {loading || !data ? (
           <div className="animate-pulse space-y-4">
-            <div className="h-32 bg-surface-dark rounded-3xl" />
+            <div className="h-32 bg-surface rounded-3xl" />
             <div className="flex gap-4">
-              <div className="flex-1 h-24 bg-surface-dark rounded-3xl" />
-              <div className="flex-1 h-24 bg-surface-dark rounded-3xl" />
+              <div className="flex-1 h-24 bg-surface rounded-3xl" />
+              <div className="flex-1 h-24 bg-surface rounded-3xl" />
             </div>
           </div>
         ) : (
@@ -101,7 +101,7 @@ export default function DashboardPage() {
               </div>
               <CardContent className="p-6">
                 <p className="text-brand-yellow font-bold text-sm mb-1">Available Balance</p>
-                <h2 className="font-display text-4xl font-bold text-elite-white">₹{data.availableBalance.toLocaleString('en-IN')}</h2>
+                <h2 className="font-display text-4xl font-bold text-text-hi">₹{data.availableBalance.toLocaleString('en-IN')}</h2>
                 <p className="text-text-lo text-xs mt-2">Lifetime Earnings: ₹{data.totalEarnings.toLocaleString('en-IN')}</p>
                 
                 <Button 
@@ -118,9 +118,9 @@ export default function DashboardPage() {
               <motion.div 
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: "auto" }}
-                className="bg-surface-dark p-6 rounded-3xl border border-white/10"
+                className="bg-surface p-6 rounded-3xl border border-white/10"
               >
-                <h3 className="font-bold text-elite-white mb-4">Request Payout</h3>
+                <h3 className="font-bold text-text-hi mb-4">Request Payout</h3>
                 <div className="space-y-4">
                   <div>
                     <label htmlFor="upiId" className="text-xs font-bold text-text-lo mb-1 block">UPI ID</label>
@@ -128,7 +128,7 @@ export default function DashboardPage() {
                       id="upiId"
                       type="text" 
                       placeholder="e.g. 9876543210@ybl"
-                      className="w-full bg-black border border-white/10 rounded-xl p-3 text-elite-white focus:border-brand-yellow focus:outline-none"
+                      className="w-full bg-black border border-white/10 rounded-xl p-3 text-text-hi focus:border-brand-yellow focus:outline-none"
                       value={upiId}
                       onChange={(e) => setUpiId(e.target.value)}
                     />
@@ -156,13 +156,13 @@ export default function DashboardPage() {
               <Card>
                 <CardContent className="p-5 text-center">
                   <p className="text-text-lo text-sm font-bold mb-1">Subscribers</p>
-                  <h3 className="font-display text-2xl font-bold text-elite-white">{data.subscribersCount}</h3>
+                  <h3 className="font-display text-2xl font-bold text-text-hi">{data.subscribersCount}</h3>
                 </CardContent>
               </Card>
               <Card>
                 <CardContent className="p-5 text-center">
                   <p className="text-text-lo text-sm font-bold mb-1">Weekly Growth</p>
-                  <h3 className={`font-display text-2xl font-bold ${data.weeklyGrowth > 0 ? 'text-green-500' : 'text-elite-white'}`}>
+                  <h3 className={`font-display text-2xl font-bold ${data.weeklyGrowth > 0 ? 'text-green-500' : 'text-text-hi'}`}>
                     {data.weeklyGrowth > 0 ? '+' : ''}{data.weeklyGrowth}%
                   </h3>
                 </CardContent>
@@ -170,9 +170,9 @@ export default function DashboardPage() {
             </div>
 
             {/* Achievement / Tick Progress */}
-            <Card className="mt-4 bg-surface-dark border border-white/5">
+            <Card className="mt-4 bg-surface border border-white/5">
               <CardContent className="p-5">
-                <h3 className="font-bold text-elite-white mb-3">Tick Progress</h3>
+                <h3 className="font-bold text-text-hi mb-3">Tick Progress</h3>
                 <div className="mb-2 flex justify-between items-end">
                   <span className="text-sm font-bold text-blue-500">Blue Tick</span>
                   <span className="text-xs text-text-lo">{data.followersCount} / 100 followers</span>
@@ -193,8 +193,8 @@ export default function DashboardPage() {
 
             {/* Chart */}
             <div className="mt-8">
-              <h3 className="font-display font-bold text-xl text-elite-white mb-4">30-Day Earnings</h3>
-              <div className="bg-surface-dark p-4 rounded-3xl border border-white/5 h-64">
+              <h3 className="font-display font-bold text-xl text-text-hi mb-4">30-Day Earnings</h3>
+              <div className="bg-surface p-4 rounded-3xl border border-white/5 h-64">
                 <ResponsiveContainer width="100%" height="100%">
                   <AreaChart data={data.chartData} margin={{ top: 10, right: 0, left: 0, bottom: 0 }}>
                     <defs>
@@ -225,21 +225,21 @@ export default function DashboardPage() {
 
             {/* Ledger */}
             <div className="mt-8">
-              <h3 className="font-display font-bold text-xl text-elite-white mb-4">Recent Transactions</h3>
+              <h3 className="font-display font-bold text-xl text-text-hi mb-4">Recent Transactions</h3>
               <div className="space-y-3">
                 {data.recentTransactions.length === 0 ? (
-                  <div className="bg-surface-dark p-6 rounded-2xl text-center text-text-lo text-sm">
+                  <div className="bg-surface p-6 rounded-2xl text-center text-text-lo text-sm">
                     No transactions yet. Keep creating!
                   </div>
                 ) : (
                   data.recentTransactions.map((tx: any) => (
-                    <div key={tx.id} className="flex justify-between items-center bg-surface-dark p-4 rounded-2xl border border-white/5">
+                    <div key={tx.id} className="flex justify-between items-center bg-surface p-4 rounded-2xl border border-white/5">
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-full bg-black flex items-center justify-center font-bold text-brand-yellow">
                           {tx.fan?.name?.[0] || tx.fan?.handle?.[0] || "?"}
                         </div>
                         <div>
-                          <p className="font-bold text-sm text-elite-white">{tx.type || "Post Unlock"}</p>
+                          <p className="font-bold text-sm text-text-hi">{tx.type || "Post Unlock"}</p>
                           <p className="text-xs text-text-lo">by {tx.fan?.name || tx.fan?.handle}</p>
                         </div>
                       </div>

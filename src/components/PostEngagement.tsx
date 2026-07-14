@@ -196,7 +196,7 @@ export function PostEngagement({
               animate={{ y: 0 }} 
               exit={{ y: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="fixed bottom-0 left-0 right-0 h-[70vh] bg-surface-dark border-t border-white/10 rounded-t-3xl p-4 sm:p-6 z-[60] flex flex-col shadow-2xl pb-safe"
+              className="fixed bottom-0 left-0 right-0 h-[70vh] bg-surface border-t border-white/10 rounded-t-3xl p-4 sm:p-6 z-[60] flex flex-col shadow-2xl pb-safe"
             >
               <button 
                 type="button"
@@ -213,7 +213,7 @@ export function PostEngagement({
                 ) : (
                   comments.map(c => (
                     <div key={c.id} className="flex gap-3">
-                      <div className="w-8 h-8 rounded-full bg-surface-light flex items-center justify-center overflow-hidden shrink-0">
+                      <div className="w-8 h-8 rounded-full bg-surface flex items-center justify-center overflow-hidden shrink-0">
                         {c.user?.image || c.user?.photo ? (
                            <img src={c.user.photo || c.user.image} alt="User" className="w-full h-full object-cover" />
                         ) : (
@@ -222,7 +222,7 @@ export function PostEngagement({
                       </div>
                       <div>
                         <div className="flex items-center gap-1">
-                          <span className="font-bold text-sm text-elite-white">{c.user?.name || "Anonymous"}</span>
+                          <span className="font-bold text-sm text-text-hi">{c.user?.name || "Anonymous"}</span>
                           {c.user?.tickTier === "gold" && <span className="text-brand-yellow text-xs">✓</span>}
                         </div>
                         <p className="text-sm text-text-lo mt-0.5 break-words">{c.text}</p>
@@ -269,7 +269,7 @@ export function PostEngagement({
               initial={{ y: "100%", opacity: 0 }} 
               animate={{ y: "-50%", top: "50%", opacity: 1 }} 
               exit={{ y: "100%", opacity: 0 }}
-              className="fixed left-4 right-4 sm:left-1/2 sm:-translate-x-1/2 sm:w-96 bg-surface-dark border border-white/10 rounded-3xl p-6 z-[70] flex flex-col shadow-2xl"
+              className="fixed left-4 right-4 sm:left-1/2 sm:-translate-x-1/2 sm:w-96 bg-surface border border-white/10 rounded-3xl p-6 z-[70] flex flex-col shadow-2xl"
             >
               {reportSuccess ? (
                 <div className="text-center py-6">

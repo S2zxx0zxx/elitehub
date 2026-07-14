@@ -5,7 +5,7 @@ export function Card({ className, children, ...props }: React.HTMLAttributes<HTM
   return (
     <div 
       className={cn(
-        "bg-surface-light dark:bg-surface-dark rounded-[24px] shadow-card overflow-hidden",
+        "bg-surface dark:bg-surface rounded-[24px] shadow-card overflow-hidden",
         className
       )}
       {...props}

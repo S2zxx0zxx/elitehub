@@ -3,8 +3,8 @@ import { Skeleton } from "@/components/Skeleton";
 
 export default function ProfileLoading() {
   return (
-    <main className="min-h-screen bg-bg-dark pb-24">
-      <div className="h-48 w-full bg-surface-dark relative">
+    <main className="min-h-screen bg-bg pb-24">
+      <div className="h-48 w-full bg-surface relative">
         <Skeleton className="absolute inset-0 rounded-none" />
       </div>
       

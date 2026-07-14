@@ -5,17 +5,17 @@ import { BottomNav } from "@/components/BottomNav";
 
 export function PurchasesClient({ purchases }: { purchases: any[] }) {
   return (
-    <main className="min-h-screen bg-bg-dark pb-24">
+    <main className="min-h-screen bg-bg pb-24">
       <TopBar />
       <div className="max-w-md mx-auto p-4 sm:p-8 space-y-6 mt-4">
-        <h1 className="font-display text-3xl font-bold text-elite-white">My Purchases</h1>
+        <h1 className="font-display text-3xl font-bold text-text-hi">My Purchases</h1>
         
         {purchases.length === 0 ? (
           <p className="text-text-lo text-center py-12">You haven't purchased anything yet.</p>
         ) : (
           <div className="space-y-4">
             {purchases.map((purchase) => (
-              <div key={purchase.id} className="bg-surface-dark p-4 rounded-2xl border border-white/5 flex items-center justify-between">
+              <div key={purchase.id} className="bg-surface p-4 rounded-2xl border border-white/5 flex items-center justify-between">
                 <div>
                   <h4 className="font-bold text-white mb-1">
                     {purchase.post.type === "product" ? "📦 " : "🖼️ "}
