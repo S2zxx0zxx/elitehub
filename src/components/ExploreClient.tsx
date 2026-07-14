@@ -14,12 +14,11 @@ type TrendingContent = Prisma.PostGetPayload<{
     _count: { select: { likes: true, comments: true, saves: true } },
     creator: {
       include: {
-        _count: { select: { followers: true } },
-        posts: { include: { _count: { select: { purchases: true } } } }
+        _count: { select: { followers: true } }
       }
     }
   }
-}>;
+}> & { score: number };
 
 export function ExploreClient({ trendingContent, newCreators, topTags }: { trendingContent: TrendingContent[], newCreators: Prisma.UserGetPayload<{}>[], topTags: string[] }) {
   const [searchQuery, setSearchQuery] = useState("");

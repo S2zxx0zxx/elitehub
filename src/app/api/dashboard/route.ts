@@ -136,7 +136,7 @@ export async function GET(req: Request) {
     const recentTransactions = [...recentPostPurchases, ...recentSubPayments]
       .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
       .slice(0, 5)
-      .map((tx: any) => ({
+      .map((tx) => ({
         id: tx.id,
         type: 'post' in tx ? 'Post Unlock' : 'Subscription',
         fan: tx.fan,
