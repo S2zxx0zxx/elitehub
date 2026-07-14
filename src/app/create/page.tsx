@@ -18,6 +18,7 @@ export default function CreatePage() {
   
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
+  const [postType, setPostType] = useState<"feed" | "product">("feed");
   
   // Crop states
   const [crop, setCrop] = useState<Point>({ x: 0, y: 0 });
@@ -45,6 +46,13 @@ export default function CreatePage() {
     if (e.target.files && e.target.files[0]) {
       const selectedFile = e.target.files[0];
       setFile(selectedFile);
+      
+      if (postType === "product") {
+        setPreview(null);
+        setCroppedBlob(selectedFile);
+        return;
+      }
+      
       setPreview(URL.createObjectURL(selectedFile));
       
       // If it's an image, start crop mode
@@ -119,6 +127,7 @@ export default function CreatePage() {
         body: JSON.stringify({
           filename: file.name,
           contentType: contentType,
+          type: postType,
         }),
       });
       const { signedUrl, key } = await urlRes.json();
@@ -133,11 +142,11 @@ export default function CreatePage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          type: file.type.startsWith("video/") ? "video" : "photo",
+          type: postType === "product" ? "product" : (file.type.startsWith("video/") ? "video" : "photo"),
           mediaKey: key,
           caption,
-          visibility,
-          price: visibility === "private" ? price : null,
+          visibility: postType === "product" ? "private" : visibility,
+          price: (postType === "product" || visibility === "private") ? price : null,
           tags: tags,
         }),
       });
@@ -157,17 +166,32 @@ export default function CreatePage() {
 
   return (
     <main className="min-h-screen p-4 sm:p-8 max-w-md mx-auto pb-24">
-      <h1 className="font-display text-2xl font-bold mb-6">Create Post</h1>
+      <h1 className="font-display text-2xl font-bold mb-6">Create Content</h1>
+      
+      <div className="flex border-b border-white/10 mb-6">
+        <button 
+          onClick={() => { setPostType("feed"); setFile(null); setPreview(null); setCroppedBlob(null); }}
+          className={`flex-1 py-3 text-center transition-colors ${postType === "feed" ? "border-b-2 border-brand-yellow font-bold text-brand-yellow" : "text-text-lo hover:text-white"}`}
+        >
+          Post / Reel
+        </button>
+        <button 
+          onClick={() => { setPostType("product"); setFile(null); setPreview(null); setCroppedBlob(null); }}
+          className={`flex-1 py-3 text-center transition-colors ${postType === "product" ? "border-b-2 border-brand-yellow font-bold text-brand-yellow" : "text-text-lo hover:text-white"}`}
+        >
+          Digital Product
+        </button>
+      </div>
       
       <Card>
         <CardContent className="space-y-6">
-          {!preview ? (
+          {!file ? (
             <div 
               className="w-full h-48 border-2 border-dashed border-white/20 rounded-2xl flex flex-col items-center justify-center text-text-lo hover:border-brand-yellow cursor-pointer transition-colors"
               onClick={() => fileInputRef.current?.click()}
             >
               <span className="text-3xl mb-2">+</span>
-              <p>Tap to select media</p>
+              <p>{postType === "product" ? "Select PDF or ZIP" : "Tap to select media"}</p>
             </div>
           ) : isCropping && preview ? (
             <div className="space-y-4">
@@ -191,7 +215,7 @@ export default function CreatePage() {
                 </Button>
               </div>
             </div>
-          ) : (
+          ) : preview ? (
             <div className="relative w-full rounded-2xl overflow-hidden bg-black aspect-[4/5]">
               {file?.type.startsWith("video/") ? (
                 <video src={preview} className="w-full h-full object-cover" controls />
@@ -205,23 +229,36 @@ export default function CreatePage() {
                 ✕
               </button>
             </div>
+          ) : (
+            <div className="w-full h-32 bg-surface-dark border border-white/10 rounded-2xl flex flex-col items-center justify-center relative">
+              <span className="font-bold text-brand-yellow">{file.name}</span>
+              <p className="text-xs text-text-lo mt-1">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
+              <button 
+                onClick={() => { setFile(null); setCroppedBlob(null); }}
+                className="absolute top-2 right-2 bg-black/50 text-white rounded-full w-8 h-8 flex items-center justify-center backdrop-blur"
+              >
+                ✕
+              </button>
+            </div>
           )}
           
           <input 
             type="file" 
             ref={fileInputRef} 
             className="hidden" 
-            accept="image/*,video/*"
+            accept={postType === "product" ? ".pdf,.zip,application/pdf,application/zip,application/x-zip-compressed" : "image/*,video/*"}
             onChange={handleFileChange}
           />
 
           {!isCropping && file && (
             <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4">
               <div>
-                <label className="text-sm font-bold text-text-lo mb-1 block">Caption</label>
+                <label className="text-sm font-bold text-text-lo mb-1 block">
+                  {postType === "product" ? "Product Name / Title" : "Caption"}
+                </label>
                 <textarea 
                   className="w-full bg-surface-dark border border-white/10 rounded-xl p-3 text-elite-white focus:outline-none focus:border-brand-yellow resize-none h-24"
-                  placeholder="What's this about?"
+                  placeholder={postType === "product" ? "e.g. 100+ Reels Bundle" : "What's this about?"}
                   value={caption}
                   onChange={(e) => setCaption(e.target.value)}
                 />
@@ -260,7 +297,8 @@ export default function CreatePage() {
                 </div>
               </div>
 
-              <div className="flex items-center justify-between p-4 bg-surface-dark rounded-xl border border-white/10">
+              {postType !== "product" && (
+                <div className="flex items-center justify-between p-4 bg-surface-dark rounded-xl border border-white/10">
                 <div>
                   <h4 className="font-bold">Visibility</h4>
                   <p className="text-xs text-text-lo">Lock this post for fans?</p>
@@ -280,18 +318,22 @@ export default function CreatePage() {
                   </button>
                 </div>
               </div>
+              )}
 
-              {visibility === "private" && (
+              {(visibility === "private" || postType === "product") && (
                 <div className="animate-in fade-in slide-in-from-top-2">
-                  <label className="text-sm font-bold text-brand-yellow mb-1 block">Unlock Price (₹)</label>
+                  <label className="text-sm font-bold text-brand-yellow mb-1 block">
+                    {postType === "product" ? "Price (₹) *" : "Unlock Price (₹)"}
+                  </label>
                   <input 
                     type="number" 
                     className="w-full bg-surface-dark border border-white/10 rounded-xl p-3 text-brand-yellow focus:outline-none focus:border-brand-yellow font-bold text-lg"
                     placeholder="e.g. 199"
                     value={price}
                     onChange={(e) => setPrice(e.target.value)}
+                    required={postType === "product"}
                   />
-                  <p className="text-xs text-text-lo mt-1">Leave blank to use your default subscription access.</p>
+                  {postType !== "product" && <p className="text-xs text-text-lo mt-1">Leave blank to use your default subscription access.</p>}
                 </div>
               )}
 

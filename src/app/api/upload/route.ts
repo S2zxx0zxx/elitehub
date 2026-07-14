@@ -12,14 +12,15 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Unauthorized. Must be a creator." }, { status: 401 });
     }
 
-    const { filename, contentType } = await req.json();
+    const { filename, contentType, type } = await req.json();
 
     if (!filename || !contentType) {
       return NextResponse.json({ error: "Missing filename or contentType" }, { status: 400 });
     }
 
     const fileExtension = filename.split(".").pop();
-    const uniqueKey = `${user.id}/${crypto.randomUUID()}.${fileExtension}`;
+    const folder = type === "product" ? "products" : "media";
+    const uniqueKey = `${user.id}/${folder}/${crypto.randomUUID()}.${fileExtension}`;
 
     const command = new PutObjectCommand({
       Bucket: process.env.R2_BUCKET_NAME || "elitehub-bucket",
