@@ -47,7 +47,7 @@ export function ExploreClient({ trendingContent, newCreators, topTags }: { trend
         <input 
           type="text" 
           placeholder="Search creators, posts, or tags..." 
-          className="w-full bg-surface border border-white/10 rounded-2xl py-4 pl-12 pr-4 text-text-hi focus:outline-none focus:border-brand-yellow transition-colors"
+          className="w-full bg-surface border border-white/10 rounded-3xl py-4 pl-12 pr-4 text-text-hi focus:outline-none focus:border-brand-yellow transition-colors"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />

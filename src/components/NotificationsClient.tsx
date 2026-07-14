@@ -57,7 +57,7 @@ export function NotificationsClient({ notifications, broadcasts }: { notificatio
             </div>
           ) : (
             filteredAlerts.map(alert => (
-              <div key={alert.id} className={`p-4 rounded-2xl border ${alert.isBroadcast ? 'bg-brand-yellow/10 border-brand-yellow/30' : 'bg-surface border-white/5'}`}>
+              <div key={alert.id} className={`p-4 rounded-3xl border ${alert.isBroadcast ? 'bg-brand-yellow/10 border-brand-yellow/30' : 'bg-surface border-white/5'}`}>
                 <div className="flex gap-3">
                   <div className="mt-1 text-2xl relative">
                     {alert.isBroadcast ? "📢" : (alert.type === "promotion" ? "🎉" : "⚙️")}

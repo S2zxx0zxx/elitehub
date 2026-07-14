@@ -132,7 +132,7 @@ export function ProfileClient({
             shopProducts.map(product => {
               const isPurchased = purchasedPostIds?.includes(product.id);
               return (
-                <div key={product.id} className="bg-surface p-4 rounded-2xl border border-white/5 flex items-center justify-between">
+                <div key={product.id} className="bg-surface p-4 rounded-3xl border border-white/5 flex items-center justify-between">
                   <div className="flex items-center gap-4">
                     <div className="w-16 h-16 bg-white/5 rounded-xl flex items-center justify-center text-text-lo">
                       <Package size={24} />
