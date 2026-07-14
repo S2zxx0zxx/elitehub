@@ -28,14 +28,14 @@ export default async function RootLayout({
   const user = await getDbUser();
 
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`${display.variable} ${body.variable} font-body pb-24`}>
-        <ClerkProvider>
+    <ClerkProvider>
+      <html lang="en" className="dark" suppressHydrationWarning>
+        <body className={`${display.variable} ${body.variable} font-body pb-24`}>
           <Providers userTheme={user?.theme || "dark"}>
             {children}
           </Providers>
-        </ClerkProvider>
-      </body>
-    </html>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
