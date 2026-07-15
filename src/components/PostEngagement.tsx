@@ -188,7 +188,7 @@ export function PostEngagement({
               exit={{ opacity: 0 }}
               aria-label="Close comments"
               onClick={() => setShowComments(false)}
-              className="fixed inset-0 w-full h-full bg-black/80 backdrop-blur-sm z-[60] cursor-default border-none outline-none"
+              className="fixed inset-0 w-full h-full bg-black/50 backdrop-blur-sm z-[60] cursor-default border-none outline-none"
             />
             
             <motion.div 
@@ -196,16 +196,16 @@ export function PostEngagement({
               animate={{ y: 0 }} 
               exit={{ y: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="fixed bottom-0 left-0 right-0 h-[70vh] bg-surface border-t border-white/10 rounded-t-3xl p-4 sm:p-6 z-[60] flex flex-col shadow-2xl pb-safe"
+              className="fixed bottom-0 left-0 right-0 h-[70vh] bg-surface border-t border-border rounded-t-3xl p-4 sm:p-6 z-[60] flex flex-col shadow-glossy-lg pb-safe"
             >
               <button 
                 type="button"
                 aria-label="Close comments panel"
                 onClick={() => setShowComments(false)}
-                className="w-12 h-1.5 bg-white/20 rounded-full mx-auto mb-6 shrink-0 cursor-pointer border-none outline-none block" 
+                className="w-12 h-1.5 bg-text-lo/20 rounded-full mx-auto mb-6 shrink-0 cursor-pointer border-none outline-none block" 
               />
               
-              <h3 className="font-display text-xl font-bold mb-4 shrink-0">Comments</h3>
+              <h3 className="font-display text-xl font-bold mb-4 shrink-0 text-text-hi">Comments</h3>
               
               <div className="flex-1 overflow-y-auto space-y-4 pr-2 mb-4 custom-scrollbar">
                 {comments.length === 0 ? (
@@ -213,7 +213,7 @@ export function PostEngagement({
                 ) : (
                   comments.map(c => (
                     <div key={c.id} className="flex gap-3">
-                      <div className="w-8 h-8 rounded-full bg-surface flex items-center justify-center overflow-hidden shrink-0">
+                      <div className="w-8 h-8 rounded-full bg-bg border border-border flex items-center justify-center overflow-hidden shrink-0">
                         {c.user?.image || c.user?.photo ? (
                            <img src={c.user.photo || c.user.image} alt="User" className="w-full h-full object-cover" />
                         ) : (
@@ -236,7 +236,7 @@ export function PostEngagement({
                 <input 
                   type="text" 
                   placeholder="Add a comment..." 
-                  className="w-full bg-black/40 border border-white/10 rounded-full py-3 px-5 pr-12 text-sm focus:outline-none focus:border-brand-yellow transition-colors"
+                  className="w-full bg-bg border border-border rounded-full py-3 px-5 pr-12 text-sm text-text-hi focus:outline-none focus:border-brand-yellow transition-colors"
                   value={newComment}
                   onChange={e => setNewComment(e.target.value)}
                   disabled={loading}
@@ -262,35 +262,35 @@ export function PostEngagement({
               animate={{ opacity: 1 }} 
               exit={{ opacity: 0 }}
               onClick={() => setShowReport(false)}
-              className="fixed inset-0 w-full h-full bg-black/80 backdrop-blur-sm z-[70] cursor-default border-none outline-none"
+              className="fixed inset-0 w-full h-full bg-black/50 backdrop-blur-sm z-[70] cursor-default border-none outline-none"
             />
             
             <motion.div 
               initial={{ y: "100%", opacity: 0 }} 
               animate={{ y: "-50%", top: "50%", opacity: 1 }} 
               exit={{ y: "100%", opacity: 0 }}
-              className="fixed left-4 right-4 sm:left-1/2 sm:-translate-x-1/2 sm:w-96 bg-surface border border-white/10 rounded-3xl p-6 z-[70] flex flex-col shadow-2xl"
+              className="fixed left-4 right-4 sm:left-1/2 sm:-translate-x-1/2 sm:w-96 bg-surface border border-border rounded-3xl p-6 z-[70] flex flex-col shadow-glossy-lg"
             >
               {reportSuccess ? (
                 <div className="text-center py-6">
-                  <div className="w-16 h-16 bg-green-500/20 text-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <div className="w-16 h-16 bg-green-500/10 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
                     ✓
                   </div>
-                  <h3 className="font-bold text-xl mb-2">Report Submitted</h3>
+                  <h3 className="font-bold text-xl mb-2 text-text-hi">Report Submitted</h3>
                   <p className="text-text-lo text-sm">Thanks for keeping the community safe. Our team will review this.</p>
                 </div>
               ) : (
                 <>
                   <div className="flex items-center gap-3 mb-6">
                     <AlertTriangle className="text-red-500 w-6 h-6" />
-                    <h3 className="font-display text-xl font-bold">Report Content</h3>
+                    <h3 className="font-display text-xl font-bold text-text-hi">Report Content</h3>
                   </div>
                   
                   <p className="text-sm text-text-lo mb-4">Why are you reporting this post?</p>
                   
                   <div className="space-y-2 mb-6">
                     {["Spam", "Inappropriate", "Copyright Violation", "Other"].map(reason => (
-                      <label key={reason} className="flex items-center gap-3 p-3 rounded-xl border border-white/5 bg-black/20 cursor-pointer hover:bg-white/5 transition-colors">
+                      <label key={reason} className="flex items-center gap-3 p-3 rounded-xl border border-border bg-bg cursor-pointer hover:bg-border/40 transition-colors">
                         <input 
                           type="radio" 
                           name="reportReason" 
@@ -299,14 +299,14 @@ export function PostEngagement({
                           onChange={(e) => setReportReason(e.target.value)}
                           className="w-4 h-4 accent-brand-yellow"
                         />
-                        <span className="text-sm font-bold">{reason}</span>
+                        <span className="text-sm font-bold text-text-hi">{reason}</span>
                       </label>
                     ))}
                   </div>
                   
                   <div className="flex gap-3 mt-auto">
                     <button 
-                      className="flex-1 py-3 rounded-full font-bold text-sm bg-white/5 hover:bg-white/10 transition-colors"
+                      className="flex-1 py-3 rounded-full font-bold text-sm bg-bg text-text-hi border border-border hover:bg-border/40 transition-colors"
                       onClick={() => setShowReport(false)}
                     >
                       Cancel

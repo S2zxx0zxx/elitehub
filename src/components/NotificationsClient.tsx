@@ -26,7 +26,7 @@ export function NotificationsClient({ notifications, broadcasts }: { notificatio
       <TopBar />
       
       <div className="max-w-md mx-auto p-4">
-        <h1 className="font-display font-bold text-2xl mb-6 text-text-hi">Alerts</h1>
+        <h1 className="font-serif font-bold text-2xl mb-6 text-text-hi">Alerts</h1>
         
         {/* Filters */}
         <div className="flex gap-2 mb-6 overflow-x-auto scrollbar-hide pb-2">
@@ -37,7 +37,7 @@ export function NotificationsClient({ notifications, broadcasts }: { notificatio
               className={`px-4 py-1.5 rounded-full text-sm font-bold transition-colors ${
                 filter === f 
                   ? "bg-brand-yellow text-black" 
-                  : "bg-surface border border-white/10 text-text-hi"
+                  : "bg-surface border border-border text-text-hi"
               }`}
             >
               {f}
@@ -49,7 +49,7 @@ export function NotificationsClient({ notifications, broadcasts }: { notificatio
         <div className="space-y-4">
           {filteredAlerts.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-20 text-center">
-              <div className="w-16 h-16 bg-surface rounded-full flex items-center justify-center mb-4 border border-white/5">
+              <div className="w-16 h-16 bg-surface rounded-full flex items-center justify-center mb-4 border border-border shadow-glossy">
                 <span className="text-2xl">🔔</span>
               </div>
               <h3 className="font-bold text-lg mb-1 text-text-hi">No alerts yet</h3>
@@ -57,7 +57,7 @@ export function NotificationsClient({ notifications, broadcasts }: { notificatio
             </div>
           ) : (
             filteredAlerts.map(alert => (
-              <div key={alert.id} className={`p-4 rounded-3xl border ${alert.isBroadcast ? 'bg-brand-yellow/10 border-brand-yellow/30' : 'bg-surface border-white/5'}`}>
+              <div key={alert.id} className={`p-4 rounded-3xl border shadow-glossy ${alert.isBroadcast ? 'bg-brand-yellow/10 border-brand-yellow/30' : 'bg-surface border-border'}`}>
                 <div className="flex gap-3">
                   <div className="mt-1 text-2xl relative">
                     {alert.isBroadcast ? "📢" : (alert.type === "promotion" ? "🎉" : "⚙️")}
@@ -68,7 +68,7 @@ export function NotificationsClient({ notifications, broadcasts }: { notificatio
                   <div>
                     <h4 className="font-bold text-sm text-text-hi mb-1">{alert.title}</h4>
                     <p className="text-xs text-text-lo">{alert.body}</p>
-                    <p className="text-[10px] text-white/30 mt-2">
+                    <p className="text-[10px] text-text-lo/60 mt-2">
                       {new Date(alert.createdAt).toLocaleDateString()}
                     </p>
                   </div>

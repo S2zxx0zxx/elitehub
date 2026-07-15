@@ -6,6 +6,11 @@ import { BottomNav } from "@/components/BottomNav";
 import { TopBar } from "@/components/TopBar";
 import { AdSlot } from "@/components/AdSlot";
 import { HomeCategoryGrid } from "@/components/HomeCategoryGrid";
+import { TrendingCategoryGrid } from "@/components/TrendingCategoryGrid";
+import { TrendingCreatorGrid } from "@/components/TrendingCreatorGrid";
+import { FeatureGrid } from "@/components/FeatureGrid";
+import { MarketStats } from "@/components/MarketStats";
+import { AppDownload } from "@/components/AppDownload";
 import { getTrendingCreators, getTrendingContent } from "@/lib/ranking";
 import { timeAgo } from "@/lib/time";
 import { PostEngagement } from "@/components/PostEngagement";
@@ -35,7 +40,7 @@ export default async function Home() {
         
         {/* Hero Section */}
         <section className="mb-8 pt-4">
-          <h1 className="text-4xl font-display font-bold leading-[1.1] mb-5">
+          <h1 className="text-4xl font-serif font-bold leading-[1.1] mb-5 text-text-hi">
             India ke creators,<br />
             <span className="text-text-lo text-3xl">seedha apne fans se kamayein</span>
           </h1>
@@ -54,6 +59,12 @@ export default async function Home() {
           <HomeCategoryGrid />
         </section>
 
+        {/* Trending Categories */}
+        <section className="mb-8">
+          <h3 className="font-serif font-bold text-xl mb-4 text-text-hi">🔥 Trending Categories</h3>
+          <TrendingCategoryGrid />
+        </section>
+
         <AdSlot 
           title="Supercharge your edits" 
           description="Get 50% off on Premiere Pro masterclass bundles today." 
@@ -63,7 +74,7 @@ export default async function Home() {
 
         {/* Featured Creators */}
         <section className="mb-10">
-          <h3 className="font-display font-bold text-xl mb-4">Featured Creators</h3>
+          <h3 className="font-serif font-bold text-xl mb-4 text-text-hi">Featured Creators</h3>
           <div className="flex gap-4 overflow-x-auto pb-4 -mx-4 px-4 scrollbar-hide">
             {trendingCreators.length === 0 ? (
               <p className="text-text-lo text-sm">No creators found yet. Be the first!</p>
@@ -91,10 +102,16 @@ export default async function Home() {
           </div>
         </section>
 
+        {/* Trending Creators Grid */}
+        <section className="mb-10">
+          <h3 className="font-serif font-bold text-xl mb-4 text-text-hi">Trending Creators</h3>
+          <TrendingCreatorGrid creators={trendingCreators} />
+        </section>
+
         {/* Trending Content Feed */}
         <section className="mb-12">
           <div className="flex justify-between items-end mb-4">
-            <h3 className="font-display font-bold text-xl">Trending Content</h3>
+            <h3 className="font-serif font-bold text-xl text-text-hi">Trending Content</h3>
             <Link href="/explore" className="text-sm font-bold text-brand-yellow">View all</Link>
           </div>
           
@@ -142,32 +159,48 @@ export default async function Home() {
           </div>
         </section>
 
+        {/* Why EliteHub */}
+        <section className="mb-10">
+          <h3 className="font-serif font-bold text-xl mb-6 text-center text-text-hi">Why EliteHub</h3>
+          <FeatureGrid />
+        </section>
+
+        {/* Market Opportunity */}
+        <section className="mb-10">
+          <h3 className="font-serif font-bold text-xl mb-4 text-text-hi">📈 Market Opportunity</h3>
+          <MarketStats />
+        </section>
+
         {/* How it works */}
-        <section className="mb-10 bg-surface rounded-3xl p-6 border border-white/5">
-          <h3 className="font-display font-bold text-xl mb-6 text-center">How it works</h3>
-          <div className="space-y-6">
-            <div className="flex gap-4">
-              <div className="w-8 h-8 rounded-full bg-brand-yellow text-black font-bold flex items-center justify-center shrink-0">1</div>
-              <div>
-                <h4 className="font-bold text-text-hi">Create a profile</h4>
-                <p className="text-sm text-text-lo">Setup your creator page in 2 minutes.</p>
-              </div>
+        <section className="mb-10 bg-surface rounded-3xl p-6 border border-border shadow-glossy">
+          <h3 className="font-serif font-bold text-2xl mb-8 text-center text-text-hi">How EliteHub Works</h3>
+          <div className="grid grid-cols-2 gap-x-4 gap-y-8">
+            <div className="text-center">
+              <div className="w-14 h-14 rounded-full border-2 border-navy flex items-center justify-center mx-auto mb-3 font-serif font-bold text-xl text-navy">1</div>
+              <h4 className="font-bold text-text-hi mb-1">Create Profile</h4>
+              <p className="text-sm text-text-lo leading-relaxed">Sign up, verify KYC, set up your creator page</p>
             </div>
-            <div className="flex gap-4">
-              <div className="w-8 h-8 rounded-full bg-brand-yellow text-black font-bold flex items-center justify-center shrink-0">2</div>
-              <div>
-                <h4 className="font-bold text-text-hi">Upload content</h4>
-                <p className="text-sm text-text-lo">Share free reels to grow, or lock premium posts.</p>
-              </div>
+            <div className="text-center">
+              <div className="w-14 h-14 rounded-full border-2 border-navy flex items-center justify-center mx-auto mb-3 font-serif font-bold text-xl text-navy">2</div>
+              <h4 className="font-bold text-text-hi mb-1">Upload Content</h4>
+              <p className="text-sm text-text-lo leading-relaxed">Free posts to grow, lock premium ones to earn</p>
             </div>
-            <div className="flex gap-4">
-              <div className="w-8 h-8 rounded-full bg-brand-yellow text-black font-bold flex items-center justify-center shrink-0">3</div>
-              <div>
-                <h4 className="font-bold text-text-hi">Get paid directly</h4>
-                <p className="text-sm text-text-lo">Fans pay via UPI. Earnings hit your bank account.</p>
-              </div>
+            <div className="text-center">
+              <div className="w-14 h-14 rounded-full border-2 border-navy flex items-center justify-center mx-auto mb-3 font-serif font-bold text-xl text-navy">3</div>
+              <h4 className="font-bold text-text-hi mb-1">Fans Subscribe</h4>
+              <p className="text-sm text-text-lo leading-relaxed">Fans unlock content or subscribe monthly via UPI</p>
+            </div>
+            <div className="text-center">
+              <div className="w-14 h-14 rounded-full border-2 border-navy flex items-center justify-center mx-auto mb-3 font-serif font-bold text-xl text-navy">4</div>
+              <h4 className="font-bold text-text-hi mb-1">Get Paid Directly</h4>
+              <p className="text-sm text-text-lo leading-relaxed">Earnings hit your bank account, no middlemen</p>
             </div>
           </div>
+        </section>
+
+        {/* App Download */}
+        <section className="mb-10">
+          <AppDownload />
         </section>
 
       </div>

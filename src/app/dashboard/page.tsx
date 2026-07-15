@@ -82,26 +82,26 @@ export default function DashboardPage() {
       <TopBar />
       
       <div className="max-w-md mx-auto p-4 sm:p-8 space-y-8 mt-4">
-        <h1 className="font-display text-3xl font-bold text-text-hi mb-2">Analytics</h1>
+        <h1 className="font-serif text-3xl font-bold text-text-hi mb-2">Analytics</h1>
         
         {loading || !data ? (
           <div className="animate-pulse space-y-4">
-            <div className="h-32 bg-surface rounded-3xl" />
+            <div className="h-32 bg-surface border border-border rounded-3xl" />
             <div className="flex gap-4">
-              <div className="flex-1 h-24 bg-surface rounded-3xl" />
-              <div className="flex-1 h-24 bg-surface rounded-3xl" />
+              <div className="flex-1 h-24 bg-surface border border-border rounded-3xl" />
+              <div className="flex-1 h-24 bg-surface border border-border rounded-3xl" />
             </div>
           </div>
         ) : (
           <>
             {/* Main KPI */}
-            <Card className="bg-gradient-to-br from-brand-yellow/20 to-surface border-brand-yellow/30 relative overflow-hidden">
+            <Card className="bg-gradient-to-br from-brand-yellow/10 to-surface border-brand-yellow/30 relative overflow-hidden">
               <div className="absolute top-0 right-0 p-4 opacity-10 text-brand-yellow">
                 <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
               </div>
               <CardContent className="p-6">
                 <p className="text-brand-yellow font-bold text-sm mb-1">Available Balance</p>
-                <h2 className="font-display text-4xl font-bold text-text-hi">₹{data.availableBalance.toLocaleString('en-IN')}</h2>
+                <h2 className="font-serif text-4xl font-bold text-text-hi">₹{data.availableBalance.toLocaleString('en-IN')}</h2>
                 <p className="text-text-lo text-xs mt-2">Lifetime Earnings: ₹{data.totalEarnings.toLocaleString('en-IN')}</p>
                 
                 <Button 
@@ -118,7 +118,7 @@ export default function DashboardPage() {
               <motion.div 
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: "auto" }}
-                className="bg-surface p-6 rounded-3xl border border-white/10"
+                className="bg-surface p-6 rounded-3xl border border-border shadow-glossy"
               >
                 <h3 className="font-bold text-text-hi mb-4">Request Payout</h3>
                 <div className="space-y-4">
@@ -128,7 +128,7 @@ export default function DashboardPage() {
                       id="upiId"
                       type="text" 
                       placeholder="e.g. 9876543210@ybl"
-                      className="w-full bg-black border border-white/10 rounded-xl p-3 text-text-hi focus:border-brand-yellow focus:outline-none"
+                      className="w-full bg-bg border border-border rounded-xl p-3 text-text-hi focus:border-brand-yellow focus:outline-none"
                       value={upiId}
                       onChange={(e) => setUpiId(e.target.value)}
                     />
@@ -139,7 +139,7 @@ export default function DashboardPage() {
                       id="payoutAmount"
                       type="number" 
                       placeholder={`Max ₹${data.availableBalance}`}
-                      className="w-full bg-black border border-white/10 rounded-xl p-3 text-brand-yellow font-bold text-lg focus:border-brand-yellow focus:outline-none"
+                      className="w-full bg-bg border border-border rounded-xl p-3 text-brand-yellow font-bold text-lg focus:border-brand-yellow focus:outline-none"
                       value={payoutAmount}
                       onChange={(e) => setPayoutAmount(e.target.value)}
                     />
@@ -156,13 +156,13 @@ export default function DashboardPage() {
               <Card>
                 <CardContent className="p-5 text-center">
                   <p className="text-text-lo text-sm font-bold mb-1">Subscribers</p>
-                  <h3 className="font-display text-2xl font-bold text-text-hi">{data.subscribersCount}</h3>
+                  <h3 className="font-serif text-2xl font-bold text-text-hi">{data.subscribersCount}</h3>
                 </CardContent>
               </Card>
               <Card>
                 <CardContent className="p-5 text-center">
                   <p className="text-text-lo text-sm font-bold mb-1">Weekly Growth</p>
-                  <h3 className={`font-display text-2xl font-bold ${data.weeklyGrowth > 0 ? 'text-green-500' : 'text-text-hi'}`}>
+                  <h3 className={`font-serif text-2xl font-bold ${data.weeklyGrowth > 0 ? 'text-green-600' : 'text-text-hi'}`}>
                     {data.weeklyGrowth > 0 ? '+' : ''}{data.weeklyGrowth}%
                   </h3>
                 </CardContent>
@@ -170,14 +170,14 @@ export default function DashboardPage() {
             </div>
 
             {/* Achievement / Tick Progress */}
-            <Card className="mt-4 bg-surface border border-white/5">
+            <Card className="mt-4 bg-surface border border-border">
               <CardContent className="p-5">
                 <h3 className="font-bold text-text-hi mb-3">Tick Progress</h3>
                 <div className="mb-2 flex justify-between items-end">
                   <span className="text-sm font-bold text-blue-500">Blue Tick</span>
                   <span className="text-xs text-text-lo">{data.followersCount} / 100 followers</span>
                 </div>
-                <div className="w-full bg-black rounded-full h-2 mb-4">
+                <div className="w-full bg-border rounded-full h-2 mb-4">
                   <div className="bg-blue-500 h-2 rounded-full" style={{ width: `${Math.min(100, (data.followersCount / 100) * 100)}%` }} />
                 </div>
                 
@@ -185,7 +185,7 @@ export default function DashboardPage() {
                   <span className="text-sm font-bold text-gold">Gold Tick</span>
                   <span className="text-xs text-text-lo">{data.followersCount} / 100,000 followers</span>
                 </div>
-                <div className="w-full bg-black rounded-full h-2">
+                <div className="w-full bg-border rounded-full h-2">
                   <div className="bg-gold h-2 rounded-full" style={{ width: `${Math.min(100, (data.followersCount / 100000) * 100)}%` }} />
                 </div>
               </CardContent>
@@ -193,8 +193,8 @@ export default function DashboardPage() {
 
             {/* Chart */}
             <div className="mt-8">
-              <h3 className="font-display font-bold text-xl text-text-hi mb-4">30-Day Earnings</h3>
-              <div className="bg-surface p-4 rounded-3xl border border-white/5 h-64">
+              <h3 className="font-serif font-bold text-xl text-text-hi mb-4">30-Day Earnings</h3>
+              <div className="bg-surface p-4 rounded-3xl border border-border shadow-glossy h-64">
                 <ResponsiveContainer width="100%" height="100%">
                   <AreaChart data={data.chartData} margin={{ top: 10, right: 0, left: 0, bottom: 0 }}>
                     <defs>
@@ -204,9 +204,9 @@ export default function DashboardPage() {
                       </linearGradient>
                     </defs>
                     <Tooltip 
-                      contentStyle={{ backgroundColor: '#1C1C1E', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px' }}
-                      itemStyle={{ color: '#F5C518', fontWeight: 'bold' }}
-                      labelStyle={{ color: '#A0A0A0', marginBottom: '4px' }}
+                      contentStyle={{ backgroundColor: '#FFFFFF', border: '1px solid #EBEBEB', borderRadius: '12px' }}
+                      itemStyle={{ color: '#E0A800', fontWeight: 'bold' }}
+                      labelStyle={{ color: '#6B6B6B', marginBottom: '4px' }}
                       formatter={(value: any) => [`₹${value}`, 'Earnings']}
                       labelFormatter={(label) => `Date: ${label}`}
                     />
@@ -225,17 +225,17 @@ export default function DashboardPage() {
 
             {/* Ledger */}
             <div className="mt-8">
-              <h3 className="font-display font-bold text-xl text-text-hi mb-4">Recent Transactions</h3>
+              <h3 className="font-serif font-bold text-xl text-text-hi mb-4">Recent Transactions</h3>
               <div className="space-y-3">
                 {data.recentTransactions.length === 0 ? (
-                  <div className="bg-surface p-6 rounded-2xl text-center text-text-lo text-sm">
+                  <div className="bg-surface p-6 rounded-2xl border border-border text-center text-text-lo text-sm">
                     No transactions yet. Keep creating!
                   </div>
                 ) : (
                   data.recentTransactions.map((tx: any) => (
-                    <div key={tx.id} className="flex justify-between items-center bg-surface p-4 rounded-2xl border border-white/5">
+                    <div key={tx.id} className="flex justify-between items-center bg-surface p-4 rounded-2xl border border-border shadow-glossy">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-black flex items-center justify-center font-bold text-brand-yellow">
+                        <div className="w-10 h-10 rounded-full bg-brand-yellow/15 flex items-center justify-center font-bold text-brand-yellow">
                           {tx.fan?.name?.[0] || tx.fan?.handle?.[0] || "?"}
                         </div>
                         <div>
@@ -244,7 +244,7 @@ export default function DashboardPage() {
                         </div>
                       </div>
                       <div className="text-right">
-                        <p className="font-bold text-green-500">+₹{tx.creatorEarning}</p>
+                        <p className="font-bold text-green-600">+₹{tx.creatorEarning}</p>
                         <p className="text-[10px] text-text-lo">Fee: ₹{tx.commission}</p>
                       </div>
                     </div>

@@ -105,16 +105,16 @@ export function ProfileClient({
       </div>
 
       {/* Tabs */}
-      <div className="flex border-b border-white/10 mb-6">
+      <div className="flex border-b border-border mb-6">
         <button 
           onClick={() => setActiveTab("posts")}
-          className={`flex-1 py-3 text-center transition-colors ${activeTab === "posts" ? "border-b-2 border-brand-yellow font-bold text-brand-yellow" : "text-text-lo hover:text-white"}`}
+          className={`flex-1 py-3 text-center transition-colors ${activeTab === "posts" ? "border-b-2 border-brand-yellow font-bold text-brand-yellow" : "text-text-lo hover:text-text-hi"}`}
         >
           Posts
         </button>
         <button 
           onClick={() => setActiveTab("shop")}
-          className={`flex-1 py-3 text-center transition-colors ${activeTab === "shop" ? "border-b-2 border-brand-yellow font-bold text-brand-yellow" : "text-text-lo hover:text-white"}`}
+          className={`flex-1 py-3 text-center transition-colors ${activeTab === "shop" ? "border-b-2 border-brand-yellow font-bold text-brand-yellow" : "text-text-lo hover:text-text-hi"}`}
         >
           Shop
         </button>
@@ -132,19 +132,19 @@ export function ProfileClient({
             shopProducts.map(product => {
               const isPurchased = purchasedPostIds?.includes(product.id);
               return (
-                <div key={product.id} className="bg-surface p-4 rounded-3xl border border-white/5 flex items-center justify-between">
+                <div key={product.id} className="bg-surface p-4 rounded-3xl border border-border shadow-glossy flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <div className="w-16 h-16 bg-white/5 rounded-xl flex items-center justify-center text-text-lo">
+                    <div className="w-16 h-16 bg-bg rounded-xl flex items-center justify-center text-text-lo">
                       <Package size={24} />
                     </div>
                     <div>
-                      <h4 className="font-bold text-white mb-1">{product.caption || "Digital Product"}</h4>
+                      <h4 className="font-bold text-text-hi mb-1">{product.caption || "Digital Product"}</h4>
                       <p className="text-sm font-bold text-brand-yellow">₹{product.price || 0}</p>
                     </div>
                   </div>
                   <div>
                     {isPurchased ? (
-                      <a href={`/api/media/${product.id}`} download target="_blank" rel="noreferrer" className="inline-block bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-full font-bold text-sm transition-colors">
+                      <a href={`/api/media/${product.id}`} download target="_blank" rel="noreferrer" className="inline-block bg-bg hover:bg-border/50 border border-border text-text-hi px-4 py-2 rounded-full font-bold text-sm transition-colors">
                         Download
                       </a>
                     ) : (

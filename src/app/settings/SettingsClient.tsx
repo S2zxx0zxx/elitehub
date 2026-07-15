@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useClerk } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
-import { useTheme } from "next-themes";
 import { toast } from "sonner";
 import { CheckCircle2, Clock } from "lucide-react";
 import { TopBar } from "@/components/TopBar";
@@ -17,7 +16,6 @@ export default function SettingsClient({ user }: { user: any }) {
   const [name, setName] = useState(user.name || "");
   const [bio, setBio] = useState(user.bio || "");
   const [upiId, setUpiId] = useState(user.upiId || "");
-  const { theme, setTheme } = useTheme();
   const [loading, setLoading] = useState(false);
   const [kycLoading, setKycLoading] = useState(false);
   const [kycId, setKycId] = useState("");
@@ -30,7 +28,7 @@ export default function SettingsClient({ user }: { user: any }) {
       const res = await fetch("/api/settings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, bio, upiId, theme })
+        body: JSON.stringify({ name, bio, upiId, theme: "light" })
       });
       if (res.ok) {
         toast.success("Settings saved successfully!");
@@ -47,14 +45,14 @@ export default function SettingsClient({ user }: { user: any }) {
     <main className="min-h-screen bg-bg pb-24">
       <TopBar />
       <div className="max-w-md mx-auto p-4 sm:p-8 space-y-6 mt-4">
-        <h1 className="font-display text-3xl font-bold text-text-hi">Settings</h1>
+        <h1 className="font-serif text-3xl font-bold text-text-hi">Settings</h1>
         
         <div className="space-y-4">
           <div>
             <label className="text-xs font-bold text-text-lo mb-1 block">Display Name</label>
             <input 
               type="text" 
-              className="w-full bg-surface border border-white/10 rounded-xl p-3 text-text-hi focus:border-brand-yellow focus:outline-none"
+              className="w-full bg-surface border border-border rounded-xl p-3 text-text-hi focus:border-brand-yellow focus:outline-none"
               value={name}
               onChange={e => setName(e.target.value)}
             />
@@ -62,7 +60,7 @@ export default function SettingsClient({ user }: { user: any }) {
           <div>
             <label className="text-xs font-bold text-text-lo mb-1 block">Bio</label>
             <textarea 
-              className="w-full bg-surface border border-white/10 rounded-xl p-3 text-text-hi focus:border-brand-yellow focus:outline-none h-24"
+              className="w-full bg-surface border border-border rounded-xl p-3 text-text-hi focus:border-brand-yellow focus:outline-none h-24"
               value={bio}
               onChange={e => setBio(e.target.value)}
             />
@@ -71,21 +69,10 @@ export default function SettingsClient({ user }: { user: any }) {
             <label className="text-xs font-bold text-text-lo mb-1 block">UPI ID (For Payouts)</label>
             <input 
               type="text" 
-              className="w-full bg-surface border border-white/10 rounded-xl p-3 text-text-hi focus:border-brand-yellow focus:outline-none"
+              className="w-full bg-surface border border-border rounded-xl p-3 text-text-hi focus:border-brand-yellow focus:outline-none"
               value={upiId}
               onChange={e => setUpiId(e.target.value)}
             />
-          </div>
-          <div>
-            <label className="text-xs font-bold text-text-lo mb-1 block">Theme</label>
-            <select 
-              className="w-full bg-surface border border-white/10 rounded-xl p-3 text-text-hi focus:border-brand-yellow focus:outline-none"
-              value={theme}
-              onChange={e => setTheme(e.target.value)}
-            >
-              <option value="dark">Dark</option>
-              <option value="light">Light</option>
-            </select>
           </div>
           
           <Button className="w-full mt-4" onClick={handleSave} disabled={loading}>
@@ -94,10 +81,10 @@ export default function SettingsClient({ user }: { user: any }) {
         </div>
 
         {/* KYC Section */}
-        <div className="bg-surface p-6 rounded-2xl border border-white/5 space-y-4">
-          <h2 className="font-display font-bold text-xl text-text-hi">Verification (KYC)</h2>
+        <div className="bg-surface p-6 rounded-2xl border border-border shadow-glossy space-y-4">
+          <h2 className="font-serif font-bold text-xl text-text-hi">Verification (KYC)</h2>
           {kycStatus === "verified" && (
-            <p className="text-green-500 font-bold text-sm flex items-center gap-2"><CheckCircle2 size={16}/> Your identity is verified.</p>
+            <p className="text-green-600 font-bold text-sm flex items-center gap-2"><CheckCircle2 size={16}/> Your identity is verified.</p>
           )}
           {kycStatus === "pending" && (
             <p className="text-brand-yellow font-bold text-sm flex items-center gap-2"><Clock size={16}/> Verification pending admin approval.</p>
@@ -109,7 +96,7 @@ export default function SettingsClient({ user }: { user: any }) {
                 <label className="text-xs font-bold text-text-lo mb-1 block">Legal Name</label>
                 <input 
                   type="text" 
-                  className="w-full bg-black border border-white/10 rounded-xl p-3 text-text-hi focus:border-brand-yellow focus:outline-none"
+                  className="w-full bg-bg border border-border rounded-xl p-3 text-text-hi focus:border-brand-yellow focus:outline-none"
                   value={kycName}
                   onChange={e => setKycName(e.target.value)}
                 />
@@ -118,7 +105,7 @@ export default function SettingsClient({ user }: { user: any }) {
                 <label className="text-xs font-bold text-text-lo mb-1 block">ID Number (Aadhaar/PAN)</label>
                 <input 
                   type="text" 
-                  className="w-full bg-black border border-white/10 rounded-xl p-3 text-text-hi focus:border-brand-yellow focus:outline-none"
+                  className="w-full bg-bg border border-border rounded-xl p-3 text-text-hi focus:border-brand-yellow focus:outline-none"
                   value={kycId}
                   onChange={e => setKycId(e.target.value)}
                 />
@@ -144,7 +131,7 @@ export default function SettingsClient({ user }: { user: any }) {
         </div>
 
         <div className="pt-4 space-y-3">
-          <Button variant="secondary" className="w-full !border-white/10" onClick={() => router.push("/purchases")}>
+          <Button variant="secondary" className="w-full" onClick={() => router.push("/purchases")}>
             My Purchases & Downloads
           </Button>
           <Button variant="secondary" className="w-full !text-red-500 !border-red-500/20" onClick={() => signOut()}>

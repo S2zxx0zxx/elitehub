@@ -14,7 +14,7 @@ export const Chip = React.forwardRef<HTMLButtonElement, ChipProps>(
           "px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap",
           active 
             ? "bg-brand-yellow text-black" 
-            : "bg-surface dark:bg-surface text-text-hi border border-transparent dark:border-white/10 hover:border-brand-yellow/50",
+            : "bg-surface text-text-hi border border-border hover:border-brand-yellow/50",
           className
         )}
         {...props}

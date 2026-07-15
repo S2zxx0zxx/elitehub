@@ -12,7 +12,7 @@ interface AdSlotProps {
 export function AdSlot({ title, description, ctaText, imageColor = "bg-blue-600" }: AdSlotProps) {
   return (
     <Card className="my-6 border border-brand-yellow/20 relative overflow-hidden group cursor-pointer">
-      <div className="absolute top-2 right-2 bg-black/60 backdrop-blur text-[10px] font-bold px-2 py-1 rounded text-text-lo z-10">
+      <div className="absolute top-2 right-2 bg-white/80 backdrop-blur text-[10px] font-bold px-2 py-1 rounded text-text-lo z-10 border border-border">
         Sponsored
       </div>
       <div className={`w-full h-32 ${imageColor} opacity-80 group-hover:opacity-100 transition-opacity`} />

@@ -15,7 +15,7 @@ export function BottomNav() {
   const pathname = usePathname();
   return (
     <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-md">
-      <nav className="flex items-center justify-around rounded-full bg-surface/80 backdrop-blur-xl border border-white/10 px-2 py-2 shadow-2xl">
+      <nav className="flex items-center justify-around rounded-full bg-white/90 backdrop-blur-xl border border-border px-2 py-2 shadow-glossy-lg">
         {items.map((item) => {
           const active = pathname === item.href;
           if (item.center) {
@@ -29,7 +29,7 @@ export function BottomNav() {
           }
           return (
             <Link key={item.label} href={item.href} className="flex flex-col items-center gap-1 px-2 py-1">
-              <Image src={item.icon} alt={item.label} width={22} height={22} className={`object-contain ${active ? "" : "opacity-60"}`} />
+              <Image src={item.icon} alt={item.label} width={22} height={22} className={`object-contain ${active ? "" : "opacity-50"}`} />
               <span className={`text-[10px] font-semibold ${active ? "text-brand-yellow" : "text-text-lo"}`}>{item.label}</span>
             </Link>
           );

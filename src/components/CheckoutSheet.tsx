@@ -91,7 +91,7 @@ export function CheckoutSheet({ isOpen, onClose, title, price, postId, creatorId
               animate={{ opacity: 1 }} 
               exit={{ opacity: 0 }}
               onClick={onClose}
-              className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50"
+              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50"
             />
             
             <motion.div 
@@ -99,9 +99,9 @@ export function CheckoutSheet({ isOpen, onClose, title, price, postId, creatorId
               animate={{ y: 0 }} 
               exit={{ y: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-surface border-t border-white/10 rounded-t-3xl p-6 z-50 pb-safe shadow-2xl"
+              className="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-surface border-t border-border rounded-t-3xl p-6 z-50 pb-safe shadow-glossy-lg"
             >
-              <div className="w-12 h-1.5 bg-white/20 rounded-full mx-auto mb-6" />
+              <div className="w-12 h-1.5 bg-text-lo/20 rounded-full mx-auto mb-6" />
               
               <h2 className="font-display text-2xl font-bold text-text-hi mb-2">{type === "post" ? "Unlock Content" : "Subscribe"}</h2>
               <p className="text-text-lo mb-6">{title}</p>
@@ -109,7 +109,7 @@ export function CheckoutSheet({ isOpen, onClose, title, price, postId, creatorId
               <div className="space-y-4 mb-8">
                 {type === "post" && (
                   <div 
-                    className={`p-4 rounded-xl border cursor-pointer transition-colors ${selectedMode === "post" ? "bg-black/50 border-brand-yellow" : "bg-black/20 border-white/5 hover:border-white/20"}`}
+                    className={`p-4 rounded-xl border cursor-pointer transition-colors ${selectedMode === "post" ? "bg-brand-yellow/10 border-brand-yellow" : "bg-bg border-border hover:border-text-lo/30"}`}
                     onClick={() => setSelectedMode("post")}
                   >
                     <div className="flex justify-between items-center mb-1">
@@ -122,7 +122,7 @@ export function CheckoutSheet({ isOpen, onClose, title, price, postId, creatorId
                 
                 {(type === "subscription" || (type === "post" && subscriptionPrice)) && (
                   <div 
-                    className={`p-4 rounded-xl border cursor-pointer transition-colors relative overflow-hidden ${selectedMode === "subscription" ? "bg-black/50 border-brand-yellow" : "bg-black/20 border-white/5 hover:border-white/20"}`}
+                    className={`p-4 rounded-xl border cursor-pointer transition-colors relative overflow-hidden ${selectedMode === "subscription" ? "bg-brand-yellow/10 border-brand-yellow" : "bg-bg border-border hover:border-text-lo/30"}`}
                     onClick={() => setSelectedMode("subscription")}
                   >
                     {type === "post" && selectedMode === "subscription" && (

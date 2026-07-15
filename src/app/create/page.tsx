@@ -173,18 +173,18 @@ export default function CreatePage() {
 
   return (
     <main className="min-h-screen p-4 sm:p-8 max-w-md mx-auto pb-24">
-      <h1 className="font-display text-2xl font-bold mb-6">Create Content</h1>
+      <h1 className="font-serif text-2xl font-bold mb-6 text-text-hi">Create Content</h1>
       
-      <div className="flex border-b border-white/10 mb-6">
+      <div className="flex border-b border-border mb-6">
         <button 
           onClick={() => { setPostType("feed"); setFile(null); setPreview(null); setCroppedBlob(null); }}
-          className={`flex-1 py-3 text-center transition-colors ${postType === "feed" ? "border-b-2 border-brand-yellow font-bold text-brand-yellow" : "text-text-lo hover:text-white"}`}
+          className={`flex-1 py-3 text-center transition-colors ${postType === "feed" ? "border-b-2 border-brand-yellow font-bold text-brand-yellow" : "text-text-lo hover:text-text-hi"}`}
         >
           Post / Reel
         </button>
         <button 
           onClick={() => { setPostType("product"); setFile(null); setPreview(null); setCroppedBlob(null); }}
-          className={`flex-1 py-3 text-center transition-colors ${postType === "product" ? "border-b-2 border-brand-yellow font-bold text-brand-yellow" : "text-text-lo hover:text-white"}`}
+          className={`flex-1 py-3 text-center transition-colors ${postType === "product" ? "border-b-2 border-brand-yellow font-bold text-brand-yellow" : "text-text-lo hover:text-text-hi"}`}
         >
           Digital Product
         </button>
@@ -194,7 +194,7 @@ export default function CreatePage() {
         <CardContent className="space-y-6">
           {!file ? (
             <div 
-              className="w-full h-48 border-2 border-dashed border-white/20 rounded-2xl flex flex-col items-center justify-center text-text-lo hover:border-brand-yellow cursor-pointer transition-colors"
+              className="w-full h-48 border-2 border-dashed border-border rounded-2xl flex flex-col items-center justify-center text-text-lo hover:border-brand-yellow cursor-pointer transition-colors"
               onClick={() => fileInputRef.current?.click()}
             >
               <span className="text-3xl mb-2">+</span>
@@ -237,7 +237,7 @@ export default function CreatePage() {
               </button>
             </div>
           ) : (
-            <div className="w-full h-32 bg-surface border border-white/10 rounded-2xl flex flex-col items-center justify-center relative">
+            <div className="w-full h-32 bg-surface border border-border rounded-2xl flex flex-col items-center justify-center relative">
               <span className="font-bold text-brand-yellow">{file.name}</span>
               <p className="text-xs text-text-lo mt-1">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
               <button 
@@ -264,7 +264,7 @@ export default function CreatePage() {
                   {postType === "product" ? "Product Name / Title" : "Caption"}
                 </label>
                 <textarea 
-                  className="w-full bg-surface border border-white/10 rounded-xl p-3 text-text-hi focus:outline-none focus:border-brand-yellow resize-none h-24"
+                  className="w-full bg-surface border border-border rounded-xl p-3 text-text-hi focus:outline-none focus:border-brand-yellow resize-none h-24"
                   placeholder={postType === "product" ? "e.g. 100+ Reels Bundle" : "What's this about?"}
                   value={caption}
                   onChange={(e) => setCaption(e.target.value)}
@@ -275,7 +275,7 @@ export default function CreatePage() {
                 <label className="text-sm font-bold text-text-lo mb-1 block">Tags (Max 5)</label>
                 <input 
                   type="text" 
-                  className="w-full bg-surface border border-white/10 rounded-xl p-3 text-text-hi focus:outline-none focus:border-brand-yellow mb-2"
+                  className="w-full bg-surface border border-border rounded-xl p-3 text-text-hi focus:outline-none focus:border-brand-yellow mb-2"
                   placeholder="Type a tag and press Enter"
                   value={tagInput}
                   onChange={(e) => setTagInput(e.target.value)}
@@ -305,14 +305,14 @@ export default function CreatePage() {
               </div>
 
               {postType !== "product" && (
-                <div className="flex items-center justify-between p-4 bg-surface rounded-xl border border-white/10">
+                <div className="flex items-center justify-between p-4 bg-surface rounded-xl border border-border">
                 <div>
-                  <h4 className="font-bold">Visibility</h4>
+                  <h4 className="font-bold text-text-hi">Visibility</h4>
                   <p className="text-xs text-text-lo">Lock this post for fans?</p>
                 </div>
-                <div className="flex bg-black/50 rounded-lg p-1">
+                <div className="flex bg-bg rounded-lg p-1 border border-border">
                   <button 
-                    className={`px-3 py-1 text-sm rounded-md transition-colors ${visibility === "public" ? "bg-white text-black" : "text-text-lo"}`}
+                    className={`px-3 py-1 text-sm rounded-md transition-colors ${visibility === "public" ? "bg-navy text-white" : "text-text-lo"}`}
                     onClick={() => setVisibility("public")}
                   >
                     Public
@@ -334,7 +334,7 @@ export default function CreatePage() {
                   </label>
                   <input 
                     type="number" 
-                    className="w-full bg-surface border border-white/10 rounded-xl p-3 text-brand-yellow focus:outline-none focus:border-brand-yellow font-bold text-lg"
+                    className="w-full bg-surface border border-border rounded-xl p-3 text-brand-yellow focus:outline-none focus:border-brand-yellow font-bold text-lg"
                     placeholder="e.g. 199"
                     value={price}
                     onChange={(e) => setPrice(e.target.value)}
@@ -345,7 +345,7 @@ export default function CreatePage() {
               )}
 
               {uploading && (
-                <div className="w-full bg-surface rounded-full h-4 overflow-hidden border border-white/10 relative">
+                <div className="w-full bg-surface rounded-full h-4 overflow-hidden border border-border relative">
                   <div 
                     className="bg-brand-yellow h-full transition-all duration-300 ease-out"
                     style={{ width: `${uploadProgress}%` }}

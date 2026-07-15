@@ -59,7 +59,7 @@ export function ExploreClient({ trendingContent, newCreators, topTags }: { trend
         <input 
           type="text" 
           placeholder="Search creators, posts, or tags..." 
-          className="w-full bg-surface border border-white/10 rounded-3xl py-4 pl-12 pr-4 text-text-hi focus:outline-none focus:border-brand-yellow transition-colors"
+          className="w-full bg-surface border border-border rounded-3xl py-4 pl-12 pr-4 text-text-hi focus:outline-none focus:border-brand-yellow transition-colors shadow-glossy"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
@@ -76,13 +76,13 @@ export function ExploreClient({ trendingContent, newCreators, topTags }: { trend
 
       {/* Naye Creators (New) */}
       <section className="mb-10">
-        <h3 className="font-display font-bold text-xl mb-4">Discover Naye Creators ✨</h3>
+        <h3 className="font-serif font-bold text-xl mb-4 text-text-hi">Discover Naye Creators ✨</h3>
         <div className="flex gap-4 overflow-x-auto pb-4 -mx-4 px-4 scrollbar-hide">
           {newCreators.map(creator => (
             <Link href={`/${creator.handle}`} key={creator.id} className="min-w-[120px]">
               <div className="flex flex-col items-center">
-                <div className="w-20 h-20 rounded-full bg-surface border-2 border-brand-yellow/50 p-1 mb-2">
-                  <div className="w-full h-full rounded-full overflow-hidden bg-surface text-black flex items-center justify-center font-bold text-xl">
+                <div className="w-20 h-20 rounded-full bg-surface border-2 border-brand-yellow/50 p-1 mb-2 shadow-glossy">
+                  <div className="w-full h-full rounded-full overflow-hidden bg-surface text-text-hi flex items-center justify-center font-bold text-xl">
                     {creator.photo ? (
                       <img src={creator.photo} alt="" className="w-full h-full object-cover" />
                     ) : (
@@ -100,7 +100,7 @@ export function ExploreClient({ trendingContent, newCreators, topTags }: { trend
 
       {/* Feed - Reels/Posts */}
       <section className="space-y-6">
-        <h3 className="font-display font-bold text-xl mb-2">Explore Feed</h3>
+        <h3 className="font-serif font-bold text-xl mb-2 text-text-hi">Explore Feed</h3>
         
         {filteredContent.length === 0 ? (
           <p className="text-text-lo text-sm">No content found matching your criteria.</p>

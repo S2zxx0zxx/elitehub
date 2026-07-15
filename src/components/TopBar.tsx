@@ -9,7 +9,7 @@ export function TopBar() {
   const { isLoaded, isSignedIn } = useUser();
 
   return (
-    <div className="sticky top-0 z-40 w-full bg-bg/80 backdrop-blur-xl border-b border-white/5">
+    <div className="sticky top-0 z-40 w-full bg-white/80 backdrop-blur-xl border-b border-border">
       <div className="flex items-center justify-between px-4 h-16 max-w-md mx-auto">
         <Link href="/" className="font-display text-2xl font-bold text-brand-yellow tracking-tight">
           EliteHub
@@ -31,7 +31,7 @@ export function TopBar() {
           ) : (
             isLoaded && (
               <SignInButton mode="modal">
-                <button className="text-sm font-bold bg-brand-yellow text-bg px-4 py-2 rounded-full">
+                <button className="text-sm font-bold bg-brand-yellow text-black px-4 py-2 rounded-full">
                   Sign In
                 </button>
               </SignInButton>

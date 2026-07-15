@@ -99,12 +99,12 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
   return (
     <main className="min-h-screen bg-bg pb-24">
       {/* Cover Banner */}
-      <div className="h-48 w-full bg-surface relative">
+      <div className="h-48 w-full bg-gradient-to-br from-brand-yellow/20 to-navy/10 relative">
         <div className="absolute top-4 left-4 right-4 flex justify-between">
-          <button className="w-10 h-10 bg-black/50 backdrop-blur rounded-full flex items-center justify-center text-white">
+          <button className="w-10 h-10 bg-black/40 backdrop-blur rounded-full flex items-center justify-center text-white">
             ←
           </button>
-          <button className="w-10 h-10 bg-black/50 backdrop-blur rounded-full flex items-center justify-center text-white">
+          <button className="w-10 h-10 bg-black/40 backdrop-blur rounded-full flex items-center justify-center text-white">
             ↑
           </button>
         </div>
@@ -113,7 +113,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
       <div className="max-w-md mx-auto px-4 -mt-12 relative z-10">
         <div className="flex justify-between items-end mb-4">
           <div className="relative">
-            <div className="w-24 h-24 rounded-full border-4 border-bg bg-surface overflow-hidden">
+            <div className="w-24 h-24 rounded-full border-4 border-bg bg-surface overflow-hidden shadow-glossy">
               {creator.photo ? (
                 <img src={creator.photo} alt={creator.name || ""} className="w-full h-full object-cover" />
               ) : (
@@ -123,27 +123,27 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
               )}
             </div>
             {(isGold || isBlue) && (
-              <div className={`absolute bottom-0 right-0 w-6 h-6 rounded-full border-2 border-bg flex items-center justify-center ${isGold ? 'bg-gold' : 'bg-blue-500'}`}>
+              <div className={`absolute bottom-0 right-0 w-6 h-6 rounded-full border-2 border-bg flex items-center justify-center ${isGold ? 'bg-gold' : 'bg-blue-500'} text-white`}>
                 ✓
               </div>
             )}
           </div>
           <div className="flex gap-4 text-center">
             <div>
-              <p className="font-bold text-lg">{followersCount}</p>
+              <p className="font-bold text-lg text-text-hi">{followersCount}</p>
               <p className="text-xs text-text-lo">Followers</p>
             </div>
             <div>
-              <p className="font-bold text-lg">{creator.posts.length}</p>
+              <p className="font-bold text-lg text-text-hi">{creator.posts.length}</p>
               <p className="text-xs text-text-lo">Posts</p>
             </div>
           </div>
         </div>
 
         <div className="mb-6">
-          <h1 className="font-display text-2xl font-bold text-text-hi">{creator.name || creator.handle}</h1>
+          <h1 className="font-serif text-2xl font-bold text-text-hi">{creator.name || creator.handle}</h1>
           <p className="text-text-lo mb-2">@{creator.handle} • {creator.tags && creator.tags.length > 0 ? creator.tags.join(", ") : "Creator"}</p>
-          <p className="text-sm">{creator.bio || "Welcome to my official EliteHub page! Subscribe for exclusive content."}</p>
+          <p className="text-sm text-text-hi">{creator.bio || "Welcome to my official EliteHub page! Subscribe for exclusive content."}</p>
         </div>
 
         {/* Tabs and Posts Grid handled by Client Component */}

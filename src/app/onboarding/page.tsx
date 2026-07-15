@@ -79,21 +79,21 @@ export default function OnboardingPage() {
           {step === 1 && (
             <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4">
               <div className="text-center space-y-2">
-                <h1 className="font-display text-2xl font-bold">Choose your path</h1>
+                <h1 className="font-serif text-2xl font-bold text-text-hi">Choose your path</h1>
                 <p className="text-text-lo">How do you want to use EliteHub?</p>
               </div>
               
               <div className="space-y-4">
                 <button 
                   onClick={() => setRole("Fan")}
-                  className={`w-full p-4 rounded-2xl border text-left transition-colors ${role === "Fan" ? "border-brand-yellow bg-brand-yellow/10" : "border-white/10 bg-surface"}`}
+                  className={`w-full p-4 rounded-2xl border text-left transition-colors ${role === "Fan" ? "border-brand-yellow bg-brand-yellow/10" : "border-border bg-surface"}`}
                 >
                   <h3 className="font-bold text-lg text-text-hi">Fan 🤩</h3>
                   <p className="text-text-lo text-sm">Discover and support your favorite creators.</p>
                 </button>
                 <button 
                   onClick={() => setRole("Creator")}
-                  className={`w-full p-4 rounded-2xl border text-left transition-colors ${role === "Creator" ? "border-brand-yellow bg-brand-yellow/10" : "border-white/10 bg-surface"}`}
+                  className={`w-full p-4 rounded-2xl border text-left transition-colors ${role === "Creator" ? "border-brand-yellow bg-brand-yellow/10" : "border-border bg-surface"}`}
                 >
                   <h3 className="font-bold text-lg text-text-hi">Creator 🎨</h3>
                   <p className="text-text-lo text-sm">Earn directly from your fans and share premium content.</p>
@@ -113,13 +113,13 @@ export default function OnboardingPage() {
           {step === 2 && role === "Fan" && (
             <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4">
               <div className="text-center space-y-2">
-                <h1 className="font-display text-2xl font-bold">What interests you?</h1>
+                <h1 className="font-serif text-2xl font-bold text-text-hi">What interests you?</h1>
                 <p className="text-text-lo">Pick a few categories to personalize your feed.</p>
               </div>
               <div className="space-y-4">
                 <input 
                   type="text" 
-                  className="w-full bg-surface border border-white/10 rounded-xl p-3 text-text-hi focus:outline-none focus:border-brand-yellow"
+                  className="w-full bg-surface border border-border rounded-xl p-3 text-text-hi focus:outline-none focus:border-brand-yellow"
                   placeholder="Type a tag and press Enter (max 5)"
                   value={tagInput}
                   onChange={(e) => setTagInput(e.target.value)}
@@ -151,7 +151,7 @@ export default function OnboardingPage() {
           {step === 2 && role === "Creator" && (
             <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4">
               <div className="text-center space-y-2">
-                <h1 className="font-display text-2xl font-bold">Set up your profile</h1>
+                <h1 className="font-serif text-2xl font-bold text-text-hi">Set up your profile</h1>
                 <p className="text-text-lo">Choose a unique handle for your page.</p>
               </div>
               
@@ -160,7 +160,7 @@ export default function OnboardingPage() {
                   <label className="text-sm font-bold text-text-lo mb-1 block">Username Handle</label>
                   <input 
                     type="text" 
-                    className="w-full bg-surface border border-white/10 rounded-xl p-3 text-text-hi focus:outline-none focus:border-brand-yellow"
+                    className="w-full bg-surface border border-border rounded-xl p-3 text-text-hi focus:outline-none focus:border-brand-yellow"
                     placeholder="e.g. raj_editzz"
                     value={handle}
                     onChange={(e) => setHandle(e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, ''))}
@@ -171,7 +171,7 @@ export default function OnboardingPage() {
                   <label className="text-sm font-bold text-text-lo mb-1 block">Profile Photo URL (or mediaKey)</label>
                   <input 
                     type="text" 
-                    className="w-full bg-surface border border-white/10 rounded-xl p-3 text-text-hi focus:outline-none focus:border-brand-yellow"
+                    className="w-full bg-surface border border-border rounded-xl p-3 text-text-hi focus:outline-none focus:border-brand-yellow"
                     placeholder="e.g. key from R2"
                     value={photo}
                     onChange={(e) => setPhoto(e.target.value)}
@@ -182,7 +182,7 @@ export default function OnboardingPage() {
                   <label className="text-sm font-bold text-text-lo mb-1 block">Your Tags (Max 5)</label>
                   <input 
                     type="text" 
-                    className="w-full bg-surface border border-white/10 rounded-xl p-3 text-text-hi focus:outline-none focus:border-brand-yellow mb-2"
+                    className="w-full bg-surface border border-border rounded-xl p-3 text-text-hi focus:outline-none focus:border-brand-yellow mb-2"
                     placeholder="Type a tag and press Enter"
                     value={tagInput}
                     onChange={(e) => setTagInput(e.target.value)}
@@ -216,7 +216,7 @@ export default function OnboardingPage() {
           {step === 3 && role === "Creator" && (
             <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4">
               <div className="text-center space-y-2">
-                <h1 className="font-display text-2xl font-bold">Subscription Price</h1>
+                <h1 className="font-serif text-2xl font-bold text-text-hi">Subscription Price</h1>
                 <p className="text-text-lo">How much will fans pay per month to unlock your private content?</p>
               </div>
               
@@ -224,7 +224,7 @@ export default function OnboardingPage() {
                 <label className="text-sm font-bold text-text-lo mb-1 block">Monthly Price (₹)</label>
                 <input 
                   type="number" 
-                  className="w-full bg-surface border border-white/10 rounded-xl p-3 text-text-hi focus:outline-none focus:border-brand-yellow text-2xl font-bold text-center"
+                  className="w-full bg-surface border border-border rounded-xl p-3 text-text-hi focus:outline-none focus:border-brand-yellow text-2xl font-bold text-center"
                   placeholder="199"
                   value={price}
                   onChange={(e) => setPrice(e.target.value)}

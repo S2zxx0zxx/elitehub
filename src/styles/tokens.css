@@ -4,30 +4,36 @@
 
 @layer base {
   :root, .light {
-    /* LIGHT MODE */
-    --bg: #FFFFFF;
-    --surface: #F3F4F6; /* Optional: adjust surface if needed, but let's keep it as is or something slightly different if bg is white */
-    --text-hi: #10131A;
-    --text-lo: #64748B;
-    
-    /* Global tokens */
+    /* GLOSSY WHITE THEME (light-only) */
+    --bg: #FAFAF9;
+    --surface: #FFFFFF;
+    --text-hi: #1A1A1A;
+    --text-lo: #6B6B6B;
+    --border: #EBEBEB;
+
+    /* Global brand tokens (unchanged) */
     --brand-yellow: #F5C518;
     --yellow-deep: #E0A800;
     --cta: #F5C518;
     --gold: #E0B341;
     --success: #16A34A;
     --danger: #DC2626;
-  }
 
-  .dark {
-    /* DARK MODE */
-    --bg: #0B0B0D;
-    --surface: #16161A;
-    --text-hi: #FFFFFF;
-    --text-lo: #9AA4B2;
+    /* New accents (from Travel Together reference) */
+    --accent-coral: #E94560;
+    --navy: #1A1A2E;
   }
 
   body {
     @apply bg-[var(--bg)] text-[var(--text-hi)] antialiased;
+  }
+}
+
+@layer utilities {
+  .shadow-glossy {
+    box-shadow: 0 1px 2px rgba(16,19,26,0.04), 0 8px 24px rgba(16,19,26,0.06);
+  }
+  .shadow-glossy-lg {
+    box-shadow: 0 4px 8px rgba(16,19,26,0.05), 0 16px 40px rgba(16,19,26,0.08);
   }
 }

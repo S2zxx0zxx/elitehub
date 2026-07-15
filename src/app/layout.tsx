@@ -1,6 +1,6 @@
 import {ClerkProvider} from "@clerk/nextjs";
 import type { Metadata } from "next";
-import { Poppins, Inter } from "next/font/google";
+import { Poppins, Inter, Fraunces } from "next/font/google";
 import "@/styles/tokens.css";
 import { Providers } from "@/components/Providers";
 
@@ -13,6 +13,12 @@ const display = Poppins({ weight: ["500","600","700","800"],
 const body = Inter({ 
   subsets: ["latin"], 
   variable: "--font-body" 
+});
+
+const serif = Fraunces({
+  weight: ["500","600","700","900"],
+  subsets: ["latin"],
+  variable: "--font-serif"
 });
 
 export const metadata: Metadata = {
@@ -28,7 +34,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
-        <body className={`${display.variable} ${body.variable} font-body pb-24`}>
+        <body className={`${display.variable} ${body.variable} ${serif.variable} font-body pb-24`}>
           <Providers userTheme="light">
             {children}
           </Providers>

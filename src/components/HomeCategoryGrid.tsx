@@ -23,7 +23,7 @@ export function HomeCategoryGrid() {
       {categories.map((cat) => (
         <div
           key={cat.label}
-          className="bg-surface border border-white/5 rounded-3xl p-3 flex flex-col items-center justify-center text-center gap-2 hover:border-brand-yellow/30 transition-colors"
+          className="bg-surface border border-border rounded-3xl p-3 flex flex-col items-center justify-center text-center gap-2 hover:border-brand-yellow/40 shadow-glossy transition-colors"
         >
           <div className="relative w-12 h-12">
             <Image src={cat.icon} alt={cat.label} fill sizes="48px" className="object-contain drop-shadow-lg" />
