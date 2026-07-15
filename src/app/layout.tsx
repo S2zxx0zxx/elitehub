@@ -27,9 +27,9 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <html lang="en" className="dark" suppressHydrationWarning>
+      <html lang="en" suppressHydrationWarning>
         <body className={`${display.variable} ${body.variable} font-body pb-24`}>
-          <Providers userTheme="dark">
+          <Providers userTheme="light">
             {children}
           </Providers>
         </body>

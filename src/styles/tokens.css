@@ -5,8 +5,8 @@
 @layer base {
   :root, .light {
     /* LIGHT MODE */
-    --bg: #FAFAF7;
-    --surface: #FFFFFF;
+    --bg: #FFFFFF;
+    --surface: #F3F4F6; /* Optional: adjust surface if needed, but let's keep it as is or something slightly different if bg is white */
     --text-hi: #10131A;
     --text-lo: #64748B;
     
