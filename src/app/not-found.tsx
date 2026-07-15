@@ -11,7 +11,7 @@ export default function NotFound() {
         <h1 className="text-[120px] font-display font-black text-brand-yellow leading-none tracking-tighter opacity-80 mix-blend-screen drop-shadow-2xl">404</h1>
         <h2 className="text-3xl font-display font-bold text-text-hi mt-4 mb-2">Lost in the sauce?</h2>
         <p className="text-text-lo max-w-sm mb-8 text-lg">
-          The creator, post, or page you are looking for doesn't exist or was removed.
+          The creator, post, or page you are looking for doesn&apos;t exist or was removed.
         </p>
         <div className="flex gap-4">
           <Link href="/">

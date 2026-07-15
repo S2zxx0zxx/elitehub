@@ -40,8 +40,6 @@ export default function CreatePage() {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  if (isLoaded && !isSignedIn) return null; // Or redirect
-
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const selectedFile = e.target.files[0];
@@ -170,6 +168,8 @@ export default function CreatePage() {
       setUploading(false);
     }
   };
+
+  if (isLoaded && !isSignedIn) return null; // Or redirect
 
   return (
     <main className="min-h-screen p-4 sm:p-8 max-w-md mx-auto pb-24">

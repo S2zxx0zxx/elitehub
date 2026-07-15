@@ -11,7 +11,7 @@ export function PurchasesClient({ purchases }: { purchases: any[] }) {
         <h1 className="font-display text-3xl font-bold text-text-hi">My Purchases</h1>
         
         {purchases.length === 0 ? (
-          <p className="text-text-lo text-center py-12">You haven't purchased anything yet.</p>
+          <p className="text-text-lo text-center py-12">You haven&apos;t purchased anything yet.</p>
         ) : (
           <div className="space-y-4">
             {purchases.map((purchase) => (
