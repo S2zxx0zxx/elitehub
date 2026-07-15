@@ -6,12 +6,15 @@
     "dev": "next dev",
     "build": "prisma generate && next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "prepare": "husky",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.577.0",
     "@aws-sdk/s3-request-presigner": "^3.577.0",
     "@clerk/nextjs": "^5.7.6",
+    "@ducanh2912/next-pwa": "^10.2.9",
     "@prisma/client": "^5.14.0",
     "@sentry/nextjs": "^10.65.0",
     "clsx": "^2.1.1",
@@ -29,6 +32,7 @@
     "tailwind-merge": "^2.3.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.61.1",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
@@ -44,7 +48,7 @@
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
-      "eslint --fix"
+      "npx eslint --fix"
     ]
   }
 }

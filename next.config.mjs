@@ -12,7 +12,16 @@ const nextConfig = {
   }
 };
 
-export default withSentryConfig(nextConfig, {
+import withPWAInit from "@ducanh2912/next-pwa";
+
+const withPWA = withPWAInit({
+  dest: "public",
+  disable: process.env.NODE_ENV === "development",
+  register: true,
+  skipWaiting: true,
+});
+
+export default withSentryConfig(withPWA(nextConfig), {
   silent: true,
   org: process.env.SENTRY_ORG,
   project: process.env.SENTRY_PROJECT,
