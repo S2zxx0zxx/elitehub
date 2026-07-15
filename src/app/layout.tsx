@@ -1,11 +1,11 @@
-import { ClerkProvider } from "@clerk/nextjs";
-import { dark } from "@clerk/themes";
+import {ClerkProvider} from "@clerk/nextjs";
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans, Inter } from "next/font/google";
+import { Poppins, Inter } from "next/font/google";
 import "@/styles/tokens.css";
 import { Providers } from "@/components/Providers";
 
-const display = Plus_Jakarta_Sans({ 
+
+const display = Poppins({ weight: ["500","600","700","800"], 
   subsets: ["latin"], 
   variable: "--font-display" 
 });
@@ -26,12 +26,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider
-      appearance={{ 
-        baseTheme: dark, 
-        variables: { colorPrimary: "#F5C518", colorBackground: "#0B0B0D" } 
-      }}
-    >
+    <ClerkProvider>
       <html lang="en" className="dark" suppressHydrationWarning>
         <body className={`${display.variable} ${body.variable} font-body pb-24`}>
           <Providers userTheme="dark">

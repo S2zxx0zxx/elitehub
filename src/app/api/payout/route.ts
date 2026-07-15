@@ -21,12 +21,12 @@ export async function POST(req: Request) {
     const purchases = await prisma.purchase.findMany({
       where: { post: { creatorId: creatorId }, status: "completed" }
     });
-    const totalEarnings = purchases.reduce((sum: number, p) => sum + p.creatorEarning, 0);
+    const totalEarnings = purchases.reduce((sum: number, p: any) => sum + p.creatorEarning, 0);
 
     const payouts = await prisma.payout.findMany({
       where: { creatorId: creatorId }
     });
-    const totalPayouts = payouts.reduce((sum: number, p) => sum + p.amount, 0);
+    const totalPayouts = payouts.reduce((sum: number, p: any) => sum + p.amount, 0);
 
     const availableBalance = totalEarnings - totalPayouts;
 

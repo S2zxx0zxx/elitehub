@@ -27,15 +27,15 @@ export async function GET(req: Request) {
     });
 
     const totalEarnings = 
-      purchases.reduce((sum: number, p) => sum + p.creatorEarning, 0) +
-      subPayments.reduce((sum: number, p) => sum + p.creatorEarning, 0);
+      purchases.reduce((sum: number, p: any) => sum + p.creatorEarning, 0) +
+      subPayments.reduce((sum: number, p: any) => sum + p.creatorEarning, 0);
 
     // 2. Calculate requested/paid payouts
     const payouts = await prisma.payout.findMany({
       where: { creatorId: creatorId }
     });
 
-    const totalPayouts = payouts.reduce((sum: number, p) => sum + p.amount, 0);
+    const totalPayouts = payouts.reduce((sum: number, p: any) => sum + p.amount, 0);
 
     // 3. Available Balance
     const availableBalance = totalEarnings - totalPayouts;
@@ -69,12 +69,12 @@ export async function GET(req: Request) {
     });
 
     const thisWeekEarnings = 
-      thisWeekPurchases.reduce((sum: number, p) => sum + p.creatorEarning, 0) +
-      thisWeekSubs.reduce((sum: number, p) => sum + p.creatorEarning, 0);
+      thisWeekPurchases.reduce((sum: number, p: any) => sum + p.creatorEarning, 0) +
+      thisWeekSubs.reduce((sum: number, p: any) => sum + p.creatorEarning, 0);
       
     const lastWeekEarnings = 
-      lastWeekPurchases.reduce((sum: number, p) => sum + p.creatorEarning, 0) +
-      lastWeekSubs.reduce((sum: number, p) => sum + p.creatorEarning, 0);
+      lastWeekPurchases.reduce((sum: number, p: any) => sum + p.creatorEarning, 0) +
+      lastWeekSubs.reduce((sum: number, p: any) => sum + p.creatorEarning, 0);
     
     let weeklyGrowth = 0;
     if (lastWeekEarnings === 0 && thisWeekEarnings > 0) weeklyGrowth = 100;

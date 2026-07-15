@@ -15,18 +15,18 @@ export async function getTrendingCreators() {
     }
   });
 
-  const creatorIds = creators.map(c => c.id);
+  const creatorIds = creators.map((c: (typeof creators)[number]) => c.id);
   const postPurchases = await prisma.post.findMany({
     where: { creatorId: { in: creatorIds } },
     select: { creatorId: true, _count: { select: { purchases: true } } }
   });
 
   const purchasesByCreator: Record<string, number> = {};
-  for (const p of postPurchases) {
+  for (const p of postPurchases as Array<{creatorId:string;_count:{purchases:number}}>) {
     purchasesByCreator[p.creatorId] = (purchasesByCreator[p.creatorId] || 0) + p._count.purchases;
   }
 
-  const scored = creators.map(creator => {
+  const scored = creators.map((creator: (typeof creators)[number]) => {
     const daysSinceCreation = (new Date().getTime() - new Date(creator.createdAt).getTime()) / (1000 * 3600 * 24);
     const recencyBonus = Math.max(0, 30 - daysSinceCreation); 
     
@@ -36,7 +36,7 @@ export async function getTrendingCreators() {
     return { ...creator, score };
   });
 
-  return scored.sort((a, b) => b.score - a.score).slice(0, 10);
+  return scored.sort((a: {score:number}, b: {score:number}) => b.score - a.score).slice(0, 10);
 }
 
 export async function getTrendingContent() {
@@ -53,18 +53,18 @@ export async function getTrendingContent() {
     }
   });
 
-  const creatorIds = Array.from(new Set(posts.map(p => p.creatorId)));
+  const creatorIds = Array.from(new Set(posts.map((p: (typeof posts)[number]) => p.creatorId)));
   const allCreatorPosts = await prisma.post.findMany({
     where: { creatorId: { in: creatorIds } },
     select: { creatorId: true, _count: { select: { purchases: true } } }
   });
 
   const purchasesByCreator: Record<string, number> = {};
-  for (const p of allCreatorPosts) {
+  for (const p of allCreatorPosts as Array<{creatorId:string;_count:{purchases:number}}>) {
     purchasesByCreator[p.creatorId] = (purchasesByCreator[p.creatorId] || 0) + p._count.purchases;
   }
 
-  const scored = posts.map(post => {
+  const scored = posts.map((post: (typeof posts)[number]) => {
     const totalCreatorPurchases = purchasesByCreator[post.creatorId] || 0;
     const creatorScore = (post.creator._count.followers * 2) + (totalCreatorPurchases * 5);
     
@@ -77,7 +77,7 @@ export async function getTrendingContent() {
     return { ...post, score };
   });
 
-  return scored.sort((a, b) => b.score - a.score).slice(0, 15);
+  return scored.sort((a: {score:number}, b: {score:number}) => b.score - a.score).slice(0, 15);
 }
 
 export async function getNewCreators() {
@@ -100,13 +100,13 @@ export async function getNewCreators() {
 export async function getTopTags(limit: number = 10) {
   const posts = await prisma.post.findMany({ select: { tags: true } });
   const tagCounts: Record<string, number> = {};
-  posts.forEach(p => {
-    p.tags.forEach(t => {
+  posts.forEach((p: {tags: string[]}) => {
+    p.tags.forEach((t: string) => {
       tagCounts[t] = (tagCounts[t] || 0) + 1;
     });
   });
   return Object.entries(tagCounts)
-    .sort((a, b) => b[1] - a[1])
+    .sort((a: [string,number], b: [string,number]) => b[1] - a[1])
     .slice(0, limit)
     .map(entry => entry[0]);
 }

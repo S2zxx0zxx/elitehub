@@ -5,24 +5,34 @@ import { Search } from "lucide-react";
 import { Card } from "@/components/Card";
 import { AdSlot } from "@/components/AdSlot";
 import { Chip } from "@/components/Chip";
-import { EmptyState } from "@/components/EmptyState";
-import { PackageOpen } from "lucide-react";
 import { PostEngagement } from "@/components/PostEngagement";
 
-import { Prisma } from "@prisma/client";
+type TrendingContent = {
+  id: string;
+  caption: string | null;
+  mediaKey: string | null;
+  tags: string[];
+  visibility: string;
+  price: number | null;
+  viewCount: number;
+  type: string;
+  creatorId: string;
+  createdAt: Date;
+  score: number;
+  _count: { likes: number; comments: number; saves: number };
+  creator: { id: string; name: string | null; handle: string | null; photo: string | null; tickTier: string; _count: { followers: number } };
+};
 
-type TrendingContent = Prisma.PostGetPayload<{
-  include: {
-    _count: { select: { likes: true, comments: true, saves: true } },
-    creator: {
-      include: {
-        _count: { select: { followers: true } }
-      }
-    }
-  }
-}> & { score: number };
+type NewCreator = {
+  id: string;
+  name: string | null;
+  handle: string | null;
+  photo: string | null;
+  bio: string | null;
+  tickTier: string;
+};
 
-export function ExploreClient({ trendingContent, newCreators, topTags }: { trendingContent: TrendingContent[], newCreators: Prisma.UserGetPayload<{}>[], topTags: string[] }) {
+export function ExploreClient({ trendingContent, newCreators, topTags }: { trendingContent: TrendingContent[], newCreators: NewCreator[], topTags: string[] }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
 
@@ -93,13 +103,7 @@ export function ExploreClient({ trendingContent, newCreators, topTags }: { trend
         <h3 className="font-display font-bold text-xl mb-2">Explore Feed</h3>
         
         {filteredContent.length === 0 ? (
-          <EmptyState 
-            icon={PackageOpen}
-            title="No content found"
-            description="We couldn't find anything matching your search criteria. Try a different tag."
-            ctaText="Clear Filters"
-            ctaLink="/explore"
-          />
+          <p className="text-text-lo text-sm">No content found matching your criteria.</p>
         ) : (
           filteredContent.map((post, i) => (
             <React.Fragment key={post.id}>

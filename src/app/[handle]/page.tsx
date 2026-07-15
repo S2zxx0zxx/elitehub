@@ -77,14 +77,14 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
       where: { fanId: viewer.id, status: "completed" },
       select: { postId: true }
     });
-    purchasedPostIds = purchases.map(p => p.postId);
+    purchasedPostIds = purchases.map((p: (typeof purchases)[number]) => p.postId);
   }
 
   const isFollowing = viewer ? (await prisma.follow.findFirst({
     where: { followerId: viewer.id, creatorId: creator.id }
   })) !== null : false;
 
-  const sanitizedPosts = creator.posts.map((post) => {
+  const sanitizedPosts = creator.posts.map((post: (typeof creator.posts)[number]) => {
     // Strip mediaKey for all viewers - client will use /api/media/[postId]
     return { ...post, mediaKey: "" };
   });

@@ -9,8 +9,7 @@ import { HomeCategoryGrid } from "@/components/HomeCategoryGrid";
 import { getTrendingCreators, getTrendingContent } from "@/lib/ranking";
 import { timeAgo } from "@/lib/time";
 import { PostEngagement } from "@/components/PostEngagement";
-import { EmptyState } from "@/components/EmptyState";
-import { Play, Image as ImageIcon, Users, LayoutGrid } from "lucide-react";
+import { Play, Image as ImageIcon } from "lucide-react";
 
 export const revalidate = 60; // Revalidate every 60 seconds instead of blocking every request
 
@@ -29,25 +28,23 @@ export default async function Home() {
   const trendingContent = await getTrendingContent();
 
   return (
-    <main className="min-h-screen bg-bg pb-32">
+    <main className="min-h-screen bg-bg pb-24">
       <TopBar />
       
       <div className="max-w-md mx-auto p-4 sm:p-8">
         
         {/* Hero Section */}
-        <section className="mb-10 pt-6 text-center">
-          <h1 className="text-[2.5rem] font-display font-bold leading-tight mb-3">
-            India ke creators,<br />seedha fans se kamayein
+        <section className="mb-8 pt-4">
+          <h1 className="text-4xl font-display font-bold leading-[1.1] mb-5">
+            India ke creators,<br />
+            <span className="text-text-lo text-3xl">seedha apne fans se kamayein</span>
           </h1>
-          <p className="text-text-lo text-base mb-6 px-4">
-            Monetize your exclusive content directly with your fans. No middlemen.
-          </p>
-          <div className="flex gap-3 max-w-sm mx-auto">
+          <div className="flex gap-4">
             <Link href="/onboarding" className="flex-1">
-              <Button variant="primary" className="w-full shadow-lg shadow-brand-yellow/20">Creator bano</Button>
+              <Button variant="primary" className="w-full">Creator bano</Button>
             </Link>
             <Link href="/explore" className="flex-1">
-              <Button variant="outline" className="w-full">Explore</Button>
+              <Button variant="secondary" className="w-full">Explore</Button>
             </Link>
           </div>
         </section>
@@ -69,17 +66,9 @@ export default async function Home() {
           <h3 className="font-display font-bold text-xl mb-4">Featured Creators</h3>
           <div className="flex gap-4 overflow-x-auto pb-4 -mx-4 px-4 scrollbar-hide">
             {trendingCreators.length === 0 ? (
-              <div className="w-full">
-                <EmptyState 
-                  icon={Users} 
-                  title="No creators yet" 
-                  description="Be the first to join and start earning." 
-                  ctaText="Creator bano" 
-                  ctaLink="/onboarding" 
-                />
-              </div>
+              <p className="text-text-lo text-sm">No creators found yet. Be the first!</p>
             ) : (
-              trendingCreators.map(creator => (
+              trendingCreators.map((creator: (typeof trendingCreators)[number]) => (
                 <Link href={`/${creator.handle}`} key={creator.id} className="min-w-[140px]">
                   <Card className="h-full hover:border-brand-yellow/50 transition-colors border border-transparent">
                     <CardContent className="flex flex-col items-center text-center p-4">
@@ -111,13 +100,9 @@ export default async function Home() {
           
           <div className="space-y-6">
             {trendingContent.length === 0 ? (
-              <EmptyState 
-                icon={LayoutGrid} 
-                title="No content yet" 
-                description="Check back later for fresh posts from our creators." 
-              />
+              <p className="text-text-lo text-sm">No content found yet.</p>
             ) : (
-              trendingContent.slice(0,3).map((post) => (
+              trendingContent.slice(0,3).map((post: (typeof trendingContent)[number]) => (
                 <Card key={post.id} className="overflow-hidden">
                   <div className="w-full aspect-[4/5] bg-surface relative">
                     {/* Public content plays automatically in real app */}

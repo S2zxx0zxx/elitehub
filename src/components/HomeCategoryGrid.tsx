@@ -1,45 +1,36 @@
 import React from "react";
-import { 
-  Gamepad2, Music, Camera, Dumbbell, TrendingUp, Plane, 
-  Sparkles, Video, Shirt, Palette, PenTool, BookOpen 
-} from "lucide-react";
+import Image from "next/image";
 
+// Informational-only visual grid (not clickable) using the real 3D icons.
 const categories = [
-  { label: "Gamers", icon: Gamepad2 },
-  { label: "Musicians", icon: Music },
-  { label: "Photographers", icon: Camera },
-  { label: "Trainers", icon: Dumbbell },
-  { label: "Traders", icon: TrendingUp },
-  { label: "Travellers", icon: Plane },
-  { label: "Influencers", icon: Sparkles },
-  { label: "Content Creators", icon: Video },
-  { label: "Fashion", icon: Shirt },
-  { label: "Artists", icon: Palette },
-  { label: "Bloggers", icon: PenTool },
-  { label: "Educators", icon: BookOpen },
+  { label: "Gaming", icon: "/assets/category_icons/gaming.png" },
+  { label: "Music", icon: "/assets/category_icons/music.png" },
+  { label: "Photography", icon: "/assets/category_icons/photography.png" },
+  { label: "Fitness", icon: "/assets/category_icons/fitness.png" },
+  { label: "Trading", icon: "/assets/category_icons/trading.png" },
+  { label: "Travel", icon: "/assets/category_icons/travel.png" },
+  { label: "Art", icon: "/assets/category_icons/artist.png" },
+  { label: "Coding", icon: "/assets/category_icons/programming.png" },
+  { label: "Fashion", icon: "/assets/category_icons/fashion.png" },
+  { label: "Education", icon: "/assets/category_icons/education.png" },
+  { label: "Blogger", icon: "/assets/category_icons/blogger.png" },
+  { label: "Influencer", icon: "/assets/category_icons/influencer.png" },
 ];
 
 export function HomeCategoryGrid() {
   return (
-    <div className="flex flex-col gap-4">
-      <div>
-        <h3 className="font-display font-bold text-xl">Har tarah ke creators</h3>
-        <p className="text-sm text-text-lo">Find your niche and start growing</p>
-      </div>
-      <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
-        {categories.map((cat) => (
-          <div 
-            key={cat.label} 
-            className="bg-surface border border-white/5 rounded-[24px] p-4 flex flex-col items-center justify-center text-center gap-3 relative overflow-hidden group shadow-sm"
-          >
-            <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-            <div className="w-12 h-12 rounded-full bg-brand-yellow/10 flex items-center justify-center z-10 group-hover:scale-110 transition-transform">
-              <cat.icon className="text-brand-yellow w-6 h-6" />
-            </div>
-            <span className="text-text-hi text-[11px] uppercase tracking-wider font-bold z-10 line-clamp-1">{cat.label}</span>
+    <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
+      {categories.map((cat) => (
+        <div
+          key={cat.label}
+          className="bg-surface border border-white/5 rounded-3xl p-3 flex flex-col items-center justify-center text-center gap-2 hover:border-brand-yellow/30 transition-colors"
+        >
+          <div className="relative w-12 h-12">
+            <Image src={cat.icon} alt={cat.label} fill sizes="48px" className="object-contain drop-shadow-lg" />
           </div>
-        ))}
-      </div>
+          <span className="text-text-hi text-xs font-bold">{cat.label}</span>
+        </div>
+      ))}
     </div>
   );
 }

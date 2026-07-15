@@ -1,44 +1,40 @@
 "use client";
+import Link from "next/link";
+import Image from "next/image";
+import { usePathname } from "next/navigation";
 
-import React from 'react';
-import Link from 'next/link';
-import { Home, Compass, Plus, Bell, User } from 'lucide-react';
-import { useUser } from "@clerk/nextjs";
-import { usePathname } from 'next/navigation';
+const items = [
+  { label: "Home", href: "/", icon: "/assets/navigation_icons/home.png" },
+  { label: "Explore", href: "/explore", icon: "/assets/navigation_icons/explore.png" },
+  { label: "Create", href: "/create", icon: "/assets/navigation_icons/create.png", center: true },
+  { label: "Alerts", href: "/notifications", icon: "/assets/navigation_icons/notification.png" },
+  { label: "Profile", href: "/dashboard", icon: "/assets/navigation_icons/profile.png" },
+];
 
 export function BottomNav() {
   const pathname = usePathname();
-  const { isSignedIn } = useUser();
-
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 p-4 pb-safe flex justify-center pointer-events-none">
-      <div className="flex items-center justify-between w-full max-w-md px-6 py-3 bg-[#0B0B0D]/95 backdrop-blur-2xl border border-white/10 rounded-[32px] shadow-[0_-8px_32px_rgba(0,0,0,0.5)] pointer-events-auto">
-        <Link href="/" className={`flex flex-col items-center gap-1 transition-colors ${pathname === '/' ? 'text-brand-yellow drop-shadow-[0_0_8px_rgba(245,197,24,0.4)]' : 'text-text-lo hover:text-text-hi'}`}>
-          <Home size={22} className={pathname === '/' ? 'stroke-[2.5px]' : ''} />
-          <span className="text-[10px] font-bold">Home</span>
-        </Link>
-
-        <Link href="/explore" className={`flex flex-col items-center gap-1 transition-colors ${pathname === '/explore' ? 'text-brand-yellow drop-shadow-[0_0_8px_rgba(245,197,24,0.4)]' : 'text-text-lo hover:text-text-hi'}`}>
-          <Compass size={22} className={pathname === '/explore' ? 'stroke-[2.5px]' : ''} />
-          <span className="text-[10px] font-bold">Explore</span>
-        </Link>
-
-        <div className="relative -top-5">
-          <Link href="/create" className="flex items-center justify-center w-14 h-14 bg-brand-yellow text-black rounded-full shadow-[0_8px_24px_rgba(245,197,24,0.3)] hover:scale-105 hover:shadow-[0_8px_32px_rgba(245,197,24,0.5)] active:scale-95 transition-all">
-            <Plus size={28} className="stroke-[2.5px]" />
-          </Link>
-        </div>
-
-        <Link href="/notifications" className={`flex flex-col items-center gap-1 transition-colors ${pathname === '/notifications' ? 'text-brand-yellow drop-shadow-[0_0_8px_rgba(245,197,24,0.4)]' : 'text-text-lo hover:text-text-hi'}`}>
-          <Bell size={22} className={pathname === '/notifications' ? 'stroke-[2.5px]' : ''} />
-          <span className="text-[10px] font-bold">Alerts</span>
-        </Link>
-
-        <Link href={isSignedIn ? "/dashboard" : "/sign-in"} className={`flex flex-col items-center gap-1 transition-colors ${pathname === '/dashboard' || pathname.includes('/profile') ? 'text-brand-yellow drop-shadow-[0_0_8px_rgba(245,197,24,0.4)]' : 'text-text-lo hover:text-text-hi'}`}>
-          <User size={22} className={pathname === '/dashboard' ? 'stroke-[2.5px]' : ''} />
-          <span className="text-[10px] font-bold">Profile</span>
-        </Link>
-      </div>
+    <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-md">
+      <nav className="flex items-center justify-around rounded-full bg-surface/80 backdrop-blur-xl border border-white/10 px-2 py-2 shadow-2xl">
+        {items.map((item) => {
+          const active = pathname === item.href;
+          if (item.center) {
+            return (
+              <Link key={item.label} href={item.href} className="flex flex-col items-center">
+                <div className="w-14 h-14 rounded-full bg-brand-yellow flex items-center justify-center -mt-6 shadow-lg shadow-brand-yellow/30">
+                  <Image src={item.icon} alt={item.label} width={28} height={28} className="object-contain" />
+                </div>
+              </Link>
+            );
+          }
+          return (
+            <Link key={item.label} href={item.href} className="flex flex-col items-center gap-1 px-2 py-1">
+              <Image src={item.icon} alt={item.label} width={22} height={22} className={`object-contain ${active ? "" : "opacity-60"}`} />
+              <span className={`text-[10px] font-semibold ${active ? "text-brand-yellow" : "text-text-lo"}`}>{item.label}</span>
+            </Link>
+          );
+        })}
+      </nav>
     </div>
   );
 }
