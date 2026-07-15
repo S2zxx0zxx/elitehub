@@ -1,0 +1,12 @@
+# This file is used to specify who owns specific code in a repository.
+# When a pull request is opened, the owners will automatically be requested for review.
+# This ensures that nobody can silently modify code without the owner's knowledge.
+
+# Global owner: Any change in the repo requires review from the repository owner
+*       @S2zxx0zxx
+
+# Critical files that must always be strictly reviewed
+/package.json         @S2zxx0zxx
+/package-lock.json    @S2zxx0zxx
+/.env*                @S2zxx0zxx
+/.github/             @S2zxx0zxx
